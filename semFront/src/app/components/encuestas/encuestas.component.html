@@ -1,0 +1,124 @@
+<html>
+    <body>
+        <div id="mcuerpo">
+            <div id="footer">
+        
+<app-nav-dir></app-nav-dir>
+<div class="base">
+<lib-ngx-notification></lib-ngx-notification>
+    <div class="search-banner text-white py-3" id="search-banner">
+        <div >
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="card acik-renk-form">
+                        <div class="card-body">
+                            <h4 class="titulo">Encuestas</h4>
+                            <!-- <div class="row">
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 dropdown">
+                                    <label>Encusta (Requerida)</label>
+                                        <select  [(ngModel)]="sucursalSeleccionada" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off" (change)="onChangeStateDropdown()">
+                                            <option [ngValue]=0 >Seleccionar encuesta..</option>
+                                        </select>
+                                </div>
+                            </div> -->
+                            <div class="row">
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 dropdown">
+                                    <label>Sucursal (Requerida)</label>
+                                        <select  [(ngModel)]="sucursalSeleccionada" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off" (change)="onChangeStateDropdown()">
+                                            <option [ngValue]=0 disabled>Seleccionar sucursal..</option>
+                                            <!-- <option [ngValue]=1 >Cholula</option> -->
+                                            <option [ngValue]=2 >13 Sur (Matriz)</option>
+                                            <option [ngValue]=3 >5 de Mayo</option>
+                                            <option [ngValue]=4 >Xonaca</option>
+<!--                                             <option [ngValue]=5 >11 Sur</option> -->
+                                            <option [ngValue]=6 >Chapultepec</option>
+                                            <option [ngValue]=7 >Cruz del Sur</option>
+                                            <option [ngValue]=8 >San Alejandro</option>
+                                            <option [ngValue]=9 >La Margarita</option>
+                                            <option [ngValue]=10 >24 Sur</option>
+                                            <option [ngValue]=11 >16 de Septiembre</option>
+                                            <option [ngValue]=12 >Clínica Integral</option>
+                                            <option [ngValue]=13 >Amozoc</option>
+                                        </select>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 dropdown">
+                                    <label>Sucursal (Requerida)</label>
+                                        <select  [(ngModel)]="estudioSeleccionado" ng-init="estudioSeleccionado=25" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off" (change)="onChangeStateDropdown()">
+                                            <option [ngValue]=0 selected disabled>Seleccionar estudio..</option>
+                                            <option [ngValue]=1 >Analisis Sanguineos</option>
+                                            <option [ngValue]=2 >Analisis Clinicos</option>
+                                            <option [ngValue]=3 >Ultrasonografia</option>
+                                            <option [ngValue]=4 >Ultrasonografia Doppler</option>
+                                            <option [ngValue]=5 >Rayos X</option>
+                                            <option [ngValue]=6 >Rayos X Contrastado</option>
+                                            <option [ngValue]=7 >Mastografia</option>
+                                            <option [ngValue]=8 >Papanicolau</option>
+                                            <option [ngValue]=9 >Cardiologia</option>
+                                            <option [ngValue]=10 >Tomografia</option>
+                                            <option [ngValue]=11 >Tomografia Contrastada</option>
+                                            <option [ngValue]=12 >Resonancia Magnetica Contrastada</option>
+                                            <option [ngValue]=13 >Colposcopia</option>
+                                            <option [ngValue]=14 >Densitometria</option>
+                                            <option [ngValue]=15 >Audiologia</option>
+                                            <option [ngValue]=16 >Espirometria</option>
+                                            <option [ngValue]=17 >Patologia</option>
+                                            <option [ngValue]=18 >Consulta</option>
+                                            <option [ngValue]=19 >Cardiologia</option>
+                                            <option [ngValue]=20 >Rehabilitacion</option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div>
+                                        <canvas baseChart
+                                                [datasets]="preguntaUnoData"
+                                                [labels]="preguntaUnoLabels"
+                                                [options]="preguntaUnoOptions"
+                                                [colors]="chartColors"
+                                                [legend]="false"
+                                                [chartType]="ChartType">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div>
+                                        <canvas baseChart
+                                                [datasets]="preguntaDosData"
+                                                [labels]="preguntaDosLabels"
+                                                [options]="preguntaDosOptions"
+                                                [colors]="chartColors"
+                                                [legend]="false"
+                                                [chartType]="ChartType">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div>
+                                        <canvas baseChart
+                                                [datasets]="preguntaTresData"
+                                                [labels]="preguntaTresLabels"
+                                                [options]="preguntaTresOptions"
+                                                [colors]="chartColors"
+                                                [legend]="false"
+                                                [chartType]="ChartType">
+                                        </canvas>
+                                    </div>
+                                </div> 
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>
+

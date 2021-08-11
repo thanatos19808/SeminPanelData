@@ -1,0 +1,279 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+<head>
+</head>
+<body style="background: linear-gradient(to right, rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%); height: auto;" >
+<lib-ngx-notification></lib-ngx-notification>
+<ngx-spinner></ngx-spinner>
+<div class="container">
+	<div class="d-flex justify-content-center h-100">
+		<div class="card">
+			<div class="card-header">
+				<br><br>
+				<div class="d-flex justify-content-end social_icon">
+					<span><a id="logo"><img class="img-fluid" src="../../../../assets/img/logoNormalBlanco.png"></a></span>
+				</div>
+			</div>
+			<div class="card-body" [formGroup]="usuarioForm">
+				<p style="color:white; font-size: 25px; text-align: center;"><strong>Registro de Médico</strong></p>
+				<h6 class="titulo" style="font-size: 20px; color:white; text-align: center;">Por favor ingrese sus datos. Posteriormente serán revisados por uno de nuestros representantes para su aprovación.</h6>
+                <br>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+					<input type="text" class="form-control" placeholder="correo (Requerido)" formControlName="email" [(ngModel)]="userCrear.email" (change)="consultarDisponibilidadEmail()">
+                </div>
+                <div *ngIf="(pacienteFlag==1 || medicoFlag==1)" style="text-align: center;" class="alert alert-danger" role="alert">Este correo ya se encuentra registrado. Puede solicitar restablecimiento de cuenta desde la siguiente liga: <br> <a href="https://semindigital.com/olvidada">Restablecer Cuenta.</a></div> 
+				<p style="color:Red;" *ngIf="usuarioForm.controls['email'].touched && usuarioForm.controls['email'].errors?.required">Requerido. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['email'].errors?.minlength">Debe tener mínimo 5 caracteres. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['email'].errors?.maxlength">No puede superar los 90 caracteres. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['email'].errors?.pattern">No válido. </p>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-key"></i></span>
+					</div>
+					<input type="password" class="form-control" placeholder="Contraseña (Requerido)" formControlName="password" [(ngModel)]="userCrear.password">
+				</div>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['password'].touched && usuarioForm.controls['password'].errors?.required">Requerido. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['password'].errors?.minlength">Debe tener mínimo 8 caracteres. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['password'].errors?.maxlength">No puede superar los 30 caracteres. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['password'].errors?.pattern">No válido. </p>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-key"></i></span>  
+					</div>
+					<input type="password" class="form-control" placeholder="Repetir Contraseña (Requerido)" formControlName="password2" [(ngModel)]="userCrear.password2">
+				</div>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['password2'].touched && usuarioForm.controls['password2'].errors?.required">Requerido. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['password2'].errors?.minlength">Debe tener mínimo 8 caracteres. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['password2'].errors?.maxlength">No puede superar los 30 caracteres. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['password2'].errors?.pattern">No válido. </p>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="text" class="form-control" placeholder="Nombre (Requerido)" formControlName="nombre" [(ngModel)]="userCrear.first_name">
+				</div>
+					<p style="color:Red;" *ngIf="usuarioForm.controls['nombre'].touched && usuarioForm.controls['nombre'].errors?.required">Requerido. </p>
+					<p style="color:Red;" *ngIf="usuarioForm.controls['nombre'].errors?.minlength">Debe tener mínimo 3 caracteres. </p>
+					<p style="color:Red;" *ngIf="usuarioForm.controls['nombre'].errors?.maxlength">No puede superar los 90 caracteres. </p>
+					<p style="color:Red;" *ngIf="usuarioForm.controls['nombre'].errors?.pattern">No válido. </p>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="text" class="form-control" placeholder="Primer Apellido (Requerido)" formControlName="primer_apellido" [(ngModel)]="userCrear.first_last_name">
+				</div>
+					<p style="color:Red;" *ngIf="usuarioForm.controls['primer_apellido'].touched && usuarioForm.controls['primer_apellido'].errors?.required">Requerido. </p>
+					<p style="color:Red;" *ngIf="usuarioForm.controls['primer_apellido'].errors?.minlength">Debe tener mínimo 3 caracteres. </p>
+					<p style="color:Red;" *ngIf="usuarioForm.controls['primer_apellido'].errors?.maxlength">No puede superar los 45 caracteres. </p>
+					<p style="color:Red;" *ngIf="usuarioForm.controls['primer_apellido'].errors?.pattern">No válido. </p>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="text" class="form-control" placeholder="Segundo Apellido" formControlName="segundo_apellido" [(ngModel)]="userCrear.second_last_name">
+				</div>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['segundo_apellido'].errors?.minlength">Debe tener mínimo 3 caracteres. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['segundo_apellido'].errors?.maxlength">No puede superar los 45 caracteres. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['segundo_apellido'].errors?.pattern">No válido. </p>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas  fa-calendar c-c3"></i></span>
+					</div>
+					<input class="form-control" id="date" type="date" formControlName="fecha_nacimiento" [(ngModel)]="userCrear.fecha_nacimiento" >
+				</div>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['fecha_nacimiento'].errors?.minDate">La edad máxima aceptada son 120 años. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['fecha_nacimiento'].errors?.maxDate">La edad mínima aceptada son 21 años. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['fecha_nacimiento'].touched && usuarioForm.controls['fecha_nacimiento'].errors?.required">Requerido. </p>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+					</div>
+					<select class="form-control" id="sexo" formControlName="sexo" [(ngModel)]="userCrear.sexo"> 
+						<option>femenino</option>
+						<option>masculino</option>
+					</select>
+				</div>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['sexo'].touched && usuarioForm.controls['sexo'].errors?.required">Requerido. </p>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-phone"></i></span>
+					</div>
+					<input name="telefono" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="Número Telefónico (Requerido)" formControlName="telefono" [(ngModel)]="userCrear.telefono">
+				</div>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['telefono'].touched && usuarioForm.controls['telefono'].errors?.required">Requerido. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['telefono'].errors?.min">Número no válido. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['telefono'].errors?.max">Número no válido. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['telefono'].errors?.pattern">No válido. </p>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-id-card"></i></span>
+					</div>
+                    <input name="cedula" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="Cédula (Requerida)" formControlName="cedula" [(ngModel)]="userCrear.cedula">
+				</div>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['cedula'].touched && usuarioForm.controls['cedula'].errors?.required">Requerido. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['cedula'].errors?.min">No parece ser una cédula válida. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['cedula'].errors?.max">No parece ser una cédula válida. </p>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['cedula'].errors?.pattern">No válido. </p>
+
+                <div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user-md"></i></span>
+					</div>
+                    <select class="form-control" formControlName="especialidad"  [(ngModel)]="userCrear.especialidad">
+						<option [ngValue]="'Medicina General'">Medicina General</option>
+                        <option [ngValue]="'Medicina Interna'">Medicina Interna</option>
+                        <option [ngValue]="'Cirugia'">Cirugía</option>
+                        <option [ngValue]="'Endocrinologia'">Endocrinología</option>
+                        <option [ngValue]="'Ginecologia'">Ginecología</option>
+                        <option [ngValue]="'Nefrologia'">Nefrología</option> 
+                        <option [ngValue]="'Neurocirugia'">Neurocirugía</option>
+                        <option [ngValue]="'Neurologia'">Neurología</option>
+                        <option [ngValue]="'Pediatria'">Pediatría</option> 
+                        <option [ngValue]="'Traumatologia y Ortopedia'">Traumatología y Ortopedia</option>
+                        <option [ngValue]="'Urologia'">Urología</option>
+                    </select> 
+				</div>
+				<p style="color:Red;" *ngIf="usuarioForm.controls['especialidad'].touched && usuarioForm.controls['especialidad'].errors?.required">Requerido. </p>
+                <div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-map"></i></span>
+					</div>
+                    <select class="form-control" formControlName="estado"  [(ngModel)]="userCrear.estado">
+                        <option>Aguascalientes</option>
+                        <option>Baja California</option>
+                        <option>Baja California Sur</option>
+                        <option>Campeche</option>
+                        <option>CDMX</option>
+                        <option>Chihuahua</option>
+                        <option>Chiapas</option>
+                        <option>Coahuila</option>
+                        <option>Colima</option>
+                        <option>Durango</option>
+                        <option>Guanajuato</option>
+                        <option>Guerrero</option>
+                        <option>Hidalgo</option>
+                        <option>Jalisco</option>
+                        <option>México</option>
+                        <option>Michoacán</option>
+                        <option>Morelos</option>
+                        <option>Nayarit</option>
+                        <option>Nuevo León</option>
+                        <option>Oaxaca</option>
+                        <option>Puebla</option>
+                        <option>Querétaro</option>
+                        <option>Quintana Ro</option>
+                        <option>San Luis Potosí</option>
+                        <option>Sinaloa</option>
+                        <option>Sonora</option>
+                        <option>Tabasco</option>
+                        <option>Tamaulipas</option>
+                        <option>Tlaxcala</option>
+                        <option>Veracruz</option>
+                        <option>Yucatán</option>
+                        <option>Zacatecas</option>
+                    </select>
+				</div>
+                <p style="color:Red;" *ngIf="usuarioForm.controls['estado'].touched && usuarioForm.controls['estado'].errors?.required">Requerido. </p>
+                <div class="form-group">
+                    <input *ngIf="(pacienteFlag==0 && medicoFlag==0)" type="submit" value="Registrar" [disabled]="usuarioForm.invalid" (click)="verEstudios(ConfirmacionModal)" class="btn float-right login_btn">
+                    <input *ngIf="(pacienteFlag==1 || medicoFlag==1)" type="submit" value="Registrar" class="btn float-right login_btn" disabled>
+                </div>               
+			</div>
+			<div class="card-footer"> 
+				<div class="d-flex justify-content-center links">
+					¿Ya tienes cuenta?<a href="https://semindigital.com/login">Login</a>
+				</div>
+				<div class="d-flex justify-content-center">
+					<a href="https://semindigital.com/olvidada">¿Olvidaste tu contraseña?</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+
+<ng-template #ConfirmacionModal let-c="close" led-d="dismiss">
+	<!-- Modal Header -->
+	<div class="modal-header" style="color:white; background-color:#9AB638;">  
+		<h4 style="text-align: center;">Aviso de Privacidad</h4>  
+		<button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+	</div>
+	<!-- Modal Body -->
+	<div class="modal-body">
+		<div style="height: 300px; overflow-x: auto; overflow-x: hidden;" >
+			<div class="col-md-12">
+				<p class="parrafosJustify">La privacidad de sus datos personales es de total importancia para Laboratorios Semin XXI S. A de C .V (“Semin XXI”). En cumplimiento con lo establecido por la ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) y demás normas vigentes, Semin XXI pone a su disposición el Aviso de Privacidad para hacer de su conocimiento el tratamiento que hacemos de sus datos personales, así como de los mecanismos mediante los cuales podrá ejercer sus derechos de Acceso, Rectificación, Cancelación y Oposición.
+					<br><br>
+					Semin XXI obtiene, almacena y trata sus datos personales en virtud de los servicios proporcionados y/o recibidos. Es importante que usted sea el titular o representante legal de los datos que proporciona Semin XXI. Así mismo, es indispensable que sus datos sean correctos, completos, veraces, exactos y actuales, en caso de que exista algún error actualización le solicitamos atentamente nos lo notifique de acuerdo con lo establecido en el presente Aviso.
+					<br><br>
+					Los datos personales que recabamos podemos obtenerlos directamente de su titular o representante legal. Se trata de datos generales e información señalada como sensible por la Ley, misma que será tratada bajo las más estrictas medidas de seguridad que garanticen su confidencialidad. Dichos datos son:
+				</p>
+			</div> 
+			<div class="row parrafosJustify">
+				<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					<li type="disc">Nombre completo</li>
+					<li type="disc">Teléfono</li>
+					<li type="disc">Dirección</li>
+					<li type="disc">Correo electrónico</li>
+					<li type="disc">Edad</li>
+
+				</div>
+				<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					<li type="disc">Sexo</li>
+					<li type="disc">Resultados de estudios o análisis</li>
+					<li type="disc">Historial clínico</li>
+					<li type="disc">Estado de salud</li>
+				</div>
+			</div>
+			<br><br>
+			<div class="col-md-12 parrafosJustify">
+				<p>Los datos personales proporcionados por el titular y los derivados de los que solicita serán utilizados para:</p>
+					<br>
+					<li type="disc">Proporcionar el servicio</li>
+					<li type="disc">Tratamiento y diagnóstico medico</li>
+					<li type="disc">Actualización de expedientes médicos</li>
+					<li type="disc">Contacto con el paciente y prestación de servicios a futuro</li>
+					<li type="disc">Facturación y cobranza</li>
+			</div> 
+			<br><br>
+			<div class="col-md-12 parrafosJustify">
+				Para la correcta prestación de nuestros servicios, Semin XXI podrá revelar y/o transferir a terceros de forma parcial sus datos personales que se encuentren bajo tratamiento, para el cumplimiento de alguna(s) de las finalidades señaladas en el presente Aviso, en los siguientes casos: médicos, laboratorios, sanatorios, autoridades competentes en caso de que lo requieran. Si usted no manifiesta su oposición para que sus datos personales sean transferidos, se entenderá que contamos con su consentimiento tácito. Semin XXI y sus sucursales únicamente harán uso de la información para la finalidad para la que fue obtenida y no habrá transferencia a terceros distintos de los mencionados.
+				<br><br>
+				Semin XXI cuenta con las medidas de seguridad administrativas, técnicas y físicas suficientes para proteger sus datos personales con el fin de evitar el daño, pérdida, alteración, destrucción o el uso, acceso o tratamiento no autorizado de los mismos. Semin XXI se encuentra debidamente capacitado y comprometido para tratar sus datos personales preservando su confidencialidad y privacidad.
+				<br><br>
+				Conforme a la Ley Federal de Protección de Datos Personales en Posesión de Particulares, el titular de los datos o su representante legal debidamente acreditado podrán ejercer los derechos de acceso a sus datos personales y a los detalles del tratamiento de los mismos, rectificación de datos inexactos o incompletos, cancelación cuando considere que no se requieren para alguna de las finalidades y oposición de algún fin específico.            
+				<br><br>
+				Esto lo podrá realizar presentando su solicitud directamente en el Área de Sistemas de Laboratorios Semin XXI con domicilio en la calle 13 Sur 3102, Col. Volcanes, Puebla, Puebla, México, C.P. 72410, o bien mediante correo electrónico: datos.personales@laboratoriomedicosemin.com
+				<br><br>
+				Semin XXI se reserva el derecho de efectuar en cualquier momento modificaciones o actualizaciones al presente Aviso de Privacidad para la atención de reformas jurídicas, políticas internas o nuevos requerimientos para la atención de reformas jurídicas, políticas internas o nuevos requerimientos para la prestación u ofrecimiento de nuestros servicios. Toda modificación estará disponible en la página web www.seminxxi.com            
+				<br><br>
+			</div>
+			<div class="col-md-12 parrafosCenter">
+				Semin XXI S. A de C. V
+				<br><br><br>
+			</div>
+			<div class="col-md-12 parrafosJustify" style="-webkit-text-fill-color:#ab5527;">
+				<h5>
+					13 Sur 3012, Col. Volcanes, Puebla, Puebla, México. C.P. 72410
+					<br><br>
+					(222) 237-6664
+					<br><br>
+					info@semin.mx
+					<br><br>
+				</h5>
+			</div>
+		</div>
+		<br><br>
+		<div class="form-group">
+			<button *ngIf="procesando==false" type="button" style="color: white" class="btn btn-danger" (click)="c('')">No acepto</button>
+			<button *ngIf="procesando==true" type="button" style="color: white" class="btn btn-danger" disabled>No acepto</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input *ngIf="procesando==false" type="submit" value="Acepto" [disabled]="usuarioForm.invalid" (click)="registerUser()" class="btn float-right login_btn">
+			<input *ngIf="procesando==true" type="submit" value="Espera..." class="btn float-right login_btn" disabled>
+		</div> 
+		<div *ngIf="exito" class="alert alert-success" style="text-align: center; font-size: 20px;" role="alert">El usuario ha sido activado.<br><br>Ahora ya puede ingresar al expediente online.</div>
+		<div *ngIf="err" class="alert alert-danger" style="text-align: center; font-size: 20px;" role="alert">Ha ocurrido un error: <br>{{msgError}}</div>
+	</div>
+  </ng-template>

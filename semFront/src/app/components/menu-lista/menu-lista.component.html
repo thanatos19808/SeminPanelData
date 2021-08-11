@@ -1,0 +1,607 @@
+<html>
+    <body>
+        <div id="mcuerpo">
+            <div id="footer">
+ 
+<app-navbar></app-navbar>
+<div class="base">
+<lib-ngx-notification></lib-ngx-notification>
+<ngx-spinner></ngx-spinner>
+    <div class="search-banner text-white py-3" id="search-banner">
+        <div >
+            <div class="row text-center pb-4">
+                <div class="col-md-12"> 
+                    <h2  style="text-align: center;" class="titulo">Buscador de Servicios</h2> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="card acik-renk-form">
+                        <div class="card-body">
+                            <h4 class="titulo" style="font-size: 24px;" >Palabras Clave:</h4>
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                                    <div class="form-group" [formGroup]="queryForm">
+                                        <input  (keydown)="onKeydown($event)" class="form-control" type="text" style="font-size:20px" placeholder="Buscar estudio:" formControlName="query" [(ngModel)]="query">
+                                        <span style="color:Red;" *ngIf="queryForm.controls['query'].errors?.minlength">Debe ser de mas de 3 caracteres</span>
+                                        <span style="color:Red;" *ngIf="queryForm.controls['query'].errors?.maxlength">No debe ser de mas de 90 caracteres</span>
+                                        <span style="color:Red;" *ngIf="queryForm.controls['query'].touched && queryForm.controls['query'].errors?.required">Campo Requerido.</span>
+                                        <br>
+                                        <span style="color:Red;" *ngIf="queryForm.controls['query'].errors?.pattern">No válido</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" >
+                                    <button  style="font-size: 20px; margin-top: 0px;" type="button" (click)="consultarEstudio()" (click)="almacenarConsulta()" [disabled]="queryForm.invalid" class="btn boton">Buscar</button>
+                                    <br>
+                                    <br>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <button id="btnboton" type="button" style="margin-bottom: 10px; background-color: #7C4E26;" (click)="verEstudios(estudiosModal)"> Filtrar por categoría</button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button id="btnboton" type="button" style="margin-bottom: 10px; background-color: #394793;" (click)="verEstudios(instructivoModal)"> ¿Cómo buscar un estudio? </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="estudios[0]" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="color:black;">
+                    <br> 
+                    <h2 class="titulo">Resultados:</h2>
+                    <div *ngFor="let results of estudios; index as i">
+                        <article class="search-result row articulo">
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" style="color:black;">
+                        <br>
+                            <ul class="meta-search parrafosJustify"> 
+                                <li><i class="fas fa fa-dollar"></i> <span><strong> Precio Normal: </strong></span>{{results.precioNormal.toFixed(2)}} MXN</li>
+                                <li><i class="fas fa fa-dollar"></i> <span><strong> Precio en Sucursal: </strong></span>{{results.precioApoyo.toFixed(2)}} MXN</li>
+                                <li style="color: green; font-weight: bold"><i class="fas fa fa-dollar"></i> <span><strong> Precio Online: </strong></span>{{results.precioVenta.toFixed(2)}} MXN</li>
+                                <li *ngIf="((((results.precioVenta*100)/results.precioNormal)-100)*-1) > 4.99" style="color: green; font-weight: bold"><i class="fas fa fa-dollar"></i> <span><strong> Mejor Precio: OnLine </strong></span> {{((((results.precioVenta*100)/results.precioNormal)-100)).toFixed(0)}}% de descuento.</li>
+                                <li *ngIf="results.sexo == 'M'"><i class="fas fa fa-male"></i> <span><strong> Sexo: </strong></span><span style="color:#394793;"><strong>Masculino</strong></span></li>
+                                <li *ngIf="results.sexo == 'F'"><i class="fas fa fa-male"></i> <span><strong> Sexo: </strong></span><span style="color:#E4007C;"><strong>Femenino</strong></span></li>
+                                <li *ngIf="results.sexo == 'I'"><i class="fas fa fa-male"></i> <span><strong> Sexo: </strong></span><span style="color:#7C4E26;"><strong>Indistinto</strong></span></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 beneficio">
+                            <br>
+                            <h3 class="prueba">{{results.prueba}}</h3>			
+                            <hr>
+                            <p class="beneficio">{{results.beneficio}}</p>						
+                            <br>
+                        </div>
+                        &nbsp;&nbsp;<button type="button" style="background-color: #9AB638;" id="btnres" (click)="verEstudiosId(results ,descripcionModal)">Ver Beneficio</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button data-toggle="collapse" href="#collapseOne" id="btnres" type="button" style="background-color: #394793;" (click)="verEstudiosId(results ,agendaModal)" (click)="consultarDisponibilidad()" > Agendar </button>
+                        </article>
+                        <br> 
+                    </div>
+                </div>
+                <div *ngIf="!estudios[0]">
+                    <div *ngIf="initialFlag">
+                        <br> 
+                        <h2 style="font-size: 2.5em;" class="titulo" style="color: #9AB638 !important; padding-left: 15px;">No hay resultados</h2>
+                        <br> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #descripcionModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">{{estudio.prueba}}</h4>  
+            <button type="button" class="close" style="color: white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-3 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <a class="icono" style="color:#394793;" *ngIf="estudio.sexo == 'M'"><i class="fas fa fa-male"></i> </a>
+                    <a class="icono" style="color:#E4007C;" *ngIf="estudio.sexo == 'F'"><i class="fas fa fa-female"></i> </a>
+                    <a class="icono" style="color:#7C4E26;" *ngIf="estudio.sexo == 'I'"><i class="fas fa fa-group"></i> </a>
+                </div>
+                <div class="col-9 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                    <li><i class="fas fa fa-dollar"></i> <span><strong> Precio Normal: </strong></span>{{estudio.precioNormal.toFixed(2)}} MXN</li>
+                    <span><strong> Precio en Sucursal: </strong></span>{{estudio.precioApoyo.toFixed(2)}} MXN
+                    <div style="color: green; font-weight: bold"> <span><strong> Precio Online: </strong></span>{{estudio.precioVenta.toFixed(2)}} MXN</div>
+                    <div *ngIf="((((estudio.precioVenta*100)/estudio.precioNormal)-100)*-1) > 4.99" style="color: green; font-weight: bold"><span><strong> Mejor Precio: OnLine </strong></span> {{((((estudio.precioVenta*100)/estudio.precioNormal)-100)).toFixed(0)}}% de descuento.</div>
+                </div>
+                <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                    <div *ngIf="estudio.sinAcro"><span ><strong>Sin/Acro: </strong></span>{{estudio.sinAcro}}<br></div>
+                    <div *ngIf="!estudio.sinAcro"><span ><strong>Sin/Acro: </strong></span>Ninguna<br></div>
+                    <br>
+                    <a *ngIf="estudio.sexo == 'M'"> <span><strong> Sexo: </strong></span><span >Masculino</span></a>
+                    <a *ngIf="estudio.sexo == 'F'"> <span><strong> Sexo: </strong></span><span >Femenino</span></a>
+                    <a *ngIf="estudio.sexo == 'I'"> <span><strong> Sexo: </strong></span><span >Indistinto</span></a>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <hr>
+                    <span><strong>Descripción: </strong></span><br>{{estudio.beneficio}}   
+                    <br>
+                    <span><strong>Indicaciones Pre-Examen: </strong></span>{{estudio.indicacionesPreExamen}}<br>
+                    <br>
+                    <span><strong>Otras Indicaciones: </strong></span>
+                    <br>
+                    <p *ngIf="estudio.otrasIndicaciones">{{estudio.otrasIndicaciones}}</p>
+                    <p *ngIf="!estudio.otrasIndicaciones">Ninguna</p>
+                    <span><strong>Tiempo de Entrega: </strong></span><br>{{estudio.tiempoEntrega}}
+                    <br>
+                    <br>
+                </div>
+            </div>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button data-toggle="collapse" href="#collapseOne" class="btn boton" type="button" style="background-color: #394793;"  (click)="consultarDisponibilidad()" (click)="verEstudios(agendaModal)"> Agendar </button>
+        </div>
+    </ng-template>
+
+    <ng-template #agendaModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Agendar cita</h4>  
+            <button type="button" class="close" style="color: white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body --> 
+        <div class="modal-body" >
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pasos">
+                    <div class="numberCircle col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">1</div>
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                        <h5 class="titulo">Elije un servicio</h5>
+                    </div>
+                </div>
+                <hr>
+                <div  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 collapse"  id="collapseOne">
+                    <div  *ngIf="estudio.prueba == 'RAYOS X A DOMICILIO'" class="alert alert-primary" style="text-align: center;" role="alert">Este estudio varía de precio dependiendo del area anatómica a estudiar y el numero de proyecciones que requieran. Por favor espera que uno de nuestros asesores se comunique con usted para más información y afinar detalles. Nuestra zona de asistencia es: Ciudad de Puebla, San Andrés Cholula, San Pedro Cholula, Huejotzingo, Atlixco y Amozoc. Si requiere una toma fuera de estas zonas se puede realizar, con un costo proporcinal a la distancia. </div>
+                    <div style="display: flex; align-content: center;" >
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <p style="color:#9AB638"><strong>Datos de Estudio:</strong></p>
+                            <span><strong>Prueba: </strong></span>{{estudio.prueba}}
+                            <span><strong>Tiempo de Entrega: </strong></span>{{estudio.tiempoEntrega}}<br>
+                        </div>
+                        <div  class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" >
+                            <br>
+                            <li><i class="fas fa fa-dollar"></i> <span><strong> Precio Normal: </strong></span>{{estudio.precioNormal.toFixed(2)}} MXN</li>
+                            <span><strong> Precio en Sucursal: </strong></span>{{estudio.precioApoyo.toFixed(2)}} MXN<br>
+                            <div style="color: green; font-weight: bold"> <span><strong> Precio Online: </strong></span>{{estudio.precioVenta.toFixed(2)}} MXN</div>
+                            <div *ngIf="((((estudio.precioVenta*100)/estudio.precioNormal)-100)*-1) > 4.99" style="color: green; font-weight: bold"><span><strong> Mejor Precio: OnLine </strong></span> {{((((estudio.precioVenta*100)/estudio.precioNormal)-100)).toFixed(0)}}% de descuento.</div>
+                            <a *ngIf="estudio.sexo == 'M'"> <span><strong> Sexo: </strong></span><span >Masculino</span></a>
+                            <a *ngIf="estudio.sexo == 'F'"> <span><strong> Sexo: </strong></span><span >Femenino</span></a>
+                            <a *ngIf="estudio.sexo == 'I'"> <span><strong> Sexo: </strong></span><span >Indistinto</span></a><br>
+                            <div *ngIf="estudio.sinAcro"><span ><strong>Sin/Acro: </strong></span>{{estudio.sinAcro}}<br></div>
+                            <div *ngIf="!estudio.sinAcro"><span ><strong>Sin/Acro: </strong></span>Ninguna<br></div>
+                        </div>
+                    </div>
+                        <div  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <span><strong>Descripción: </strong></span>{{estudio.beneficio}}
+                            <br><br>
+                            <span><strong>Indicaciones Pre-Examen: </strong></span>{{estudio.indicacionesPreExamen}} 
+                            <br><br>
+                            <span><strong>Otras Indicaciones: </strong></span>
+                            <div *ngIf="estudio.otrasIndicaciones">{{estudio.otrasIndicaciones}}</div>
+                            <div *ngIf="!estudio.otrasIndicaciones">Ninguna</div>                  
+                        </div>
+                        <div  style="text-align: center;" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <br>
+                            <button type="button" class="btn boton" (click)="verEstudios(otroModal)">Este estudio es para otra persona</button>
+                        </div>
+                        <br>
+                        <div *ngIf="tiempo==0" class="alert alert-primary" style="text-align: center;" role="alert">Una vez confirmada esta cita, uno de nuestros asesores se comunicará con usted en menos de una hora.</div>
+                        <div *ngIf="estudio.domingos" class="alert alert-primary" style="text-align: center;" role="alert">Este estudio es posible agendarlo los días Domingos en la sucursal “Clínica Integral”, caso en el cual el tiempo de entrega se le incrementará un día extra. </div>
+                        <div *ngIf="flagDuplicidad==1" class="alert alert-primary" style="text-align: center;" role="alert">No es posible agendar esta cita porque hemos detectado que tiene un estudio similar en su carrito de compra. </div>
+                        <br>
+            <button *ngIf="!flagAgenda && flagDuplicidad==0" data-toggle="collapse" data-target="#collapseOne,#collapseFive" type="button" class="btn boton">Siguiente</button>
+            <button *ngIf="flagAgenda && flagDuplicidad==0" data-toggle="collapse" data-target="#collapseOne,#collapseTwo" type="button" class="btn boton">Siguiente</button>
+            <br>
+            <br>
+            </div>
+                <div *ngIf="flagAgenda"  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pasos">
+                    <div class="numberCircle col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">2</div>
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                        <h5 class="titulo">Selecciona tipo de Cita</h5>
+                    </div>
+                </div>
+                <hr *ngIf="flagAgenda" >
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 collapse"  id="collapseTwo">
+                    <select  [(ngModel)]="flagCita" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off">
+                                <option [ngValue]=true >Cita Agendada</option>
+                                <option [ngValue]=false >Cita Abierta</option>
+                    </select> 
+                    <br>
+                    <br>
+                    <div *ngIf="flagCita">
+                        <h6 class="titulo" style="font-size: 25px; text-align: center;"> Eliges la sucursal, fecha y hora de tu cita antes de pagar.</h6>
+                        <br>
+                        <br>
+                    </div>
+                    <div *ngIf="!flagCita">
+                        <h1 class="titulo" style="font-size: 20px; text-align: justify;">Tú eliges el servicio y tienes hasta seis meses para asistir a nuestras sucursales y llevarlo a cabo. <br><br> Importante. Para poder ejecutar tu cita abierta debes confirmar el servicio, hasta con una hora de anticipación, esto para que consultemos disponibilidad.</h1>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                    <button data-toggle="collapse" data-target="#collapseOne,#collapseTwo" type="button" class="btn boton">Anterior</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp; 
+                    <button *ngIf="flagCita==null" data-toggle="collapse" data-target="#collapseTwo,#collapseThree" (click)="seleccionarHoraFecha()" type="button" class="btn boton">Siguienteddd</button>
+                    <button *ngIf="flagCita" data-toggle="collapse" data-target="#collapseTwo,#collapseThree" (click)="seleccionarHoraFecha()" type="button" class="btn boton">Siguiente</button>
+                    <button *ngIf="!flagCita" data-toggle="collapse" data-target="#collapseTwo,#collapseFive" (click)="seleccionarHoraFecha()" type="button" class="btn boton">Siguiente</button>
+                    <br>
+                    <br>
+                </div>            
+                <div *ngIf="flagAgenda && flagCita"  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pasos">
+                    <div class="numberCircle col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">3</div>
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                        <h5 class="titulo">Elije una sucursal</h5>
+                    </div>
+                </div>
+                <hr *ngIf="flagAgenda && flagCita" >
+                <div *ngIf="flagAgenda && flagCita"  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 collapse"  id="collapseThree">
+                    <div *ngIf="disponibilidad.count>0" >
+                        <select  [(ngModel)]="sucursalSelecionada" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off">
+                                <option value="" selected></option>
+                                <option *ngFor="let items of disponibilidad.results; index as i" [ngValue]="items" >{{items.Sucursal.nombreSucursal}}</option>
+                        </select>
+                        <div *ngIf="sucursalSelecionada">
+                            <br>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <h5 style="color:#9AB638">Sucursal: {{sucursalSelecionada.Sucursal.nombreSucursal}}</h5>
+                                <br>
+                            </div>
+                            <div style="display: flex;">
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                    <p style="color:#9AB638"><strong>Dirección:</strong></p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.calle"><strong>Calle: </strong>{{sucursalSelecionada.Sucursal.calle}}</p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.colonia"><strong>Col: </strong>{{sucursalSelecionada.Sucursal.colonia}}</p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.cp"><strong>cp: </strong>{{sucursalSelecionada.Sucursal.cp}}</p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.num_exterior"><strong>Num. Exterior: </strong>{{sucursalSelecionada.Sucursal.num_exterior}}</p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.num_interior"><strong>Num. Interior: </strong>{{sucursalSelecionada.Sucursal.num_interior}}</p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.estado"><strong>Edo: </strong>{{sucursalSelecionada.Sucursal.estado}}</p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.municipio"><strong>Municipio: </strong>{{sucursalSelecionada.Sucursal.municipio}}</p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.descipcion"><strong>Detalles: </strong>{{sucursalSelecionada.Sucursal.descipcion}}</p>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                    <p style="color:#9AB638"><strong>Horario:</strong></p>
+                                    <p><strong>Horario Lun - Vie: </strong>{{sucursalSelecionada.Sucursal.hora_apertura}} - {{sucursalSelecionada.Sucursal.hora_cierre}}</p>
+                                    <p><strong>Horario Sab: </strong>{{sucursalSelecionada.Sucursal.hora_apertura_sab}} - {{sucursalSelecionada.Sucursal.hora_cierre_sab}}</p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.hora_apertura_dom" ><strong>Horario Dom (recepción de estudios) : </strong>{{sucursalSelecionada.Sucursal.hora_apertura_dom}} - {{sucursalSelecionada.Sucursal.hora_cierre_dom}}</p>
+                                    <p *ngIf="sucursalSelecionada.Sucursal.estacionamiento"><strong>Estacionamiento: </strong>Si</p>
+                                    <p *ngIf="!sucursalSelecionada.Sucursal.estacionamiento"><strong>Estacionamiento: </strong>No</p>
+                                    <p *ngIf="!sucursalSelecionada.Sucursal.telefono"><strong>Telefono: </strong>+52 {{sucursalSelecionada.Sucursal.telefono}}</p>
+                                </div>
+                            </div>
+                        </div>    
+                    </div>
+                    <div *ngIf="disponibilidad.count==0">
+                        <br> 
+                        <h5 style="text-align: center;" class="text-white titulo">De momento no hay sucursales disponibles. Intentelo más tarde.</h5>
+                        <br> 
+                    </div>
+                    <br>
+                    <br>
+                    <button data-toggle="collapse" data-target="#collapseTwo,#collapseThree" type="button" class="btn boton">Anterior</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button *ngIf="!sucursalSelecionada" data-toggle="collapse" data-target="#collapseThree,#collapseFour" type="button" class="btn boton" disabled>Siguiente</button>
+                    <button *ngIf="sucursalSelecionada" (click)="seleccionarSala()" data-toggle="collapse" data-target="#collapseThree,#collapseFour" type="button" class="btn boton" >Siguiente</button>
+                    <br>
+                    <br>
+                </div>
+                <div *ngIf="flagAgenda && flagCita"  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pasos">
+                    <div class="numberCircle col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">4</div>
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                        <h5 class="titulo">Selecciona fecha y hora </h5>
+                    </div>
+                </div>
+                <hr *ngIf="flagAgenda && flagCita" >
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 collapse"  id="collapseFour">
+                    <div class="col-md-12 text-center">
+                        <h5 class="titulo"> 1.- Selecciona el día</h5>
+                        <br>
+                            <form [formGroup]="citaFechaForm">
+                                <input class="form-control" id="date" type="date" formControlName="fecha_cita" [(ngModel)]="fechaSelecionada" (click)="purgarHorario()" >
+                                <span style="color:Red;" *ngIf="citaFechaForm.controls['fecha_cita'].errors?.minDate">Esta fecha no es válida</span>
+                                <span style="color:Red;" *ngIf="citaFechaForm.controls['fecha_cita'].errors?.maxDate">Esta fecha no puede superar un año a partir del día de hoy</span>
+                                <span style="color:Red;" *ngIf="citaFechaForm.controls['fecha_cita'].touched && citaFechaForm.controls['fecha_cita'].errors?.required">Campo Requerido.</span>
+                                <span style="color:Red;" *ngIf="citaFechaForm.errors" > De momento solo contamos con servicio de Lun - Sab</span>
+                            </form>
+                        <br>
+                        <button style="background-color: #394793;"  (click)="consultarCitas()" (click)="verEstudios(listaModal)" [disabled]="citaFechaForm.invalid" type="button" class="btn boton ">Seleccionar Hora</button>
+                    </div>
+                    <br>
+                    <div *ngIf="horaFlag">
+                    <h6 class="titulo" style="font-size: 25px; text-align: center;">Fecha: {{fechaSelecionada}}</h6>
+                    <h6 class="titulo" style="font-size: 25px; text-align: center;">{{hora_inicio}} - {{hora_final}} </h6>
+                    </div>
+                    <br>
+                    <button data-toggle="collapse" data-target="#collapseThree,#collapseFour" type="button" class="btn boton">Anterior</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button *ngIf="!flagCita" data-toggle="collapse" data-target="#collapseFour,#collapseFive" type="button" class="btn boton">Siguiente</button>
+                    <button *ngIf="!flagFinal && !horaFlag" data-toggle="collapse" data-target="#collapseFour,#collapseFive" type="button" class="btn boton" disabled>Siguiente</button>
+                    <button *ngIf="!flagFinal && horaFlag" data-toggle="collapse" data-target="#collapseFour,#collapseFive" type="button" class="btn boton" >Siguiente</button>
+                    <br>
+                    <br>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pasos">
+                    <div *ngIf="flagAgenda && flagCita" class="numberCircle col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">5</div>
+                    <div *ngIf="!flagAgenda"  class="numberCircle col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">2</div>
+                    <div *ngIf="!flagCita"  class="numberCircle col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">3</div>
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                        <h5 class="titulo">Finalizar agenda</h5>
+                    </div>
+                </div>
+                <hr *ngIf="flagAgenda || flagCita">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 collapse"  id="collapseFive">
+                    <div style="display: flex; align-content: center;" >
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" >
+                            <br>
+                                <h5 style="color:#9AB638">Prueba: {{estudio.prueba}}</h5>
+                                <br>
+                                <p><strong>Tiempo de entrega: </strong>{{estudio.tiempoEntrega}}</p>
+                                <p *ngIf="estudio.sexo == 'M'"><strong>Sexo: </strong>Masculino</p>
+                                <p *ngIf="estudio.sexo == 'F'"><strong>Sexo: </strong>Femenino</p>
+                                <p *ngIf="estudio.sexo == 'I'"><strong>Sexo: </strong>Indistinto</p>
+                                <br>
+                                <p><strong>Indicaciones Pre-Examen: </strong>{{estudio.indicacionesPreExamen}}</p>
+                                <br>
+                                <span><strong>Otras Indicaciones: </strong></span>
+                                <br>
+                                <p *ngIf="estudio.otrasIndicaciones">{{estudio.otrasIndicaciones}}</p>
+                                <p *ngIf="!estudio.otrasIndicaciones">Ninguna</p>
+
+                                <p><strong>Precio: </strong>{{estudio.precioVenta.toFixed(2)}} MXN</p> 
+                                <br> 
+                            
+                        </div>
+                        <div *ngIf="sucursalSelecionada" class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <br>
+                                <h5 style="color:#9AB638; ">Sucursal: {{sucursalSelecionada.Sucursal.nombreSucursal}}</h5>
+                                <br>
+                                <p *ngIf="sucursalSelecionada.Sucursal.calle && (flagAgenda && flagCita )"><strong>Calle: </strong>{{sucursalSelecionada.Sucursal.calle}}</p>
+                                <p *ngIf="sucursalSelecionada.Sucursal.colonia && (flagAgenda && flagCita )"><strong>Col: </strong>{{sucursalSelecionada.Sucursal.colonia}}</p>
+                                <p *ngIf="sucursalSelecionada.Sucursal.cp && (flagAgenda && flagCita )"><strong>cp: </strong>{{sucursalSelecionada.Sucursal.cp}}</p>
+                                <p *ngIf="sucursalSelecionada.Sucursal.num_exterior && (flagAgenda && flagCita )"><strong>Num. Exterior: </strong>{{sucursalSelecionada.Sucursal.num_exterior}}</p>
+                                <p *ngIf="sucursalSelecionada.Sucursal.num_interior && (flagAgenda && flagCita )"><strong>Num. Interior: </strong>{{sucursalSelecionada.Sucursal.num_interior}}</p>
+                                <p *ngIf="sucursalSelecionada.Sucursal.estado && (flagAgenda && flagCita )"><strong>Edo: </strong>{{sucursalSelecionada.Sucursal.estado}}</p>
+                                <p *ngIf="sucursalSelecionada.Sucursal.municipio && (flagAgenda && flagCita )"><strong>Municipio: </strong>{{sucursalSelecionada.Sucursal.municipio}}</p>
+                                <p *ngIf="sucursalSelecionada.Sucursal.descipcion && (flagAgenda && flagCita )"><strong>Detalles: </strong>{{sucursalSelecionada.Sucursal.descipcion}}</p>
+                            <br>
+                        </div>
+                    </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div *ngIf="horaFlag && (flagAgenda && flagCita )">
+                                <br>
+                                <h6 class="titulo" style="font-size: 25px; text-align: center;">Fecha: {{fechaSelecionada}}</h6>
+                                <h6 class="titulo" style="font-size: 25px; text-align: center;">{{hora_inicio}} - {{hora_final}} </h6>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: center;">
+                            <button  (click)="carrito()" (click)="c('')" type="button" class="btn boton" style="background-color: #394793;" > Agregar al carrito </button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button  (click)="compra()" (click)="c('')" type="button" class="btn boton" style="background-color: #394793;" > Comprar ya </button>
+                        </div>
+                        <br>
+                        <br>
+                    <button *ngIf="!flagCita"  data-toggle="collapse" data-target="#collapseTwo,#collapseFive" type="button" class="btn boton">Anterior</button>
+                    <button *ngIf="flagAgenda && flagCita"  data-toggle="collapse" data-target="#collapseFour,#collapseFive" type="button" class="btn boton">Anterior</button>
+                    <button *ngIf="!flagAgenda"  data-toggle="collapse" data-target="#collapseOne,#collapseFive" type="button" class="btn boton">Anterior</button>
+                    <br>
+                </div>
+            </div>
+            <br>
+            <button type="button" class="btn btn-danger" (click)="c('')">Cancelar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #listaModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">2.- Selecciona el horario</h4>  
+            <button type="button" class="close" style="color: white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div *ngIf="listaHoras">
+                <div *ngFor="let results of listaHoras; index as i">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card card-inverse card-primary ">
+                            <blockquote class=" block" (click)="c('')" (click)="seleccionarHora(results.hora_inicio, results.hora_final)">
+                                <h4 class="titulo" style="text-align: center;">Hora: {{results.hora_inicio}} - {{results.hora_final}} </h4>
+                                <p style="text-align: center;"><strong>Disponible</strong></p>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <br>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #otroModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Ingresa los datos del paciente</h4>  
+            <button type="button" class="close" style="color: white;" (click)="purgarOtroPaciente()" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <form [formGroup]="otroPacienteForm">
+                <label>Fecha de naciemiento</label>
+                <input class="form-control" id="date" type="date" formControlName="otro_fecha_nacimento" [(ngModel)]="otro_fecha_nacimento"  >
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_fecha_nacimento'].errors?.minDate">Esta fecha no es válida</span>
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_fecha_nacimento'].errors?.maxDate">Esta fecha no es válida</span>
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_fecha_nacimento'].touched && otroPacienteForm.controls['otro_fecha_nacimento'].errors?.required">Campo Requerido.</span>
+                <br>  
+                <label>Nombre del paciente</label>
+                <input class="form-control" type="text" placeholder="Nombre del paciente" formControlName="otro_nombre_paciente" [(ngModel)]="otro_nombre_paciente">
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_nombre_paciente'].errors?.minlength">Debe ser mayor a 5 caracteres</span>
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_nombre_paciente'].errors?.maxlength">No debe ser mayor a 100 caracteres</span>
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_nombre_paciente'].errors?.pattern">No válido</span>
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_nombre_paciente'].touched && otroPacienteForm.controls['otro_nombre_paciente'].errors?.required">Campo Requerido.</span>
+                
+                <br>
+                <label>Parentesco</label>
+                <input class="form-control" type="text" placeholder="Parentesco" formControlName="otro_parentesco_paciente" [(ngModel)]="otro_parentesco_paciente">
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_parentesco_paciente'].errors?.minlength">Debe ser mayor a 3 caracteres</span>
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_parentesco_paciente'].errors?.maxlength">No debe ser mayor a 40 caracteres</span>
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_parentesco_paciente'].errors?.pattern">No válido</span>
+                <span style="color:Red;" *ngIf="otroPacienteForm.controls['otro_parentesco_paciente'].touched && otroPacienteForm.controls['otro_parentesco_paciente'].errors?.required">Campo Requerido.</span>
+                <br>
+            </form>
+            <button type="button" class="btn boton" style="background-color: red;" (click)="purgarOtroPaciente()" (click)="c('')">Cancelar</button>
+            &nbsp;&nbsp;
+            <button type="button" class="btn boton" [disabled]="otroPacienteForm.invalid"  (click)="c('')">Continuar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #instructivoModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">¿Cómo usar nuestro buscador de servicios?</h4>  
+            <button type="button" class="close" style="color: white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <p class="parrafosJustify" >1.- Selecciona la categoría del estudio que deseas buscar en “Filtrar por Categoría”. Si no conoces la categoría no te preocupes, buscaremos en todo nuestro catálogo. </p>
+            <br>
+            <p class="parrafosJustify">2.- Escriba una palabra u oración en la barra de búsqueda “Buscar estudio:” y una vez terminado haga click en el botón de “Buscar”.</p>
+            <br> 
+            <p class="parrafosJustify">3.- Aparecerán en la parte baja todos los estudios que sean similares a su búsqueda, haga click en cualquiera de ellos para información detallada del estudio</p>
+            <br> 
+            <p class="parrafosCenter"><strong>De ante mano agradecemos con mucho cariño su confianza.</strong></p>
+            <br>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="btnboton" type="button" style="margin-bottom: 10px; background-color: #394793;" (click)="verEstudios(descargaModal)"> Ver video </button>
+        </div> 
+    </ng-template>
+
+    <ng-template #estudiosModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4>Lista de categorias:</h4>  
+            <button type="button" class="close" style="color: white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <label style="color:#9AB638;" class="container">Seleccionar Todos
+                        <input type="checkbox"  (click)="selecionarTodos()" [(ngModel)]="todosLista">
+                        <span class="checkmark"></span>
+                    </label>
+                    <br>
+                </div>
+                <div class="col-md-6">
+                    <label style="color:#9AB638 ;" class="container"> Analisis Sanguíneos
+                        <input type="checkbox" [(ngModel)]="list[0].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Analisis Clínicos
+                        <input type="checkbox" [(ngModel)]="list[1].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Ultrasonografía
+                        <input type="checkbox" [(ngModel)]="list[2].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Ultrasonografía Doppler
+                        <input type="checkbox" [(ngModel)]="list[3].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Rayos X
+                        <input type="checkbox" [(ngModel)]="list[4].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Rayos X Contrastados
+                        <input type="checkbox" [(ngModel)]="list[5].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Mastografía
+                        <input type="checkbox" [(ngModel)]="list[6].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Papanicolau
+                        <input type="checkbox" [(ngModel)]="list[7].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Cardiología
+                        <input type="checkbox" [(ngModel)]="list[8].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Tomografía
+                        <input type="checkbox" [(ngModel)]="list[9].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Tomografía Contrastada
+                        <input type="checkbox" [(ngModel)]="list[10].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="col-md-6">
+                    <label style="color:#9AB638 ;" class="container"> Resonancia Magnética
+                        <input type="checkbox" [(ngModel)]="list[11].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Resonancia Magnética Contrastada
+                        <input type="checkbox" [(ngModel)]="list[12].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Colposcopía
+                        <input type="checkbox" [(ngModel)]="list[13].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Densitometría
+                        <input type="checkbox" [(ngModel)]="list[14].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Audiología
+                        <input type="checkbox" [(ngModel)]="list[15].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Espirometría
+                        <input type="checkbox" [(ngModel)]="list[16].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Patología
+                        <input type="checkbox" [(ngModel)]="list[17].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+            <br>
+            <button type="button" class="btn boton"  (click)="c('')">Regresar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #descargaModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">¿DUDAS AL AGENDAR TUS ESTUDIOS?</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row"> 
+                <div style="text-align: center;" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <video width="320" autoplay>
+                        <source src="https://semindigital.com/tutoriales/video_agendar_doc.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        </div>
+    </ng-template>
+
+</div> 
+</div>
+</div>
+</body>
+</html>

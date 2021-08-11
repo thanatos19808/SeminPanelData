@@ -1,0 +1,423 @@
+<app-nav-dir></app-nav-dir>
+<div class="base">
+<lib-ngx-notification></lib-ngx-notification>
+<ngx-spinner></ngx-spinner>
+    <div class="row">
+        <br><br><br>
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" style="padding-bottom: 15px;">
+            <select  [(ngModel)]="tipoSeleccionado" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off" (change)="consultarMedicoAdmin()">
+                <option [ngValue]="0" selected>Seleccionar Estatus..</option>
+                <option [ngValue]="1">Pendientes</option>
+                <option [ngValue]="2">Aprobados</option>
+                <option [ngValue]="3">Rechazados</option>
+            </select> 
+        </div>
+        <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+            <button  type="button" class="btn boton pull-right" style="color: white;" (click)="consultarMedicoAdmin()">Actualizar</button> 
+        </div >
+        <br>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <table id="listaMed" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                <thead>
+                  <tr>
+                    <th>Num.</th>
+                    <th>Sem.</th>
+                    <th>Estatus.</th>
+                    <th>Cédula.</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Cel.</th>
+                    <th>Edo.</th>
+                    <th>Ranking</th>
+                  </tr> 
+                </thead>
+                <tbody>
+                  <tr *ngFor="let results of medicos.results; index as i" (click)="verModal(results,medicoModal)" >
+                    <td><span >{{results.id}}</span></td>
+                    <td  *ngIf="results.medicoSemin"><strong style="color:#E5BE01;">Si</strong></td>
+                    <td  *ngIf="!results.medicoSemin"><strong style="color:#9AB638">No</strong></td>
+                    <td  *ngIf="results.verificado=='PENDIENTE'"><strong style="color:#E5BE01;">  {{results.verificado}}</strong></td>
+                    <td  *ngIf="results.verificado=='APROBADO'"><strong style="color:#9AB638">  {{results.verificado}}</strong></td>
+                    <td  *ngIf="results.verificado=='RECHAZADO'"><strong style="color:#FF0000;">  {{results.verificado}}</strong></td>
+                    <td *ngIf="results.cedula"><span >{{results.cedula}}</span></td>
+                    <td *ngIf="!results.cedula"><span >No definido</span></td>
+                    <td ><span >{{results.nombre}} {{results.apellido_paterno}} {{results.apellido_materno}}</span></td>
+                    <td *ngIf="results.email"><span >{{results.email}}</span></td>
+                    <td *ngIf="!results.email"><span >No definido</span></td>
+                    <td *ngIf="results.telefono"><span >{{results.telefono}}</span></td>
+                    <td *ngIf="!results.telefono"><span >No definido</span></td>
+                    <td *ngIf="results.estado"><span >{{results.estado}}</span></td>
+                    <td *ngIf="!results.estado"><span >No definido</span></td>
+                    <td *ngIf="results.ranking"><span >{{results.ranking}}</span></td>
+                    <td *ngIf="!results.ranking"><span >No definido</span></td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<ng-template #medicoModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Médico</h4>  
+        <button type="button" class="close" style="color:white;"  (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <div *ngIf="medico.nombre">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 titulo text-center"> 
+                    <h2>{{medico.nombre}} {{medico.apellido_paterno}} {{medico.apellido_materno}}</h2>
+                    <br><br><br>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" style="text-align:center">
+                    <br><br><br>
+                    <img  *ngIf="medico.imagen" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" src="https://semindigital.com:8090{{medico.imagen}}">
+                    <img  *ngIf="!medico.imagen" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" src="../../../../assets/img/user.png">
+                    <br><br>
+                    <button type="button" class="btn boton" style=" color: white; margin-top: 10px;" (click)="reiniciarValoresImagen()" (click)="verModalMed(subirModal)">Subir Foto</button> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn boton" style="color: white; margin-top: 10px;" (click)="rellenarMedicoCampos()" (click)="verModalMed(editarModal)">Actualizar Datos</button>  
+                    <br><br>
+                    <strong class="titulo" >Contacto:</strong>
+                    <br>   
+                    <p *ngIf="medico.telefono">Telefono: <strong>{{medico.telefono}}</strong></p>
+                    <p *ngIf="!medico.telefono">Telefono: <strong>No definido</strong></p>
+                    <p *ngIf="medico.email">Correo: <strong>{{medico.email}}</strong></p>
+                    <p *ngIf="!medico.email">Correo: <strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                    <strong class="titulo" >Datos Personales:</strong> 
+                    <br> 
+                    <p >Id: <strong>{{medico.id}}</strong></p> 
+                    <p  *ngIf="medico.medicoSemin">Médico Semín: <strong style="color:#E5BE01;">Si</strong></p>
+                    <p  *ngIf="!medico.medicoSemin">Médico Semín: <strong style="color:#9AB638">No</strong></p>
+                    <p  *ngIf="medico.verificado=='PENDIENTE'">Estatus: <strong style="color:#E5BE01;">  {{medico.verificado}}</strong></p>
+                    <p  *ngIf="medico.verificado=='APROBADO'">Estatus: <strong style="color:#9AB638">  {{medico.verificado}}</strong></p>
+                    <p  *ngIf="medico.verificado=='RECHAZADO'">Estatus: <strong style="color:#FF0000;">  {{medico.verificado}}</strong></p>
+                    <p *ngIf="medico.ranking">Ranking: <strong >{{medico.ranking}} Puntos</strong></p>
+                    <p *ngIf="!medico.ranking">Ranking: <strong >No definido</strong></p>
+                    <p *ngIf="medico.estrellas >= 5 ">Estrellas: <strong style="color:#9AB638">{{medico.estrellas}} Estrellas</strong></p>
+                    <p *ngIf="medico.estrellas < 5  && medico.estrellas > 1 ">Estrellas: <strong style="color:#E5BE01">{{medico.estrellas}} Estrellas</strong></p>
+                    <p *ngIf="medico.estrellas == 1 ">Estrellas: <strong style="color:#FF0000">{{medico.estrellas}} Estrella</strong></p>
+                    <p *ngIf="medico.cedula" (click)="copyText(medico.cedula)">Cédula: <strong>{{medico.cedula}}</strong></p> 
+                    <p *ngIf="!medico.cedula">Cédula: <strong>No definido</strong></p>
+                    <p *ngIf="medico.fecha_nacimiento">Fecha de Nacimiento: <strong>{{medico.fecha_nacimiento}}</strong></p>
+                    <p *ngIf="!medico.fecha_nacimiento">Fecha de Nacimiento: <strong>No definido</strong></p>
+                    <p *ngIf="medico.fecha_nacimiento && edadMeses >= 11">Edad: <strong>{{edad}}</strong></p> 
+                    <p *ngIf="medico.fecha_nacimiento && edadMeses < 11">Meses de Edad: <strong>{{edadMeses}}</strong></p>
+                    <p *ngIf="medico.creacion">Fecha de Registro: <strong>{{medico.creacion.split('T')[0]}}</strong></p>
+                    <p *ngIf="!medico.creacion">Fecha de Registro: <strong>No definido</strong></p>
+                    <p *ngIf="medico.caducidad">Caducidad: <strong>{{medico.caducidad.split('T')[0]}}</strong></p>
+                    <p *ngIf="!medico.caducidad">Caducidad: <strong>No definido</strong></p>
+                    <p *ngIf="medico.sexo">Sexo: <strong>{{medico.sexo}}</strong></p> 
+                    <p *ngIf="!medico.sexo">Sexo: <strong>No definido</strong></p>
+                    <p *ngIf="medico.especialidad">Especialidad: <strong>{{medico.especialidad}}</strong></p> 
+                    <p *ngIf="!medico.especialidad">Especialidad: <strong>No definido</strong></p>
+                    <p *ngIf="medico.subespecialidad">Sub Especialidad: <strong>{{medico.subespecialidad}}</strong></p> 
+                    <p *ngIf="!medico.subespecialidad">Sub Especialidad: <strong>No definido</strong></p>
+                    <p *ngIf="medico.estado">Ubicación: <strong>{{medico.estado}}</strong></p> 
+                    <p *ngIf="!medico.estado">Ubicación: <strong>No definido</strong></p>
+                    <br>   
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                    <strong class="titulo" >Consultorio:</strong>
+                    <br> 
+                    <p *ngIf="medico.calle">Calle: <strong>{{medico.calle}}</strong></p>
+                    <p *ngIf="!medico.calle">Calle: <strong>No definido</strong></p>
+                    <p *ngIf="medico.colonia">Colonia: <strong>{{medico.colonia}}</strong></p>
+                    <p *ngIf="!medico.colonia" >Colonia: <strong>No definido</strong></p>
+                    <p *ngIf="medico.num_interior">Número interior: <strong>{{medico.num_interior}}</strong></p>
+                    <p *ngIf="!medico.num_interior">Número interior: <strong>No definido</strong></p>
+                    <p *ngIf="medico.num_exterior">Número exterior <strong>{{medico.num_exterior}}</strong></p>
+                    <p *ngIf="!medico.num_exterior">Número exterior: <strong>No definido</strong></p>
+                    <p *ngIf="medico.cp">CP: <strong>{{medico.cp}}</strong></p>
+                    <p *ngIf="!medico.cp" >CP: <strong>No definido</strong></p>
+                    <p *ngIf="medico.municipio">Municipio: <strong>{{medico.municipio}}</strong></p>
+                    <p *ngIf="!medico.municipio" >Municipio: <strong>No definido</strong></p>
+                    <p *ngIf="medico.estado">Estado: <strong>{{medico.estado}}</strong></p>
+                    <p *ngIf="!medico.estado" >Estado: <strong>No definido</strong></p>
+                    <p *ngIf="medico.localidad">Ciudad: <strong>{{medico.localidad}}</strong></p>
+                    <p *ngIf="!medico.localidad" >Ciudad: <strong>No definido</strong></p>
+                    <br>
+                    <strong class="titulo" >Registro:</strong>
+                    <br>
+                    <p *ngIf="medico.creador"><strong>Creador: </strong>{{medico.creador}}</p>
+                    <p *ngIf="!medico.creador"><strong>Creador: </strong>No definido</p>
+                    <p *ngIf="medico.editor"><strong>Última Edición: </strong>{{medico.editor}}</p>
+                    <p *ngIf="!medico.editor"><strong>Última Edición: </strong>No definido</p>
+                    <p *ngIf="medico.creacion"><strong>Fecha Creación: </strong>{{medico.creacion.split('T')[0]}} {{medico.creacion.substring(11,19)}}</p>
+                    <p *ngIf="medico.ultimaActualizacion"><strong>Fecha Última Edición: </strong>{{medico.ultimaActualizacion.split('T')[0]}} {{medico.ultimaActualizacion.substring(11,19)}}</p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <strong class="titulo" >Descripción:</strong>
+                    <p *ngIf="medico.descripcion">{{medico.descripcion}}</p>
+                    <p *ngIf="!medico.descripcion"><strong>No definido</strong></p>
+                    <br>
+                    <br>   
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button  type="button"  (click)="actualizarEstatus()" (click)="verModalMed(editarEstatusModal)" class="btn boton">Editar Estatus</button> 
+    </div>
+  </ng-template>
+  
+
+<ng-template #subirModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Subir Foto</h4>  
+        <button type="button" class="close" style="color:white;"  (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12">
+                <h6 class="titulo" style="font-size: 20px; text-align: center;"> Por favor seleccione una imagen.</h6>
+                <br>
+                <input type="file" accept="image/jpeg" max-size="13000"  (change)="onFileSelect($event)" />
+                <br><br>
+                <div *ngIf="imagenEstatus==1" class="alert alert-primary" role="alert">Espere...</div>
+            <div *ngIf="imagenEstatus==2" class="alert alert-success" role="alert">Imagen Guardado Exitosamente</div>
+            <div  *ngIf="imagenEstatus==3" class="alert alert-danger" role="alert">Error: {{msgError}}</div>
+            </div>
+        </div>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button *ngIf="imagenEstatus==0" type="button" [disabled]="imagenSubirForm.invalid" (click)="subirImagen()" class="btn boton">Subir</button>
+    </div>
+</ng-template>
+
+
+<ng-template #editarEstatusModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Estatus Médico</h4>  
+        <button type="button" class="close" style="color:white;"  (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <div class="row" [formGroup]="medicoEstatusForm">  
+            <div class="col-12" >
+                <label class="editar">Estatus (Requerido)</label>
+                <select class="form-control" formControlName="verificado"  [(ngModel)]="medicoActualizar.verificado">
+                    <option >PENDIENTE</option>
+                    <option >APROBADO</option>
+                    <option >RECHAZADO</option> 
+                </select> 
+                <span style="color:Red;" *ngIf="medicoEstatusForm.controls['verificado'].touched && medicoEstatusForm.controls['verificado'].errors?.required">Requerido. </span>
+                <br>
+            </div>
+        </div>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        &nbsp;&nbsp;&nbsp;&nbsp; 
+        <button type="button" class="btn boton" [disabled]="medicoEstatusForm.invalid" (click)="actualizarMedicoEstatus()" >Actualizar</button>
+    </div>
+</ng-template>
+
+
+
+<ng-template #editarModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Actualizar</h4>  
+        <button type="button" class="close" style="color:white;"  (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <div class="modal-body">
+            <ul class="nav nav-tabs">
+                <li><a class="active" data-toggle="tab" href="#t-med-gral"> General</a></li>
+                <li><a data-toggle="tab" href="#t-med-cons" >Consultorio</a></li>
+                <li><a data-toggle="tab" href="#t-med-desc" >Descripción</a></li>
+            </ul>
+            <div class="tab-content" [formGroup]="medicoForm">
+                <div id="t-med-gral" class="tab-pane fade  show active">
+                    <label class="editar">Nombre (Requerido)</label>
+                    <input class="form-control" type="text" placeholder="Nombre" formControlName="nombre" [(ngModel)]="medicoActualizar.nombre">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['nombre'].errors?.minlength">Debe ser de mas de 3 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['nombre'].errors?.maxlength">No debe ser de mas de 45 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['nombre'].touched && medicoForm.controls['nombre'].errors?.required">Nombre Requerido. </span>
+                    <br>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['nombre'].errors?.pattern">No parece ser un nombre válido. </span>
+                    <br>
+                    <label class="editar">Primer Apellido (Requerido)</label>
+                    <input class="form-control" type="text" placeholder="Primer Apellido" formControlName="apellido_paterno" [(ngModel)]="medicoActualizar.apellido_paterno">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['apellido_paterno'].errors?.minlength">Debe ser de mas de 3 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['apellido_paterno'].errors?.maxlength">No debe ser de mas de 45 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['apellido_paterno'].touched && medicoForm.controls['apellido_paterno'].errors?.required">Apellido Requerido. </span>
+                    <br>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['apellido_paterno'].errors?.pattern">No parece ser un apellido válido. </span>
+                    <br>
+                    <label class="editar">Segundo Apellido (Opcional)</label>
+                    <input class="form-control" type="text" placeholder="Segundo Apellido" formControlName="apellido_materno" [(ngModel)]="medicoActualizar.apellido_materno">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['apellido_materno'].errors?.minlength">Debe ser de mas de 3 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['apellido_materno'].errors?.maxlength">No debe ser de mas de 45 caracteres. </span>
+                    <br>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['apellido_materno'].errors?.pattern">No parece ser un apellido válido. </span>
+                    <br>
+                    <label class="editar">Especialidad (Requerido)</label>
+                    <select class="form-control" formControlName="especialidad"  [(ngModel)]="medicoActualizar.especialidad">
+                        <option [ngValue]="'Medicina General'">Medicina General</option>
+                        <option [ngValue]="'Medicina Interna'">Medicina Interna</option>
+                        <option [ngValue]="'Cirugia'">Cirugía</option>
+                        <option [ngValue]="'Endocrinologia'">Endocrinología</option>
+                        <option [ngValue]="'Ginecologia'">Ginecología</option>
+                        <option [ngValue]="'Nefrologia'">Nefrología</option> 
+                        <option [ngValue]="'Neurocirugia'">Neurocirugía</option>
+                        <option [ngValue]="'Neurologia'">Neurología</option>
+                        <option [ngValue]="'Pediatria'">Pediatría</option> 
+                        <option [ngValue]="'Traumatologia y Ortopedia'">Traumatología y Ortopedia</option>
+                        <option [ngValue]="'Urologia'">Urología</option>
+                    </select> 
+                    <span style="color:Red;" *ngIf="medicoForm.controls['especialidad'].touched && medicoForm.controls['especialidad'].errors?.required">Requerido. </span>
+                    <br>
+                    <label>Sub Especialidad (Opcional)</label>
+                    <textarea class="form-control" type="text" placeholder="Sub Especialidad" formControlName="subespecialidad"  maxlength="200" [(ngModel)]="medicoActualizar.subespecialidad" rows="5"></textarea>
+                    <span *ngIf="medicoActualizar.subespecialidad">Caracteres Restantes: {{200-medicoActualizar.subespecialidad.length}}</span>
+                    <br *ngIf="medicoActualizar.subespecialidad">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['subespecialidad'].errors?.maxlength">Debe tener menos de 200 caracteres.</span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['subespecialidad'].errors?.pattern"> No válido.</span>
+                    <br>
+                    <label >Caducidad (Requerido)</label>
+                    <input class="form-control" id="date" type="date" formControlName="caducidad" [(ngModel)]="medicoActualizar.caducidad">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['caducidad'].errors?.minDate">No válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['caducidad'].errors?.maxDate">No válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['caducidad'].touched && medicoForm.controls['caducidad'].errors?.required">Requerido. </span>
+                    <br>
+                    <label>Ranking (Requerido)</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="ranking" [(ngModel)]="medicoActualizar.ranking">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['ranking'].errors?.min">Número no válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['ranking'].errors?.max">Número no válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['ranking'].touched && medicoForm.controls['ranking'].errors?.required">Requerido. </span>
+                    <br>
+                    <label>Estrellas (Requerido)</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="estrellas" [(ngModel)]="medicoActualizar.estrellas">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['estrellas'].errors?.min">Número no válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['estrellas'].errors?.max">Número no válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['estrellas'].touched && medicoForm.controls['estrellas'].errors?.required">Requerido. </span>
+                    <br>
+                    <label>Cédula (Requerido)</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="cedula" [(ngModel)]="medicoActualizar.cedula">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['cedula'].errors?.min">Número no válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['cedula'].errors?.max">Número no válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['cedula'].touched && medicoForm.controls['cedula'].errors?.required">Requerido. </span>
+                    <br>
+                    <label for="sexo" >Sexo (Opcional)</label>
+                    <select class="form-control" id="sexo" formControlName="sexo" [(ngModel)]="medicoActualizar.sexo">
+                    <option>femenino</option>
+                    <option>masculino</option>
+                    </select>   
+                    <br>
+                    <label >Fecha de Nacimiento (Opcional)</label>
+                    <input class="form-control" id="date" type="date" formControlName="fecha_nacimiento" [(ngModel)]="medicoActualizar.fecha_nacimiento">
+                    <p style="color:Red;" *ngIf="medicoForm.controls['fecha_nacimiento'].errors?.minDate">La edad máxima aceptada son 120 años. </p>
+				    <p style="color:Red;" *ngIf="medicoForm.controls['fecha_nacimiento'].errors?.maxDate">La edad mínima aceptada son 21 años. </p>
+				    <p style="color:Red;" *ngIf="medicoForm.controls['fecha_nacimiento'].touched && medicoForm.controls['fecha_nacimiento'].errors?.required">Requerido. </p>
+                    <br>
+                    <label>Teléfono (Requerido)</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="telefono" [(ngModel)]="medicoActualizar.telefono">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['telefono'].errors?.min">Número no válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['telefono'].errors?.max">Número no válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['telefono'].touched && medicoForm.controls['telefono'].errors?.required">Requerido. </span>
+                    <br>
+                    <label>Estado  (Requerido)</label>
+                    <select class="form-control" formControlName="estado"  [(ngModel)]="medicoActualizar.estado">
+                        <option>Aguascalientes</option>
+                        <option>Baja California</option>
+                        <option>Baja California Sur</option>
+                        <option>Campeche</option>
+                        <option>CDMX</option>
+                        <option>Chihuahua</option>
+                        <option>Chiapas</option>
+                        <option>Coahuila</option>
+                        <option>Colima</option>
+                        <option>Durango</option>
+                        <option>Guanajuato</option>
+                        <option>Guerrero</option>
+                        <option>Hidalgo</option>
+                        <option>Jalisco</option>
+                        <option>México</option>
+                        <option>Michoacán</option>
+                        <option>Morelos</option>
+                        <option>Nayarit</option>
+                        <option>Nuevo León</option>
+                        <option>Oaxaca</option>
+                        <option>Puebla</option>
+                        <option>Querétaro</option>
+                        <option>Quintana Ro</option>
+                        <option>San Luis Potosí</option>
+                        <option>Sinaloa</option>
+                        <option>Sonora</option>
+                        <option>Tabasco</option>
+                        <option>Tamaulipas</option>
+                        <option>Tlaxcala</option>
+                        <option>Veracruz</option>
+                        <option>Yucatán</option>
+                        <option>Zacatecas</option>
+                    </select>
+                    <br>
+                </div>
+                <span style="color:Red;" *ngIf="medicoForm.controls['estado'].touched && medicoForm.controls['estado'].errors?.required">Requerido. </span>
+                <div id="t-med-cons" class="tab-pane fade">
+                    <label>Calle (Opcional)</label>
+                    <input class="form-control" type="text" placeholder="Calle" formControlName="calle" [(ngModel)]="medicoActualizar.calle">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['calle'].errors?.minlength">Calle debe tener mas de 8 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['calle'].errors?.maxlength">Calle debe tener menos de 90 caracteres. </span>
+                    <br>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['calle'].errors?.pattern">No válido. </span>
+                    <label>Colonia (Opcional)</label>
+                    <br>
+                    <input class="form-control" type="text" placeholder="Colonia" formControlName="colonia" [(ngModel)]="medicoActualizar.colonia">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['colonia'].errors?.minlength">Colonia debe tener mas de 5 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['colonia'].errors?.maxlength">Colonia debe tener menos de 45 caracteres. </span>
+                    <br>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['colonia'].errors?.pattern">No válido. </span>		
+                    <label>Número interior (Opcional)</label>
+                    <br>
+                    <input class="form-control" type="text" placeholder="Num Interior" formControlName="num_interior" [(ngModel)]="medicoActualizar.num_interior">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['num_interior'].errors?.maxlength">Número debe tener menos de 10 caracteres. </span>
+                    <br>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['num_interior'].errors?.pattern">No válido. </span>
+                    <label>Número exterior (Opcional)</label>
+                    <br>
+                    <input class="form-control" type="text" placeholder="Num. Exterior" formControlName="num_exterior" [(ngModel)]="medicoActualizar.num_exterior">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['num_exterior'].errors?.maxlength">Número debe tener menos de 10 caracteres. </span>
+                    <br>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['num_exterior'].errors?.pattern">No válido. </span>
+                    <label>Cp (Opcional)</label>
+                    <input class="form-control" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="Cp" formControlName="cp" [(ngModel)]="medicoActualizar.cp">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['cp'].errors?.min">Cp no válido. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['cp'].errors?.max">Cp no válido. </span>
+                    <br>
+                    <label>Municipio (Opcional)</label>
+                    <input class="form-control" type="text" placeholder="Municipio" formControlName="municipio" [(ngModel)]="medicoActualizar.municipio">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['municipio'].errors?.minlength">Municipio debe tener mas de 2 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['municipio'].errors?.maxlength">municipio debe tener menos de 45 caracteres. </span>
+                    <br>
+                    <label>Localidad (Opcional)</label>
+                    <input class="form-control" type="text" placeholder="Localidad" formControlName="localidad" [(ngModel)]="medicoActualizar.localidad">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['localidad'].errors?.minlength">Localidad debe tener mas de 2 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['localidad'].errors?.maxlength">Localidad debe tener menos de 200 caracteres. </span>
+                    <br>
+                </div>
+                <div id="t-med-desc" class="tab-pane fade">
+                    <label>Descripción (Opcional)</label>
+                    <textarea class="form-control" type="text" placeholder="Descripción" formControlName="descripcion"  maxlength="1000" [(ngModel)]="medicoActualizar.descripcion" rows="5"></textarea>
+                    <span *ngIf="medicoActualizar.descripcion">Caracteres Restantes: {{1000-medicoActualizar.descripcion.length}}</span>
+                    <br *ngIf="medicoActualizar.descripcion">
+                    <span style="color:Red;" *ngIf="medicoForm.controls['descripcion'].errors?.minlength">Debe tener mas de 5 caracteres. </span>
+                    <span style="color:Red;" *ngIf="medicoForm.controls['descripcion'].errors?.maxlength">Debe tener menos de 1000 caracteres. </span>
+                    <br>
+                </div>                
+                <button type="button" class="btn boton" [disabled]="medicoForm.invalid" (click)="actualizarMedico()" >Actualizar</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

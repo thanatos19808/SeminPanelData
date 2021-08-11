@@ -1,0 +1,162 @@
+<div class="row" *ngIf="!edits">
+    <div class="col">
+        <div class="alert alert-danger mt-3">
+            {{ errors }}
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" *ngIf="edits">
+
+    <div class="row mt-2">
+        <div class="col col-md-9">
+            <h1> Editar permisos del</h1>
+        </div>
+        <div class="col col-md-3">
+            <button class="btn btn-primary" routerLink="/paneldata">Regresar</button>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col col-md-12">
+            <h3>
+                Administrador
+                {{user.nombre | titlecase}} 
+                {{user.apellido_paterno | titlecase}} 
+                {{user.apellido_materno | titlecase}}
+            </h3>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col">
+            <form method="POST" [formGroup]="formGroupData" (ngSubmit)="changePermisos(formGroupData.value)">
+
+                <h3>Ventas</h3>
+
+                <div class="row mt-4">
+
+                    <div class="col col-md-4">
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                formControlName="venta_total"
+                            >
+                            <label class="form-check-label">Venta total de empresa</label>
+                        </div>
+                    </div>
+                    <div class="col col-md-4">
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id=""
+                                formControlName="venta_sucursal"
+                            >
+                            <label class="form-check-label">Venta por sucursal</label>
+                        </div>
+                    </div>
+                    <div class="col col-md-4">
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="" 
+                                formControlName="venta_estudio"
+                            >
+                            <label class="form-check-label">Venta por estudios</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row mt-2">
+
+                    <div class="col col-md-4">
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="" 
+                                formControlName="venta_departamento"
+                            >
+                            <label class="form-check-label">Venta por departamento</label>
+                        </div>
+                    </div>
+
+                    <div class="col col-md-4">
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="" 
+                                formControlName="venta_area"
+                            >
+                            <label class="form-check-label">Venta por area</label>
+                        </div>
+                    </div>
+
+                    <div class="col col-md-4"></div>
+
+                </div>
+                <hr>
+                
+                <h3>Finanzas</h3>
+                <div class="row mt-4">
+
+                    <div class="col">
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="" 
+                                formControlName="corte_caja"
+                            >
+                            <label class="form-check-label">Corte de caja</label>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="" 
+                                formControlName="tipo_pagos"
+                            >
+                            <label class="form-check-label">Tipos de pagos</label>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="" 
+                                formControlName="devoluciones"
+                            >
+                            <label class="form-check-label">Devoluciones</label>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="" 
+                                formControlName="cambio_estudio"
+                            >
+                            <label class="form-check-label">Cambio de estudios</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <input type="submit" class="btn btn-block btn-success" value="Guardar cambios" [disabled]="buttonDisabled"/>
+            </form>
+        </div>
+    </div>
+</div>

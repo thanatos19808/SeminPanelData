@@ -1,0 +1,96 @@
+<html lang="en">
+    
+    <body>
+        <div id="mcuerpo">
+            <div id="footer">
+
+           
+<app-navbar></app-navbar>
+<div class="base">
+<div class="row" style="width: 100%;">
+<lib-ngx-notification></lib-ngx-notification>
+<ngx-spinner></ngx-spinner>
+    <div>
+        <div class="col-md-12">
+            <h3 class="text-white titulo">Ajustes:</h3>
+        </div> 
+        <hr>
+        <ul>
+            <br>
+            <li ><h4 class="titulo">Volver a introducir contraseña:</h4>
+            <p style="font-size: 20px;">Envíe a su correo personal una solicitud de reingreso de contraseña.</p></li>
+            <button (click)="verModal(resetModal)" type="button" class="btnboton">Enviar</button>
+            <br><br><br>
+            <li><h4 class="titulo">Desconectar todos los dispositivos:</h4>
+            <p style="font-size: 20px;">Esta solicitud invalida el acceso de todos los dispositivos donde se ha conectado con su cuenta, por lo cual requerirá iniciar usuario nuevamente usando su correo y contraseña.</p></li>
+            <button (click)="verModal(confirmacionModal)" type="button" class="btnboton">Desconectar</button>
+            <br><br><br>
+            <li><h4 class="titulo">Acerca de:</h4>
+            <p style="font-size: 20px;">Información de contacto.</p></li>
+            <button type="button" (click)="verModal(acercaModal)" class="btnboton">Acerca de</button>
+        </ul>
+    </div>
+
+    <ng-template #confirmacionModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4>Confirmación:</h4>  
+            <button type="button" class="close" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <h4>¿Esta seguro que desea continuar?</h4>
+            &nbsp;
+            <p style="font-size: 20px;">Esta operación no se puede deshacer, tendrá que iniciar usuario nuevamente en todos sus dispositivos conectados.</p>
+            <p class="text-danger" style="font-size: 20px;">Esta operación no se puede deshacer.</p>
+            <br>
+            <button type="button" class="btn boton"  (click)="logoutPaciente()" (click)="c('')">Aceptar</button>
+            &nbsp;
+            <button type="button" class="btn btn-danger" (click)="c('')">Cancelar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #acercaModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4>Laboratorios Médicos SEMIN XXI:</h4>  
+            <button type="button" class="close" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <p style="font-size: 20px;">Es una empresa de salud con trato humano para usted y su familia, diseñado con los más altos estándares de calidad, cuidando así en obtener los resultados de diagnóstico con la mayor precisión y exactitud, mediante tecnología moderna digitalizada.</p>
+            <br>
+            <p style="font-size: 20px;">Con base a nuestros valores, misión, visión y tendencias en que vive nuestra población y país, hemos creado programas de salud donde certificamos su completo bienestar de salud y programas de responsabilidad social para disminuir las principales tasas de mortalidad que más afectan a la población, por lo tanto nuestro compromiso es ofrecer salud para todos.</p>
+            <br> 
+            <p id="center" style="font-size: 20px;">De ante mano agradecemos con mucho cariño su confianza.</p>
+            <br>
+            <strong><p style="font-size: 20px;">Laboratorios Médicos SEMIN XXI 2020.<br> Todos los derechos reservados</p></strong>
+            <br>
+            <button type="button" class="btn boton" (click)="c('')">Aceptar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #resetModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4>Cambiar Contraseña:</h4>  
+            <button type="button" class="close" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <p style="text-align: center;" class="parrafosLeft">¿Esta seguro que desea cambiar la contraseña enlazada al correo {{userAPI.email}} ?</p>
+            <div *ngIf="flag" class="alert alert-success" style="text-align: center;" role="alert">Se ha enviado a su correo la solicutud de cambio de contraseña.</div>
+            <button *ngIf="!flag" type="button" class="btn boton" (click)="cambiarContrasena()">Aceptar</button>
+            <button *ngIf="flag" type="button" class="btn boton" disabled>Aceptar</button>
+            &nbsp;
+            <button type="button" class="btn btn-danger" (click)="c('')">Cancelar</button>
+        </div>
+    </ng-template>
+
+</div> 
+</div>
+</div>
+</div>
+</body>
+</html>
+

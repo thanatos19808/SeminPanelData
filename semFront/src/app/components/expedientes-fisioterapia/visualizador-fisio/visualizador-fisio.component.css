@@ -1,0 +1,58 @@
+
+.tittle {
+   margin-top: 30px;
+   margin-bottom: 10px;
+}
+
+.cards {
+	margin-top: 10px;
+}
+
+.buttons2 {
+	position: fixed;
+	bottom: 3%;
+	left: 0;
+	width: 100%;
+	text-align: center;
+}
+
+.incorrecto {
+	text-align: right;
+}
+
+.correcto {
+	text-align: left;
+}
+
+/* mensaje final de correcto */
+.target {
+	text-align: center;
+	border: #000 2px solid;
+	width: auto;
+	height: 100%;
+   padding: 0%;
+}
+
+.ico {
+	width: 150px;
+	height: 150px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.backgraundTittle {
+	margin: 10px;
+}
+
+.button {
+   margin-top: 50px;
+   position: relative;
+}
+
+.firmas{
+	padding-top: 15%;
+}
+
+.observaciones{
+	resize: none;
+}

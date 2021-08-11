@@ -1,0 +1,3 @@
+from panel_radiologos.models.estudio_dicom import EstudioDicom
+from panel_radiologos.models.actualizacion_estudio_dicom import ActualizacionEstudioDicom
+from panel_radiologos.models.imagenologia import Imagenologia

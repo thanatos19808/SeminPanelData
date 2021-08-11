@@ -1,0 +1,51 @@
+
+.base {padding: 80px;display: block; padding-right: 20px;}
+@media (max-width: 575px) {
+    .base {width: 100%; position:absolute; top: 90px; left: 70px; margin-left: 0 10px; padding: 0!important;}
+    .titulo{font-size: 2em!important;}
+}
+@media (min-width: 576px) and (max-width: 767px) {
+    .base {width: 100%; position:absolute; top: 125px; margin-right:10px; padding-top: 0!important;}
+    .titulo{font-size: 2em!important;}
+}
+
+
+@media (min-width: 768px) and (max-width: 999px) {
+  .titulo{font-size: 2em!important;}
+}
+
+#mcuerpo{
+    height: 100%;
+    background-color: #fff;
+  }
+  
+  #footer{
+    background-color: #fff;
+  }
+
+  .titulo{
+    padding-left: 20px;
+    font-size: 2em;
+    display: block;
+    color: #9AB638;
+    font: px Arial, sans-serif;
+  }
+  
+  .boton {
+    color: #fff;
+    background-color: #9AB638;
+    border-color:#9AB638;
+    outline: none;
+    border: none;
+    font-size: 20px; 
+    border-radius: 4px;
+    padding: 8px 18px;
+    margin-bottom: 10px;
+  }
+
+  .logo{
+    max-width: 50%;
+    height: 50px;
+  }
+  
+  

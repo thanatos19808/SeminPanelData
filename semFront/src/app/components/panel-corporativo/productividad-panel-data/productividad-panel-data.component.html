@@ -1,0 +1,138 @@
+<app-nav-panel-corporativo></app-nav-panel-corporativo>
+
+<div class="container mt-4">
+    <form method="POST" [formGroup]="formGroupData" (ngSubmit)="consultData(formGroupData.value)">
+
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="empresa">Seleccione la empresa : </label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_empresa" name="empresa" formControlName="empresa">
+                    <option value="semin">Semin</option>
+                    <option value="salud">Salud para todos</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="option">Seleccione una opcion :</label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_select_option" name="select_option" formControlName="select_option"
+                    (change)="showOptions()">
+                    <option value="usuario">Usuario</option>
+                    <option value="maquilador">Maquilador</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mt-2" *ngIf="show_users">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="option">Usuario :</label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_type_user" name="type_user" formControlName="type_user">
+                    <option value="cajero">Cajero</option>
+                    <option value="operador">Operador</option>
+                    <option value="recepcionista">Recepcionista</option>
+                    <option value="call center">Call center</option>
+                    <option value="enfermera">Enfermera</option>
+                    <option value="enfermero">Enfermero</option>
+                    <option value="medico">Medico</option>
+                    <option value="tr">TR</option>
+                    <option value="sonografista">Sonografista</option>
+                    <option value="radiologo">Radiologo</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mt-2" *ngIf="show_maquiladores">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="option">Maquilador :</label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_type_maquilador" name="type_maquilador"
+                    formControlName="type_maquilador">
+                    <option value="patologia">Patologia</option>
+                    <option value="ginecologia">Ginecologia</option>
+                    <option value="orthin">Orthin</option>
+                    <option value="ruiz">Ruiz</option>
+                    <option value="asesores">Asesores</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- date -->
+        <!-- <div class="row mt-2">
+            <div class="col-2 col-md-2">Fecha</div>
+            <div class="col-1 col-md-1">
+                <label class="form-label" for="estudio">De: </label>
+            </div>
+            <div class="col-4 col-md-4">
+                <input type="date" class="form-control" id="id_first_date" name="first_date"
+                    formControlName="first_date" />
+            </div>
+            <div class="col-1 col-md-1 text-center">
+                <label class="form-label" for="estudio"> Al: </label>
+            </div>
+            <div class="col-4 col-md-4">
+                <input type="date" class="form-control" id="id_second_date" name="second_date"
+                    formControlName="second_date" />
+            </div>
+        </div> -->
+
+        <input type="submit" class="btn btn-block btn-primary mt-3" value="Consultar">
+
+    </form>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <table class="table" *ngIf="tableOk">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>id</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Puesto</th>
+                        <th *ngIf="!cajero">Sexo</th>
+                        <th *ngIf="!cajero">Auditor</th>
+                        <th *ngIf="cajero">Sucursal</th>
+                        <th *ngIf="cajero">Hora entrada</th>
+                        <th *ngIf="cajero">Hora salida</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="!cajero">
+                    <tr *ngFor="let empleado of empleados" (click)="onClickNotCashier(empleado)" class="puntero">
+                        <td>{{ empleado.id }}</td>
+                        <td>{{ empleado.nombre }}</td>
+                        <td>
+                            {{ empleado.apellido_paterno }}
+                            {{empleado.apellido_materno}}
+                        </td>
+                        <td>{{ empleado.puesto }}</td>
+                        <td>{{ empleado.sexo }}</td>
+                        <td>{{ empleado.auditor }}</td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="cajero">
+                    <tr *ngFor="let empleado of empleados" (click)="onClickUser(empleado)" class="puntero">
+                        <td>{{ empleado.cajero_empleado.id }}</td>
+                        <td>{{ empleado.cajero_empleado.nombre }}</td>
+                        <td>
+                            {{ empleado.cajero_empleado.apellido_paterno }}
+                            {{ empleado.cajero_empleado.apellido_materno }}
+                        </td>
+                        <td>{{ empleado.cajero_empleado.puesto }}</td>
+                        <td>{{ empleado.sucursal.nombreSucursal }}</td>
+                        <td>{{ empleado.hora_entrada}}</td>
+                        <td>{{ empleado.hora_salida}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

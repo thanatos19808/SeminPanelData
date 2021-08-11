@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel="stylesheet" href="../../../../assets/css/estilos.css">
+	</head>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+<body style="background: linear-gradient(to right, rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%); height: 120%;">
+<div id="login" class="container">
+	<ngx-spinner></ngx-spinner>
+	<lib-ngx-notification></lib-ngx-notification> 
+	<div class="d-flex justify-content-center h-100">
+		<div class="card">
+			<div class="card-header">
+				<br><br>
+				<div class="d-flex justify-content-end social_icon">
+					<span><a id="logo"><img class="img-fluid" src="../../../../assets/img/logoNormalBlanco.png"></a></span>
+				</div>
+			</div>
+			<div class="card-body">
+				<form [formGroup]="loginForm"  #formLogin="ngForm" (ngSubmit)="onLogin(formLogin)">  
+					<div style="text-align: center;" *ngIf="noValido" class="alert alert-danger" role="alert">{{msgError}}</div>
+					&nbsp;
+					<span style="color:#7C4E26;" *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.required">Correo Requerido.</span>
+					<span style="color:#7C4E26;" *ngIf="loginForm.controls['email'].errors?.minlength">El correo debe tener mínimo 5 caracteres</span>
+					<span style="color:#7C4E26;" *ngIf="loginForm.controls['email'].errors?.maxlength">El correo no puede superar los 40 caracteres</span>
+					<br>
+					<span style="color:#7C4E26;" *ngIf="loginForm.controls['email'].errors?.pattern">No parece ser un correo válido</span>
+					<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-user"></i></span>
+						</div>
+						<input autocomplete="on" type="email" id="email" name="email" class="form-control" placeholder="Correo" [(ngModel)]="user.email" formControlName="email"  (change)="correoMinusculas()"/>
+					</div>
+					<span style="color:#7C4E26;" *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors?.required">Contraseña Requerida.</span>
+					<span style="color:#7C4E26;" *ngIf="loginForm.controls['password'].errors?.minlength">La contraseña debe tener mínimo 8 caracteres</span>
+					<span style="color:#7C4E26;" *ngIf="loginForm.controls['password'].errors?.maxlength">La contraseña no puede superar los 30 caracteres</span>
+					<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-key"></i></span>
+						</div>
+						<input autocomplete="on"type="password" id="password" name="password" class="form-control" placeholder="Contraseña" [(ngModel)]="user.password" formControlName="password"  />
+					</div>
+					<br>
+					<div class="container">
+						<div class="row my-1">
+							<div class="col text-center my-1">
+								<button *ngIf="!flagLogin" type="submit" class="btn login_btn" [disabled]="loginForm.invalid">Entrar</button>
+								<button *ngIf="flagLogin" type="submit" class="btn login_btn" disabled>Espere...</button>
+							</div>
+							<div *ngIf="isMobile" class="col text-center my-1">
+								<input type="button" style="width: auto;" class="btn login_btn" onclick="location.href='intent://semindigital.com/appdocsemin#Intent;package=com.semin.docsemin;scheme=mycheme;end;';" value="Entrar desde Android" />
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="card-footer">
+				<div class="d-flex justify-content-center links">
+					¿No tienes cuenta?<a href="https://semindigital.com/registro">Registrarme</a>
+				</div>
+				<div class="d-flex justify-content-center">
+					<a href="https://semindigital.com/olvidada">¿Olvidaste tu contraseña?</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

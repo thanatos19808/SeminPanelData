@@ -1,0 +1,47 @@
+<app-nav-fisio></app-nav-fisio>
+
+<div class="container">
+
+   <div class="row mt-4">
+      <div class="col-11">
+        <input
+            #termino
+            type="text"
+            (keyup)="buscar(termino.value)"
+            class="form-control"
+            placeholder="Buscar expediente por nombre o apellido"
+            id="id_search"
+         />
+      </div>
+      <div class="col-1">
+         <button routerLink="/fisio/studios" class="btn btn-info" id="id_btn_back">
+            Regresar
+         </button>   
+      </div>
+   </div>
+
+   <app-loading *ngIf="loading"></app-loading>
+
+   <div *ngIf="error" class="alert alert-danger mt-3">
+      <p> {{ mensajeError }} </p>
+   </div>
+
+   <div class="row list">
+      <div class="col">
+         <table class="table color-text table-hover">
+            <tr class="puntero" *ngFor="let item of expedientes" (click)="verExpediente(item)">
+               <td>{{ item.id }}</td>
+               <td>{{ item.nombre | uppercase }}</td>
+               <td>{{ item.apellido_paterno | uppercase }}</td>
+               <td>{{ item.apellido_materno | uppercase }}</td>
+               <td>{{ item.fecha_nacimiento | date:'d/MMM/y'}}</td>
+               <td class="badge bg-success mt-1" *ngIf="item.status == 'Correcto'"> {{ item.status }} </td>
+               <td class="badge bg-danger mt-1" *ngIf="item.status == 'Incorrecto'"> {{ item.status }} </td>
+               <td class="badge bg-warning mt-1" *ngIf="item.status == 'Pendiente'"> {{ item.status }} </td>
+            </tr>
+         </table>
+      </div>
+   </div>
+
+   
+</div>

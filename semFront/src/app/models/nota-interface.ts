@@ -1,0 +1,37 @@
+export interface NotaInterface{
+	id?: string;
+	analisis?: string;
+	clinicos?: string;
+	especialidad?: string;
+	frecuenciaCardiaca?: string;
+	frecuenciaRespiratoria?: string;
+	impresionDiagnostica?: string;
+	indiceMasaCorporal?: any;
+	manejoRecomendaciones?: string;
+	notaEvolucion?: string;
+	objetivo?: string;
+    peso?: any;
+    plan?: string;
+	sexo?: string;
+	subjetivo?: string;
+	talla?: any;
+	temperatura?: string;
+	tensionArterialDiastole?: string;
+	tensionArterialSistole?: string;
+	tituloUno?: string;
+	tituloDos?: string;
+	tituloTres?: string;
+	tituloCuatro?: string;
+	notaUno?: string;
+	notaDos?: string;
+	notaTres?: string;
+	notaCuatro?: string;
+	Medico?: any;
+	Paciente?: string;
+	creacion?: string;
+	creador?: string;
+	editor?: string;
+    results ?: any;
+    count?: any;
+    ultimaActualizacion?: string;
+}

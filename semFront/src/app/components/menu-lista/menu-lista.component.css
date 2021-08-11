@@ -1,0 +1,247 @@
+.base {padding-top: 80px; display: block; padding-left: 80px; padding-right: 20px; width: 100%;
+}
+#btnboton{
+  background-color: #fff;
+  color: #fff;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  text-align: center;
+  display: inline-block;
+  font-size: 20px;
+  padding: 8px 18px;
+}
+
+.btn-danger{
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  text-align: center;
+  display: inline-block;
+  font-size: 20px;
+  padding: 8px 18px;
+
+}
+
+#btnres{
+  background-color: #fff;
+  color: #fff;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  text-align: right;
+  font-size: 20px;
+  padding: 8px 18px;
+  float: right 12px;
+  margin: 10px;
+}
+
+#mcuerpo{
+  height: 100%;
+  background-color: #fff;
+}
+
+#footer{
+  background-color: #fff;
+}
+
+@media (max-width: 575px) {
+
+}
+@media (min-width: 576px) and (max-width: 767px) {
+
+}
+
+span{
+  font-size: 16px;
+}
+.close{
+  outline: none;
+  border: none;
+  color: #fff;
+  
+}
+
+.icono{
+  font-size: 3em;
+  padding: 30%;
+}
+
+.pasos{
+  display: flex;
+}
+
+.numberCircle {
+  font-size: 28px;
+  height: 50px;
+  display: block;
+  color: #9AB638;
+  text-align: center;
+  font: px Arial, sans-serif;
+}
+
+.titulo{
+  font-size: 24px;
+  height: 50px;
+  display: block;
+  color: #9AB638;
+  font: px Arial, sans-serif;
+ }
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px; 
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+.card {
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+  margin-top: 10px;
+  padding: 0px 0px 0px 0px !important;
+}
+
+.block{
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #9AB638 ;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 15px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+
+.prueba{  text-align: center; font-size: 20px; -webkit-text-fill-color: #9AB638;}
+.beneficio { color:black}
+.articulo { margin-left: 15px; margin-right: 5px;} 
+
+.articulo{
+  border: #9AB638 2px solid;
+  padding-top: 5px; 
+  padding-bottom: 10px;
+}
+
+.boton {
+    color: #fff;
+    background-color: #9AB638;
+    border-color:#9AB638;
+    outline: none;
+    border: none;
+    font-size: 20px; 
+    border-radius: 4px;
+    padding: 8px 18px;
+    margin: 10px;
+}
+
+.botonResultado {
+  margin-left: 5px;  
+}
+
+
+.parrafosJustify{
+  font-size: 20px;
+  text-align: justify;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.parrafosCenter{
+  font-size: 20px;
+  text-align: center;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+.parrafosLeft{
+  font-size: 20px;
+  text-align: left;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.container { margin-top: 20px; }
+.mb20 { margin-bottom: 20px; } 
+
+hgroup { padding-left: 15px; border-bottom: 1px solid #ccc; }
+hgroup h1 { font: 500 normal 1.625em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin-top: 0; line-height: 1.15; }
+hgroup h2.lead { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin: 0; padding-bottom: 10px; }
+
+.search-result .thumbnail { border-radius: 0 !important;}
+.search-result:first-child { margin-top: 0 !important; }
+.search-result { margin-top: 20px; }
+.search-result .col-md-2 { border-right: 1px dotted #ccc; min-height: 140px; }
+.search-result ul { padding-left: 0 !important; list-style: none;  }
+.search-result ul li { font: 400 normal .85em "Roboto",Arial,Verdana,sans-serif;  line-height: 30px; }
+.search-result ul li i { padding-right: 5px; }
+.search-result .col-md-7 { position: relative; }
+.search-result h3 { font: 500 normal 1.375em "Roboto",Arial,Verdana,sans-serif; margin-top: 0 !important; margin-bottom: 10px !important; }
+.search-result h3 > a, .search-result i { color: #9AB638  !important; }
+.search-result p { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; } 
+.search-result span.plus { position: absolute; right: 0; top: 126px; }
+.search-result span.plus a { background-color: #9AB638; padding: 5px 5px 3px 5px; }
+.search-result span.plus a:hover { background-color: #414141; }
+.search-result span.plus a i { color: #fff !important; }
+.search-result span.border { display: block; width: 97%; margin: 0 15px; border-bottom: 1px dotted #ccc; }
+
+
+
+

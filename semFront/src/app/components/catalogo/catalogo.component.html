@@ -1,0 +1,245 @@
+<html>
+    <body>
+        <div id="mcuerpo">
+            <div id="footer">
+        
+<app-navop></app-navop>
+<div class="base">
+<lib-ngx-notification></lib-ngx-notification>
+<ngx-spinner></ngx-spinner>
+    <div class="search-banner text-white py-3" id="search-banner">
+        <div >
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="card acik-renk-form">
+                        <div class="card-body">
+                            <h4 class="titulo">Palabras Clave:</h4>
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                                    <div class="form-group" [formGroup]="queryForm">
+                                        <input  (keydown)="onKeydown($event)" class="form-control" type="text" style="font-size:20px     margin-top: -12px;" placeholder="Buscar estudio:" formControlName="query" [(ngModel)]="query">
+                                        <span style="color:Red;" *ngIf="queryForm.controls['query'].errors?.minlength">Debe ser de mas de 3 caracteres</span>
+                                        <span style="color:Red;" *ngIf="queryForm.controls['query'].errors?.maxlength">No debe ser de mas de 90 caracteres</span>
+                                        <span style="color:Red;" *ngIf="queryForm.controls['query'].touched && queryForm.controls['query'].errors?.required">Campo Requerido.</span>
+                                        <br>
+                                        <span style="color:Red;" *ngIf="queryForm.controls['query'].errors?.pattern">No válido</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                    <button  style="font-size: 20px; margin-top: 0px;" type="button" (click)="consultarEstudio()" (click)="almacenarConsulta()" [disabled]="queryForm.invalid" class="btn boton">Buscar</button>
+                                    <br>
+                                    <br>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <button id="btnboton" type="button" style="background-color: #7C4E26;" (click)="verEstudios(estudiosModal)"> Filtrar por categoría</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="estudios[0]" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="color:black;">
+                    <br> 
+                    <h2 style="text-align: center; font-size: 2.5em;" class="titulo">Resultados:</h2>
+                    <br> 
+                    <div *ngFor="let results of estudios; index as i">
+                        <article class="search-result row articulo">
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" style="color:black;">
+                        <br>
+                            <ul class="meta-search parrafosJustify">
+                                <li><i class="fas fa fa-heartbeat"></i> <span><strong>Categoría: </strong></span>{{results.categoria}}</li>
+                                <li><i class="fas fa fa-flask"></i> <span><strong>Área: </strong></span> {{results.area}}</li>
+                                <li><i class="fas fa fa-dollar"></i> <span><strong> Precio Normal: </strong></span>{{results.precioNormal.toFixed(2)}} MXN</li>
+                                <li><i class="fas fa fa-dollar"></i> <span><strong> Precio en Sucursal: </strong></span>{{results.precioApoyo.toFixed(2)}} MXN</li>
+                                <li style="color: green; font-weight: bold"><i class="fas fa fa-dollar"></i> <span><strong> Precio Online: </strong></span>{{results.precioVenta.toFixed(2)}} MXN</li>
+                                <li *ngIf="((((results.precioVenta*100)/results.precioNormal)-100)*-1) > 4.99" style="color: green; font-weight: bold"><i class="fas fa fa-dollar"></i> <span><strong> Mejor Precio: OnLine </strong></span> {{((((results.precioVenta*100)/results.precioNormal)-100)).toFixed(0)}}% de descuento.</li>
+                                <li *ngIf="results.sexo == 'M'"><i class="fas fa fa-male"></i> <span><strong> Sexo: </strong></span><span style="color:#394793;"><strong>Masculino</strong></span></li>
+                                <li *ngIf="results.sexo == 'F'"><i class="fas fa fa-male"></i> <span><strong> Sexo: </strong></span><span style="color:#E4007C;"><strong>Femenino</strong></span></li>
+                                <li *ngIf="results.sexo == 'I'"><i class="fas fa fa-male"></i> <span><strong> Sexo: </strong></span><span style="color:#7C4E26;"><strong>Indistinto</strong></span></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 beneficio">
+                            <br>
+                            <h3 class="prueba">{{results.prueba}}</h3>			
+                            <hr>
+                            <p class="beneficio">{{results.beneficio}}</p>						
+                            <br>
+                        </div>
+                        &nbsp;&nbsp;<button type="button" style="background-color: #9AB638;" id="btnres" (click)="verEstudiosId(results ,descripcionModal)">Ver Beneficio</button>
+                        </article>
+                        <br> 
+                    </div>
+                </div>
+                <div *ngIf="!estudios[0]">
+                    <div *ngIf="initialFlag">
+                        <br> 
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h2 style="font-size: 2.5em;" class="titulo" style="color: #9AB638 !important; padding-left: 15px;">No hay resultados</h2>
+                        </div>
+                        <br> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #estudiosModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4>Lista de categorias:</h4>  
+            <button type="button" class="close" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <label style="color:#9AB638;" class="container">Seleccionar Todos
+                        <input type="checkbox"  (click)="selecionarTodos()" [(ngModel)]="todosLista">
+                        <span class="checkmark"></span>
+                    </label>
+                    <br>
+                </div>
+                <div class="col-md-6">
+                    <label style="color:#9AB638 ;" class="container"> Analisis Sanguíneos
+                        <input type="checkbox" [(ngModel)]="list[0].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Analisis Clínicos
+                        <input type="checkbox" [(ngModel)]="list[1].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Ultrasonografía
+                        <input type="checkbox" [(ngModel)]="list[2].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Ultrasonografía Doppler
+                        <input type="checkbox" [(ngModel)]="list[3].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Rayos X
+                        <input type="checkbox" [(ngModel)]="list[4].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Rayos X Contrastados
+                        <input type="checkbox" [(ngModel)]="list[5].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Mastografía
+                        <input type="checkbox" [(ngModel)]="list[6].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Papanicolau
+                        <input type="checkbox" [(ngModel)]="list[7].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Cardiología
+                        <input type="checkbox" [(ngModel)]="list[8].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Tomografía
+                        <input type="checkbox" [(ngModel)]="list[9].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Tomografía Contrastada
+                        <input type="checkbox" [(ngModel)]="list[10].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="col-md-6">
+                    <label style="color:#9AB638 ;" class="container"> Resonancia Magnética
+                        <input type="checkbox" [(ngModel)]="list[11].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Resonancia Magnética Contrastada
+                        <input type="checkbox" [(ngModel)]="list[12].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Colposcopía
+                        <input type="checkbox" [(ngModel)]="list[13].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Densitometría
+                        <input type="checkbox" [(ngModel)]="list[14].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Audiología
+                        <input type="checkbox" [(ngModel)]="list[15].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Espirometría
+                        <input type="checkbox" [(ngModel)]="list[16].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                    <label style="color:#9AB638 ;" class="container"> Patología
+                        <input type="checkbox" [(ngModel)]="list[17].flag" > 
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+            <br>
+            <button type="button" class="btn boton"  (click)="c('')">Regresar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #descripcionModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">{{estudio.prueba}}</h4>  
+            <button type="button" class="close" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-3 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <a class="icono" style="color:#394793;" *ngIf="estudio.sexo == 'M'"><i class="fas fa fa-male"></i> </a>
+                    <a class="icono" style="color:#E4007C;" *ngIf="estudio.sexo == 'F'"><i class="fas fa fa-female"></i> </a>
+                    <a class="icono" style="color:#7C4E26;" *ngIf="estudio.sexo == 'I'"><i class="fas fa fa-group"></i> </a>
+                </div>
+                <div class="col-9 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                    <span><strong> Precio Normal: </strong></span>{{estudio.precioNormal.toFixed(2)}} MXN
+                    <span><strong> Precio en Sucursal: </strong></span>{{estudio.precioApoyo.toFixed(2)}} MXN
+                    <div style="color: green; font-weight: bold"> <span><strong> Precio Online: </strong></span>{{estudio.precioVenta.toFixed(2)}} MXN</div>
+                    <div *ngIf="((((estudio.precioVenta*100)/estudio.precioNormal)-100)*-1) > 4.99" style="color: green; font-weight: bold"><span><strong> Mejor Precio: OnLine </strong></span> {{((((estudio.precioVenta*100)/estudio.precioNormal)-100)).toFixed(0)}}% de descuento.</div>
+                    <br>
+                    <a *ngIf="estudio.sexo == 'M'"> <span><strong> Sexo: </strong></span><span >Masculino</span></a>
+                    <a *ngIf="estudio.sexo == 'F'"> <span><strong> Sexo: </strong></span><span >Femenino</span></a>
+                    <a *ngIf="estudio.sexo == 'I'"> <span><strong> Sexo: </strong></span><span >Indistinto</span></a>
+                    <br>
+                    <br>
+                </div>
+                <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                    <span><strong>Categoría: </strong></span>{{estudio.categoria}}
+                    <br>
+                    <span><strong>Area: </strong></span>{{estudio.area}}
+                    <br>
+                    <span><strong>Sin/Acro: </strong></span>{{estudio.sinAcro}}
+                    <br>
+                    <br>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <hr>
+                    <span><strong>Descripción: </strong></span><br>{{estudio.beneficio}}
+                    <br>
+                    <br>
+                    <span><strong>Indicaciones Pre-Examen: </strong></span><br>{{estudio.indicacionesPreExamen}}
+                    <br>
+                    <br>
+                    <span><strong>Otras Indicaciones: </strong></span>
+                    <br>
+                    <p *ngIf="estudio.otrasIndicaciones">{{estudio.otrasIndicaciones}}</p>
+                    <p *ngIf="!estudio.otrasIndicaciones">Ninguna</p>
+                    <br>
+                    <span><strong>Tiempo de Entrega: </strong></span><br>{{estudio.tiempoEntrega}}
+                    <br>
+                    <br>
+                </div>
+            </div>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        </div>
+    </ng-template>
+
+</div>
+</div>
+</body>
+</html>
+

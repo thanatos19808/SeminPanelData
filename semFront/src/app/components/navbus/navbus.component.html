@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
+
+
+<div id="body" class="sidebar-is-reduced">
+
+  <header class="l-header b-c2">
+    <div class="l-header__inner clearfix">  
+        <div class="c-header-icon js-hamburger b-c2 bh-c5" (click)="myFunction()">
+            <a id="hamburger" class="hamburger-toggle"  ><span class="bar-top"></span><span class="bar-mid"></span><span class="bar-bot"></span></a>
+        </div>      
+      <div class="header-icons-group">
+      <a  (click)="onLogin()">
+        <div class="c-header-icon logout b-c3"><span style="color:#9AB638;" class="fas fa fa-2x fa-user c-c3"></span></div>       
+      </a>
+      </div>
+    </div>
+  </header>
+  <div class="l-sidebar b-c2" style="position: fixed;">
+    <div class="logo b-c3">
+      <span><a id="logo"><img class="img-fluid" src="../../../../assets/img/logoNormalBlanco.png"></a></span>
+    </div>
+    <div class="l-sidebar__content" (click)="myFunction()">
+      <nav class="c-menu js-menu">
+        <ul class="u-list" >
+          <li class="c-menu__item has-submenu" routerLink="/buscador" routerLinkActive="is-active">
+            <div class="c-menu__item__inner b-c2"><a  style="color:white;" class="fas fa fa-2x fa-search c-c3"  [routerLink]="['/buscador']" [routerLinkActive]="['active']"></a>
+              <a  class="c-menu-item__title" style="color:white;" [routerLink]="['/buscador']" [routerLinkActive]="['active']"><span class="c-c3">&nbsp;&nbsp;&nbsp;&nbsp;Buscador</span></a>
+            </div>
+          </li>
+          <li class="c-menu__item has-submenu"  routerLink="/promociones" routerLinkActive="is-active" >
+            <div class="c-menu__item__inner b-c2"><a style="color:white;" class="fas fa fa-2x fa-dollar c-c3"  [routerLink]="['/promociones']" [routerLinkActive]="['active']" ></a>
+              <a class="c-menu-item__title" style="color:white;" [routerLink]="['/promociones']" [routerLinkActive]="['active']" ><span class="c-c3">&nbsp;&nbsp;&nbsp;&nbsp;Promociónes</span></a>
+            </div>
+          </li> 
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+<div class="l-main">
+  <div class="content-wrapper content-wrapper--with-bg">    
+  </div>
+</div>
+</div>
+

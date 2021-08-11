@@ -1,0 +1,129 @@
+.container {
+  width: 100%;
+  height: 100px;
+}
+
+
+.right {
+  float: right;
+}
+
+.custom-pagination /deep/ .ngx-pagination .current {
+  background: #9AB638;
+}
+
+.btn-radiologo{
+  background-color: #394793; 
+  color: white;
+}
+
+.btn-warning{
+  background-color:#7C4E26; 
+  border-color:#7C4E26;
+  color: white;
+}
+
+.boton-warning {
+  color: #fff;
+  background-color: #7C4E26;
+  border-color:#7C4E26;
+  outline: none;
+  border: none;
+  font-size: 20px; 
+  border-radius: 4px;
+  padding: 8px 18px;
+  margin-bottom: 10px;
+}
+
+.nav-tabs{border-bottom:solid 1px #9AB638; margin-bottom:10px; padding:5px 0 0 0;}
+.nav-tabs li{margin-bottom: -1px}
+.nav-tabs a{padding:0px 40px; border:solid 1px #9AB638; margin-left:-1px; border-bottom: none; border-radius: 10px 10px 0 0; color: #9AB638; transition: all linear .25s}
+.nav-tabs a:hover{ text-decoration: none; color:#fff; background:#9AB638}
+.nav-tabs a.active{background:#9AB638; color:#fff;}
+
+.base{
+    padding-top: 80px;
+    padding-left: 80px;
+    padding-right: 10px;
+}
+
+.titulo{
+  font-size: 25px;
+  height: 50px;
+  display: block;
+  color: #9AB638;
+  font: px Arial, sans-serif;
+}
+
+.boton {
+  color: #fff;
+  background-color: #9AB638;
+  border-color:#9AB638;
+  outline: none;
+  border: none;
+  font-size: 20px; 
+  border-radius: 4px;
+  padding: 8px 18px;
+  margin-bottom: 10px;
+}
+
+.invisible {
+    visibility: hidden;
+  }
+
+.visible {
+    visibility: visible !important;
+  }
+
+.logo{
+  max-width: 50%;
+  height: auto;
+  margin-left: 25%;
+  margin-top: 5%;
+}
+
+.botones{
+  margin:auto;
+  display:block;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem;
+  border-bottom-right-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
+}
+
+.imagen{
+  width: 150px; 
+  height: 150px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: #9AB638;
+}
+
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.child, table.dataTable.dtr-inline.collapsed > tbody > tr > th.child, table.dataTable.dtr-inline.collapsed > tbody > tr > td.dataTables_empty {cursor: default !important;}
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.child:before, table.dataTable.dtr-inline.collapsed > tbody > tr > th.child:before, table.dataTable.dtr-inline.collapsed > tbody > tr > td.dataTables_empty:before { display: none !important;}
+table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child, table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child {  position: relative;   padding-left: 30px;  cursor: pointer;}
+table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before { top: 9px; left: 4px;  height: 14px;  width: 14px;  display: block;  position: absolute;  color: white;  border: 2px solid white; border-radius: 14px;  box-shadow: 0 0 3px #444;  box-sizing: content-box;  text-align: center;  font-family: 'Courier New', Courier, monospace;  line-height: 14px;  content: '+';  background-color: #337ab7;}
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {  content: '-';  background-color: #d33333;}
+table.dataTable.dtr-inline.collapsed > tbody > tr.child td:before {  display: none;}
+table.dataTable.dtr-inline.collapsed.compact > tbody > tr > td:first-child,table.dataTable.dtr-inline.collapsed.compact > tbody > tr > th:first-child { padding-left: 27px;}
+table.dataTable.dtr-inline.collapsed.compact > tbody > tr > td:first-child:before, table.dataTable.dtr-inline.collapsed.compact > tbody > tr > th:first-child:before { top: 5px;   left: 4px; height: 14px;  width: 14px;  border-radius: 14px;  line-height: 14px;  text-indent: 3px;}
+table.dataTable.dtr-column > tbody > tr > td.control, table.dataTable.dtr-column > tbody > tr > th.control { position: relative; cursor: pointer;}
+table.dataTable.dtr-column > tbody > tr > td.control:before, table.dataTable.dtr-column > tbody > tr > th.control:before { top: 50%; left: 50%;  height: 16px; width: 16px;  margin-top: -10px;  margin-left: -10px; display: block;  position: absolute; color: white;  border: 2px solid white;  border-radius: 14px;  box-shadow: 0 0 3px #444; box-sizing: content-box;  text-align: center;  font-family: 'Courier New', Courier, monospace; line-height: 14px;  content: '+';  background-color: #337ab7;}
+table.dataTable.dtr-column > tbody > tr.parent td.control:before, table.dataTable.dtr-column > tbody > tr.parent th.control:before { content: '-'; background-color: #d33333;}
+table.dataTable > tbody > tr.child { padding: 0.5em 1em;}
+table.dataTable > tbody > tr.child:hover { background: transparent !important;}
+table.dataTable > tbody > tr.child ul.dtr-details { display: inline-block; list-style-type: none; margin: 0;  padding: 0;}
+table.dataTable > tbody > tr.child ul.dtr-details li { border-bottom: 1px solid #efefef; padding: 0.5em 0;}
+table.dataTable > tbody > tr.child ul.dtr-details li:first-child {padding-top: 0;}
+table.dataTable > tbody > tr.child ul.dtr-details li:last-child {border-bottom: none;}
+table.dataTable > tbody > tr.child span.dtr-title {display: inline-block;min-width: 75px; font-weight: bold;}
+div.dtr-modal {  position: fixed;  box-sizing: border-box;  top: 0;  left: 0;  height: 100%;  width: 100%;  z-index: 100;  padding: 10em 1em;}
+div.dtr-modal div.dtr-modal-display {  position: absolute;  top: 0;  left: 0;  bottom: 0;  right: 0;  width: 50%;  height: 50%;  overflow: auto;  margin: auto;  z-index: 102;  overflow: auto;  background-color: #f5f5f7;  border: 1px solid black;  border-radius: 0.5em;  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);}
+div.dtr-modal div.dtr-modal-content {  position: relative;  padding: 1em;}
+div.dtr-modal div.dtr-modal-close {  position: absolute;  top: 6px;  right: 6px;  width: 22px;  height: 22px;  border: 1px solid #eaeaea;  background-color: #f9f9f9;  text-align: center;  border-radius: 3px;  cursor: pointer;  z-index: 12;}
+div.dtr-modal div.dtr-modal-close:hover {background-color: #eaeaea;}
+div.dtr-modal div.dtr-modal-background {  position: fixed;  top: 0;  left: 0;  right: 0;  bottom: 0;  z-index: 101;  background: rgba(0, 0, 0, 0.6);}
+.page-link:hover{color:#00a1ff!important}

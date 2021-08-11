@@ -1,0 +1,14 @@
+
+p{
+    font-family: "mifuente";
+  
+}
+@font-face{
+    font-family: "mifuente";
+    src: url(../../../../assets/Fonts/Montserrat-Regular.ttf);
+    font-size: 80px;
+}
+
+#center{
+    text-align: center;
+}

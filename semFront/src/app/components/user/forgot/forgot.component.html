@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+<body  style="background: linear-gradient(to right, rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%); height:auto" > 
+<lib-ngx-notification></lib-ngx-notification>
+<ngx-spinner></ngx-spinner>
+<div class="container">
+	<div class="d-flex justify-content-center h-100">
+		<div class="card">
+			<div class="card-header">
+				<br><br>
+				<div class="d-flex justify-content-end social_icon">
+					<span><a id="logo"><img class="img-fluid" src="../../../../assets/img/logoNormalBlanco.png"></a></span>
+				</div>
+			</div>
+			<div class="card-body" [formGroup]="olvidadaForm">
+				<p style="color:white; font-size: 25px; text-align: center;"><strong>Contraseña olvidada</strong></p>
+				<h6 class="titulo" style="font-size: 20px; color:white; text-align: center;">Por favor ingrese su correo, será enviada una solicitud de cambio de contraseña.</h6>
+                <br>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="text" class="form-control" placeholder="correo (Requerido)" formControlName="email" [(ngModel)]="email">
+				</div>
+				<p style="color:Red;" *ngIf="olvidadaForm.controls['email'].touched && olvidadaForm.controls['email'].errors?.required">Requerido.</p>
+				<p style="color:Red;" *ngIf="olvidadaForm.controls['email'].errors?.minlength">Debe tener mínimo 5 caracteres</p>
+				<p style="color:Red;" *ngIf="olvidadaForm.controls['email'].errors?.maxlength">No puede superar los 90 caracteres</p>
+				<p style="color:Red;" *ngIf="olvidadaForm.controls['email'].errors?.pattern">No válido</p>
+				<div *ngIf="flag" class="alert alert-success" style="text-align: center;" role="alert">Se ha enviado a su correo la solicutud de cambio de contraseña.</div>
+				<div *ngIf="err" class="alert alert-danger" style="text-align: center;" role="alert">No fué posible enviar la solicutud de cambio de contraseña.</div>
+				<div class="form-group">
+				<br>
+					<input  *ngIf="!flag" type="submit" value="Reiniciar" [disabled]="olvidadaForm.invalid" (click)="cambiarContrasena()" class="btn float-right login_btn">
+				</div>
+				
+			</div>
+			<div class="card-footer">
+				<div class="d-flex justify-content-center links">
+					¿No tienes cuenta?<a href="https://semindigital.com/registro">Registrarme</a>
+				</div>
+				<div class="d-flex justify-content-center links">
+					¿Ya tienes cuenta?<a href="https://semindigital.com">Login</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>

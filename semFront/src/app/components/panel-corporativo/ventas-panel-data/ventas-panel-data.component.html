@@ -1,0 +1,264 @@
+<app-nav-panel-corporativo></app-nav-panel-corporativo>
+
+<div class="container mt-4">
+
+    <form action="" method="POST" [formGroup]="formGroupData" (ngSubmit)="consultData()">
+
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="empresa">Seleccione la empresa : </label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_empresa" name="empresa" formControlName="empresa">
+                    <option value="semin">Semin</option>
+                    <option value="salud">Salud para todos</option>
+                </select>
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.empresa">
+                        <div
+                            *ngIf="formGroupData.get('empresa').hasError(validation.type) && (formGroupData.get('empresa').dirty || formGroupData.get('empresa').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="venta">Tipo de ventas: </label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_type_venta" name="type_venta" formControlName="type_venta"
+                    (change)="showOptions()">
+                    <option value="venta_total" *ngIf="venta_total">Venta total de la empresa</option>
+                    <option value="venta_sucursal" *ngIf="venta_sucursal">Ventas total de la sucursal</option>
+                    <option value="venta_estudio" *ngIf="venta_estudio">Ventas por estudio</option>
+                    <option value="venta_departamento" *ngIf="venta_departamento">
+                        Ventas por departamento (linea de produccion)
+                    </option>
+                    <option value="venta_area" *ngIf="venta_area"> Ventas por area</option>
+                </select>
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.empresa">
+                        <div
+                            *ngIf="formGroupData.get('type_venta').hasError(validation.type) && (formGroupData.get('type_venta').dirty || formGroupData.get('type_venta').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mt-2" *ngIf="select_venta_sucursal">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="sucursal">Seleccione la sucursal : </label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_sucursales" name="sucursal" formControlName="sucursal"
+                    (change)="selectOtherSucursals()">
+                    <option *ngFor="let sucursal of sucursales" value="{{ sucursal.nombreSucursal }}">
+                        {{ sucursal.nombreSucursal }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mt-2" *ngIf="select_venta_estudio">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="estudio">Estudio : </label>
+            </div>
+            <div class="col-12 col-md-9">
+                <input type="text" class="form-control" id="id_estudio" name="estudio" formControlName="estudio" />
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.estudio">
+                        <div
+                            *ngIf="formGroupData.get('estudio').hasError(validation.type) && (formGroupData.get('estudio').dirty || formGroupData.get('estudio').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mt-2" *ngIf="select_venta_departamento">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="departamento"> Departamento :</label>
+            </div>
+            <div class="col-12 col-md-9">
+                <input type="text" class="form-control" id="id_departamento" name="departament"
+                    formControlName="departament" />
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.departament">
+                        <div
+                            *ngIf="formGroupData.get('departament').hasError(validation.type) && (formGroupData.get('departament').dirty || formGroupData.get('departament').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row mt-2" *ngIf="select_venta_area">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="venta">Area: </label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_type_area" name="area" formControlName="area">
+                    <option value="laboratorio">Laboratorio</option>
+                    <option value="imagenologia">Imagenologia</option>
+                </select>
+
+            </div>
+        </div>
+
+        <!-- date -->
+        <div class="row mt-2">
+
+            <div class="col-1 col-md-2">Fecha</div>
+
+            <div class="col-1 col-md-1">
+                <label class="form-label" for="estudio">De: </label>
+            </div>
+            <div class="col-4 col-md-4">
+                <input type="date" class="form-control" id="id_first_date" name="first_date"
+                    formControlName="first_date" />
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.first_date">
+                        <div
+                            *ngIf="formGroupData.get('first_date').hasError(validation.type) && (formGroupData.get('first_date').dirty || formGroupData.get('first_date').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+
+            <div class="col-1 col-md-1 text-center">
+                <label class="form-label" for="estudio"> Al: </label>
+            </div>
+            <div class="col-4 col-md-4">
+                <input type="date" class="form-control" id="id_second_date" name="second_date"
+                    formControlName="second_date" />
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.second_date">
+                        <div
+                            *ngIf="formGroupData.get('second_date').hasError(validation.type) && (formGroupData.get('second_date').dirty || formGroupData.get('second_date').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+
+        </div>
+
+        <input type="submit" class="btn btn-block btn-primary mt-3" value="Consultar"
+            [disabled]="formGroupData.invalid" />
+
+        <hr class="border" />
+    </form>
+
+</div>
+
+
+<!-- mensajes de error -->
+<div class="container mt-5">
+    <app-loading *ngIf="loading"></app-loading>
+
+    <div *ngIf="message" class="alert alert-danger mt-3">
+        <p> No se hay registros </p>
+    </div>
+</div>
+
+
+<!-- reporte en grafica y tablas de lo solicutado -->
+<div class="container mt-5" *ngIf="!doughnutChartData.length == 0">
+
+    <div class="row" id="htmlData">
+        <div class="col">
+            <div style="display: block">
+                <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels"
+                    [chartType]="doughnutChartType">
+                </canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="container" *ngIf="content_data" id="htmlData">
+    <div class="row">
+        <div class="col col-md-12">
+            <table class="table color-text">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>id</th>
+                        <th>Departamento</th>
+                        <th>Fecha</th>
+                        <th>N estudios</th>
+                        <th>Sucursal</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let venta of ventaArea">
+                        <td>{{ venta.id }}</td>
+                        <td>{{ venta.departamento }}</td>
+                        <td>{{ venta.date }}</td>
+                        <td>{{ venta.numero_estudios }}</td>
+                        <td>{{ venta.sucursal.nombreSucursal }}</td>
+                        <td>$ {{ venta.total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-4">
+            <table>
+                <thead>
+                    <th>Total: </th>
+                </thead>
+                <tbody>
+                    <td>$ {{ total }}</td>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col col-md-8" *ngIf="!barChartData.length == 0">
+            <div style="display: block">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                    [legend]="barChartLegend" [chartType]="barChartType">
+                </canvas>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="container" *ngIf="(!barChartData.length == 0 || !doughnutChartData.length == 0) || content_data">
+    <div class="row mt-4">
+        <div class="col col-md-6">
+            <button class="btn btn-danger btn-block" (click)="generatePDF()">General PDF</button>
+        </div>
+        <!-- <div class="col col-md-6">
+            <button class="btn btn-success btn-block">General Exel</button>
+        </div> -->
+    </div>
+</div>

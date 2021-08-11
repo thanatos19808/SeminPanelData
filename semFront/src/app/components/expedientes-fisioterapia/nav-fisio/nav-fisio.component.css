@@ -1,0 +1,24 @@
+.logo{
+   width: 20px;
+   height: 20px;
+}
+.nav-item{
+   margin: 5px;
+}
+
+.puntero {
+   cursor: pointer;
+}
+
+.button-nav{
+   margin-right: 20px;
+}
+
+.nav{
+   background-color: #7EBC59;
+
+}
+
+.lista{
+   margin-left: 50px;
+}

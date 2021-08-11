@@ -1,0 +1,398 @@
+<app-nav-med></app-nav-med>
+<div class="base" style="overflow: hidden;">
+    <lib-ngx-notification></lib-ngx-notification> 
+    <ngx-spinner></ngx-spinner> 
+    <div class="row" style="width: 100%;"> 
+      <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" style="padding-right: 0px; padding-left: 0px;">
+          <button *ngIf="calendarioCargado > 0" type="button" class="btn boton" style="margin-left: 15px;" (click)="purgarCita()" (click)="verEstudios(nuevaModal)" >Nueva Cita</button>  
+          &nbsp;&nbsp;
+          <button *ngIf="calendarioCargado > 0" type="button" class="btn boton" style="margin-left: 15px;" (click)="consultarCitasMedico()" (click)="verEstudios(buscarModal)" >Buscar Cita</button>  
+      </div> 
+      <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" style="text-align: right; padding-right: 0px; padding-left: 0px;">
+          <button *ngIf="calendarioCargado" type="button" class="btn boton" style="padding-right: 9px; padding-left: 9px;" (click)="consultarCitasMedico()" >Actualizar</button>
+          <button *ngIf="calendarioCargado==0" type="button" class="btn boton" style="padding-right: 9px; padding-left: 9px;"  disabled>Actualizar</button>
+      </div> 
+      <div style="text-align: center;" [ngClass]="{'visible': calendarioCargado > 0}" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 invisible">
+        <br>
+        <br>
+        <h2>{{this.userAPI.first_name}} {{this.userAPI.last_name}}</h2>
+      </div>
+    </div> 
+    <div *ngIf="calendarioCargado==0">
+      <span><a id="logo"><img class="logo" src="../../../../assets/img/logoBicolor.png"></a></span>
+    </div>
+    <div class="invisible" [ngClass]="{'visible': calendarioCargado > 0}" id="calendar"></div>
+</div>
+
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div *ngIf="newCalendar==1"  class="modal-content scrollModal">
+        <div class="modal-header">
+          <div *ngIf="numCita!=null">
+            <h4 *ngIf="citasMedico.results[numCita].titulo" style="color:#9AB638; font-size: 25px;" class="modal-title">{{citasMedico.results[numCita].titulo}}</h4>
+          </div>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>  
+        <div *ngIf="numCita!=null" class="modal-body row">
+          <div *ngIf="citasMedico.results[numCita].tipo!='RESTRINGIDA'" class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <p ><strong>Número de cita: </strong>{{citasMedico.results[numCita].id}}</p>
+            <p ><strong>Fecha: </strong>{{citasMedico.results[numCita].fecha_cita}}</p>
+            <p *ngIf="citasMedico.results[numCita].costo"><strong>Costo: </strong>{{citasMedico.results[numCita].costo}} MXN</p>
+            <p *ngIf="citasMedico.results[numCita].tipo=='AGENDADA'"><strong>Tipo de Cita: </strong><strong style="color:#9AB638;">{{citasMedico.results[numCita].tipo}}</strong></p>
+            <p *ngIf="citasMedico.results[numCita].tipo=='VIRTUAL'"><strong>Tipo de Cita: </strong><strong style="color:#FF0000;">{{citasMedico.results[numCita].tipo}}</strong></p>
+          </div>
+          <div *ngIf="citasMedico.results[numCita].tipo!='RESTRINGIDA'" class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <p><strong>Hora Inicio: </strong>{{citasMedico.results[numCita].hora_inicio}}</p>
+            <p><strong>Hora Final: </strong>{{citasMedico.results[numCita].hora_final}}</p>
+            <p *ngIf="citasMedico.results[numCita].estatus=='ACTIVA'"><strong>Estatus: </strong><strong style="color:#9AB638;">{{citasMedico.results[numCita].estatus}}</strong></p>
+            <p *ngIf="citasMedico.results[numCita].estatus=='CERRADA'"><strong>Estatus: </strong><strong style="color:#B2EBFE;">{{citasMedico.results[numCita].estatus}}</strong></p>
+            <p *ngIf="citasMedico.results[numCita].estatus=='CANCELADA'"><strong>Estatus: </strong><strong style="color:#FF0000;">{{citasMedico.results[numCita].estatus}}</strong></p>
+            <p *ngIf="medico.medicoSemin && citasMedico.results[numCita].telefono"><strong>Telefono: </strong>{{citaMedicoTmp.telefono}}</p>
+            <p *ngIf="medico.medicoSemin && !citasMedico.results[numCita].telefono"><strong>Telefono: </strong>No definido</p>
+            <p *ngIf="medico.medicoSemin && citasMedico.results[numCita].unidadEnvio"><strong>Unidad de envio: </strong>{{citaMedicoTmp.unidadEnvio}}</p>
+            <p *ngIf="medico.medicoSemin && !citasMedico.results[numCita].unidadEnvio"><strong>Unidad de envio: </strong>No definido</p>  
+          </div>
+          <div *ngIf="citasMedico.results[numCita].tipo=='RESTRINGIDA'" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <h4  style="color:#9AB638; font-size: 25px;" class="modal-title">Tiempo Restringido</h4>
+            <br>
+            <p><strong>Hora Inicio: </strong>{{citasMedico.results[numCita].hora_inicio}}</p>
+            <p><strong>Hora Final: </strong>{{citasMedico.results[numCita].hora_final}}</p>
+            <p *ngIf="citasMedico.results[numCita].estatus=='ACTIVA'"><strong>Estatus: </strong><strong style="color:#9AB638;">{{citasMedico.results[numCita].estatus}}</strong></p>
+            <p *ngIf="citasMedico.results[numCita].estatus=='CERRADA'"><strong>Estatus: </strong><strong style="color:#B2EBFE;">{{citasMedico.results[numCita].estatus}}</strong></p>
+            <p *ngIf="citasMedico.results[numCita].estatus=='CANCELADA'"><strong>Estatus: </strong><strong style="color:#FF0000;">{{citasMedico.results[numCita].estatus}}</strong></p>
+          </div>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+          <hr>
+          </div>
+          <div *ngIf="citasMedico.results[numCita].tipo!='RESTRINGIDA'" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <p style="color:#9AB638; font-size: 20px;"><strong>Registro: </strong></p>
+            <p *ngIf="citasMedico.results[numCita].creador"><strong>Creador: </strong>{{citasMedico.results[numCita].creador}}</p>
+            <p *ngIf="!citasMedico.results[numCita].creador"><strong>Creador: </strong>No definido</p>
+            <p *ngIf="citasMedico.results[numCita].editor"><strong>Última Edición: </strong>{{citasMedico.results[numCita].editor}}</p>
+            <p *ngIf="!citasMedico.results[numCita].editor"><strong>Última Edición: </strong>No definido</p>
+          </div>
+          <div *ngIf="citasMedico.results[numCita].tipo=='RESTRINGIDA'" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <p style="color:#9AB638; font-size: 20px;"><strong>Registro: </strong></p>
+            <p *ngIf="citasMedico.results[numCita].creador"><strong>Creador: </strong>{{citasMedico.results[numCita].creador}}</p>
+            <p *ngIf="!citasMedico.results[numCita].creador"><strong>Creador: </strong>No definido</p>
+            <p *ngIf="citasMedico.results[numCita].editor"><strong>Última Edición: </strong>{{citasMedico.results[numCita].editor}}</p>
+            <p *ngIf="!citasMedico.results[numCita].editor"><strong>Última Edición: </strong>No definido</p>
+          </div> 
+          <div *ngIf="citaMedicoTmp.Paciente && !medico.medicoSemin" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <hr>
+            <a href="https://wa.me/52{{citaMedicoTmp.Paciente.telefonoCelular}}?text=Hi" target="_blank" class="btn btn-success">Contactar Paciente</a>
+          </div>
+          <div *ngIf="citasMedico.results[numCita].notas" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <hr>
+            <p style="color:#9AB638; font-size: 20px;"><strong>Notas: </strong></p>
+            <p>{{citasMedico.results[numCita].notas}}</p>
+          </div>          
+          <div *ngIf="citasMedico.results[numCita].Paciente" class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <p style="color:#9AB638; font-size: 20px;"><strong>Paciente: </strong></p>
+            <p *ngIf="citasMedico.results[numCita].Paciente"><strong>Nombre: </strong>{{citasMedico.results[numCita].Paciente.nombre}} {{citasMedico.results[numCita].Paciente.apellido_paterno}} {{citasMedico.results[numCita].Paciente.apellido_materno}} </p>
+            <p *ngIf="citasMedico.results[numCita].Paciente.sexo"><strong>Sexo: </strong>{{citasMedico.results[numCita].Paciente.sexo}}</p>
+            <p *ngIf="!citasMedico.results[numCita].Paciente.sexo"><strong>Sexo: </strong>No definido</p>
+            <p *ngIf="citasMedico.results[numCita].Paciente.discapacidad"><strong>Discapacidad: </strong>{{citasMedico.results[numCita].Paciente.discapacidad}}</p>
+            <p *ngIf="!citasMedico.results[numCita].Paciente.discapacidad"><strong>Discapacidad: </strong>No definido</p>
+            <p *ngIf="citasMedico.results[numCita].Paciente.tipo_sangre"><strong>Tipo de sangre: </strong>{{citasMedico.results[numCita].Paciente.tipo_sangre}}</p>
+            <p *ngIf="!citasMedico.results[numCita].Paciente.tipo_sangre"><strong>Tipo de sangre: </strong>No definido</p>
+            <p *ngIf="citasMedico.results[numCita].Paciente.fecha_nacimiento"><strong>Fecha de Nacimiento: </strong>{{citasMedico.results[numCita].Paciente.fecha_nacimiento}}</p>
+            <p *ngIf="!citasMedico.results[numCita].Paciente.fecha_nacimiento"><strong>Fecha de Nacimiento: </strong>No definido</p>
+          </div>  
+          <div *ngIf="citasMedico.results[numCita].Paciente" class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <br><br>
+            <p *ngIf="citasMedico.results[numCita].Paciente.fecha_nacimiento && edadMeses > 11"><strong>Edad: </strong>{{edad}} años</p>
+            <p *ngIf="citasMedico.results[numCita].Paciente.fecha_nacimiento && edadMeses < 11"><strong>Edad: </strong>{{edadMeses}} meses</p>
+            <p *ngIf="!citasMedico.results[numCita].Paciente.fecha_nacimiento"><strong>Edad: </strong>No definido</p>
+            <p *ngIf="citasMedico.results[numCita].Paciente.email"><strong>Correo: </strong>{{citasMedico.results[numCita].Paciente.email}}</p>
+            <p *ngIf="!citasMedico.results[numCita].Paciente.email"><strong>Correo: </strong>No definido</p>
+            <p *ngIf="medico.medicoSemin && citasMedico.results[numCita].Paciente.telefonoOficina"><strong>Tel. Oficina: </strong>{{citasMedico.results[numCita].Paciente.telefonoOficina}}</p>
+            <p *ngIf="medico.medicoSemin && !citasMedico.results[numCita].Paciente.telefonoOficina"><strong>Tel. Oficina: </strong>No definido</p>
+            <p *ngIf="medico.medicoSemin && citasMedico.results[numCita].Paciente.telefonoCasa"><strong>Tel. Casa: </strong>{{citasMedico.results[numCita].Paciente.telefonoCasa}}</p>
+            <p *ngIf="medico.medicoSemin && !citasMedico.results[numCita].Paciente.telefonoCasa"><strong>Tel. Casa: </strong>No definido</p>
+            <p *ngIf="medico.medicoSemin && citasMedico.results[numCita].Paciente.telefonoCelular"><strong>Tel. Celular: </strong>{{citasMedico.results[numCita].Paciente.telefonoCelular}}</p>
+            <p *ngIf="medico.medicoSemin && !citasMedico.results[numCita].Paciente.telefonoCelular"><strong>Tel. Celular: </strong>No definido</p>
+          </div>
+        </div>
+        <div class="botones" >
+          <button type="button" class="btn btn-success" style="margin-top: 10px;" data-dismiss="modal" >Cerrar</button>
+          <a *ngIf="editable">&nbsp;&nbsp;&nbsp;&nbsp;</a> 
+          <button *ngIf="editable"  type="button" class="btn btn-warning" style="margin-top: 10px; color:white;" (click)="idEstatus(citasMedico.results[numCita].id)" (click)="verEstudios(estatusModal)">Modificar Estatus</button>
+          <a *ngIf="editable">&nbsp;&nbsp;&nbsp;&nbsp;</a> 
+          <button *ngIf="editable" type="button" class="btn btn-success" style="margin-top: 10px;" (click)="verEstudios(editarModal)">Editar</button> 
+          <!-- Modal Header -->
+        </div>
+      </div>
+    </div> 
+</div>
+
+
+<ng-template #buscarModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Historial de Citas</h4>  
+        <button type="button" class="close" style="color:white;"  (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <table id="listaCitas" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+          <thead>
+            <tr>
+            <th>Num.</th>
+            <th>Título</th>
+            <th>Tipo de cita</th>
+            <th>Paciente</th>
+            <th>Estatus</th>
+            <th>Registro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let results of citasMedico.results; index as i" (click)="verEstudiosId(results, citaModal)"> 
+              <td><span >{{results.id}}</span></td>
+              <td><span >{{results.titulo.substr(0,40)}}</span></td>
+              <td><span >{{results.tipo}}</span></td>
+              <td *ngIf="results.Paciente"><span >{{results.Paciente.nombre}} {{results.Paciente.apellido_paterno}} {{results.Paciente.apellido_materno}}</span></td>
+              <td *ngIf="!results.Paciente"><span ></span></td>
+              <td><span >{{results.estatus}}</span></td>
+              <td><span >{{results.creacion.substring(0,10)}} {{results.creacion.substring(11,16)}}</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+    </div>
+  </ng-template>
+
+  <ng-template #citaModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">      
+        <h4 style="text-align: center;">{{citaMedicoTmp.titulo}}</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body row">
+        <div *ngIf="citaMedicoTmp.tipo!='RESTRINGIDA'" class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <p ><strong>Número de cita: </strong>{{citaMedicoTmp.id}}</p>
+            <p ><strong>Fecha: </strong>{{citaMedicoTmp.fecha_cita}}</p>
+            <p *ngIf="citaMedicoTmp.costo"><strong>Costo: </strong>{{citaMedicoTmp.costo}} MXN</p>
+            <p *ngIf="citaMedicoTmp.tipo=='AGENDADA'"><strong>Tipo de Cita: </strong><strong style="color:#9AB638;">{{citaMedicoTmp.tipo}}</strong></p>
+            <p *ngIf="citaMedicoTmp.tipo=='VIRTUAL'"><strong>Tipo de Cita: </strong><strong style="color:#FF0000;">{{citaMedicoTmp.tipo}}</strong></p>
+        </div>
+        <div *ngIf="citaMedicoTmp.tipo!='RESTRINGIDA'" class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <p><strong>Hora Inicio: </strong>{{citaMedicoTmp.hora_inicio}}</p> 
+            <p><strong>Hora Final: </strong>{{citaMedicoTmp.hora_final}}</p>
+            <p *ngIf="citaMedicoTmp.estatus=='ACTIVA'"><strong>Estatus: </strong><strong style="color:#9AB638;">{{citaMedicoTmp.estatus}}</strong></p>
+            <p *ngIf="citaMedicoTmp.estatus=='CERRADA'"><strong>Estatus: </strong><strong style="color:#B2EBFE;">{{citaMedicoTmp.estatus}}</strong></p>
+            <p *ngIf="citaMedicoTmp.estatus=='CANCELADA'"><strong>Estatus: </strong><strong style="color:#FF0000;">{{citaMedicoTmp.estatus}}</strong></p>
+            <p *ngIf="medico.medicoSemin && citaMedicoTmp.telefono"><strong>Telefono: </strong>{{citaMedicoTmp.telefono}}</p>
+            <p *ngIf="medico.medicoSemin && !citaMedicoTmp.telefono"><strong>Telefono: </strong>No definido</p>
+            <p *ngIf="medico.medicoSemin && citaMedicoTmp.unidadEnvio"><strong>Unidad de envio: </strong>{{citaMedicoTmp.unidadEnvio}}</p>
+            <p *ngIf="medico.medicoSemin && !citaMedicoTmp.unidadEnvio"><strong>Unidad de envio: </strong>No definido</p>
+        </div>
+        <div *ngIf="citaMedicoTmp.tipo=='RESTRINGIDA'" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <h4  style="color:#9AB638; font-size: 25px;" class="modal-title">Tiempo Restringido</h4>
+            <br>
+            <p><strong>Hora Inicio: </strong>{{citaMedicoTmp.hora_inicio}}</p>
+            <p><strong>Hora Final: </strong>{{citaMedicoTmp.hora_final}}</p>
+            <p *ngIf="citaMedicoTmp.estatus=='ACTIVA'"><strong>Estatus: </strong><strong style="color:#9AB638;">{{citaMedicoTmp.estatus}}</strong></p>
+            <p *ngIf="citaMedicoTmp.estatus=='CERRADA'"><strong>Estatus: </strong><strong style="color:#B2EBFE;">{{citaMedicoTmp.estatus}}</strong></p>
+            <p *ngIf="citaMedicoTmp.estatus=='CANCELADA'"><strong>Estatus: </strong><strong style="color:#FF0000;">{{citaMedicoTmp.estatus}}</strong></p>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <hr>
+        </div>
+        <div *ngIf="citaMedicoTmp.tipo!='RESTRINGIDA'" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <p style="color:#9AB638; font-size: 20px;"><strong>Registro: </strong></p>
+            <p *ngIf="citaMedicoTmp.creador"><strong>Creador: </strong>{{citaMedicoTmp.creador}}</p>
+            <p *ngIf="!citaMedicoTmp.creador"><strong>Creador: </strong>No definido</p>
+            <p *ngIf="citaMedicoTmp.editor"><strong>Última Edición: </strong>{{citaMedicoTmp.editor}}</p>
+            <p *ngIf="!citaMedicoTmp.editor"><strong>Última Edición: </strong>No definido</p>
+        </div>
+        <div *ngIf="citaMedicoTmp.tipo=='RESTRINGIDA'" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <p style="color:#9AB638; font-size: 20px;"><strong>Registro: </strong></p>
+            <p *ngIf="citaMedicoTmp.creador"><strong>Creador: </strong>{{citaMedicoTmp.creador}}</p>
+            <p *ngIf="!citaMedicoTmp.creador"><strong>Creador: </strong>No definido</p>
+            <p *ngIf="citaMedicoTmp.editor"><strong>Última Edición: </strong>{{citaMedicoTmp.editor}}</p>
+            <p *ngIf="!citaMedicoTmp.editor"><strong>Última Edición: </strong>No definido</p>
+        </div> 
+        <div *ngIf="citaMedicoTmp.notas" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <hr>
+        <p style="color:#9AB638; font-size: 20px;"><strong>Notas: </strong></p>
+        <p>{{citaMedicoTmp.notas}}</p>
+        </div>          
+        <div *ngIf="citaMedicoTmp.Paciente && !medico.medicoSemin" style="text-align: center;" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+          <hr>
+          <a href="https://wa.me/52{{citaMedicoTmp.Paciente.telefonoCelular}}?text=Hi" target="_blank" class="btn btn-success">Contactar Paciente</a>
+          <br>
+        </div>
+        <div *ngIf="citaMedicoTmp.Paciente" class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <p style="color:#9AB638; font-size: 20px;"><strong>Paciente: </strong></p>
+            <p *ngIf="citaMedicoTmp.Paciente"><strong>Nombre: </strong>{{citaMedicoTmp.Paciente.nombre}} {{citaMedicoTmp.Paciente.apellido_paterno}} {{citaMedicoTmp.Paciente.apellido_materno}} </p>
+            <p *ngIf="citaMedicoTmp.Paciente.sexo"><strong>Sexo: </strong>{{citaMedicoTmp.Paciente.sexo}}</p>
+            <p *ngIf="!citaMedicoTmp.Paciente.sexo"><strong>Sexo: </strong>No definido</p>
+            <p *ngIf="citaMedicoTmp.Paciente.discapacidad"><strong>Discapacidad: </strong>{{citaMedicoTmp.Paciente.discapacidad}}</p>
+            <p *ngIf="!citaMedicoTmp.Paciente.discapacidad"><strong>Discapacidad: </strong>No definido</p>
+            <p *ngIf="citaMedicoTmp.Paciente.tipo_sangre"><strong>Tipo de sangre: </strong>{{citaMedicoTmp.Paciente.tipo_sangre}}</p>
+            <p *ngIf="!citaMedicoTmp.Paciente.tipo_sangre"><strong>Tipo de sangre: </strong>No definido</p>
+            <p *ngIf="citaMedicoTmp.Paciente.fecha_nacimiento"><strong>Fecha de Nacimiento: </strong>{{citaMedicoTmp.Paciente.fecha_nacimiento}}</p>
+            <p *ngIf="!citaMedicoTmp.Paciente.fecha_nacimiento"><strong>Fecha de Nacimiento: </strong>No definido</p>
+        </div>  
+        <div *ngIf="citaMedicoTmp.Paciente" class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <br><br>
+            <p *ngIf="citaMedicoTmp.Paciente.fecha_nacimiento && edadMeses > 11"><strong>Edad: </strong>{{edad}} años</p>
+            <p *ngIf="citaMedicoTmp.Paciente.fecha_nacimiento && edadMeses < 11"><strong>Edad: </strong>{{edadMeses}} meses</p>
+            <p *ngIf="!citaMedicoTmp.Paciente.fecha_nacimiento"><strong>Edad: </strong>No definido</p>
+            <p *ngIf="citaMedicoTmp.Paciente.email"><strong>Correo: </strong>{{citaMedicoTmp.Paciente.email}}</p>
+            <p *ngIf="!citaMedicoTmp.Paciente.email"><strong>Correo: </strong>No definido</p>
+            <p *ngIf="medico.medicoSemin && citaMedicoTmp.Paciente.telefonoOficina"><strong>Tel. Oficina: </strong>{{citaMedicoTmp.Paciente.telefonoOficina}}</p>
+            <p *ngIf="medico.medicoSemin && !citaMedicoTmp.Paciente.telefonoOficina"><strong>Tel. Oficina: </strong>No definido</p>
+            <p *ngIf="medico.medicoSemin &&  citaMedicoTmp.Paciente.telefonoCasa"><strong>Tel. Casa: </strong>{{citaMedicoTmp.Paciente.telefonoCasa}}</p>
+            <p *ngIf="medico.medicoSemin && !citaMedicoTmp.Paciente.telefonoCasa"><strong>Tel. Casa: </strong>No definido</p>
+            <p *ngIf="medico.medicoSemin && citaMedicoTmp.Paciente.telefonoCelular"><strong>Tel. Celular: </strong>{{citaMedicoTmp.Paciente.telefonoCelular}}</p>
+            <p *ngIf="medico.medicoSemin && !citaMedicoTmp.Paciente.telefonoCelular"><strong>Tel. Celular: </strong>No definido</p>
+        </div>
+        <div class="botones">
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="c('')">Cerrar</button>
+          <a *ngIf="editable">&nbsp;&nbsp;&nbsp;&nbsp;</a> 
+          <button *ngIf="editable" style="color:white; "type="button" class="btn btn-warning"  (click)="idEstatus(citaMedicoTmp.id)" (click)="verEstudios(estatusModal)">Modificar Estatus</button>
+          <a *ngIf="editable">&nbsp;&nbsp;&nbsp;&nbsp;</a> 
+          <button *ngIf="editable" type="button" class="btn btn-success" (click)="verEstudios(editarModal)">Editar</button>
+          <!-- Front -->
+        </div>
+    </div>
+  </ng-template>
+
+  <ng-template #nuevaModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Crear Cita</h4>  
+        <button type="button" class="close" style="color:white;"  (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <form [formGroup]="citaCrearFormulario">
+            <label>Estudio a realizar (Requerido)</label>
+            <input class="form-control" type="text" placeholder="Estudio a realizar" formControlName="titulo"  [(ngModel)]="citaMedicoTmp.titulo">
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['titulo'].errors?.minlength">Debe ser de mas de 5 caracteres</span>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['titulo'].errors?.maxlength">No debe ser de mas de 500 caracteres</span>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['titulo'].touched && citaCrearFormulario.controls['titulo'].errors?.required">Campo Requerido.</span>
+            <br>
+            <label>Tipo de Cita (Requerido)</label>
+            <select class="form-control" id="tipo" formControlName="tipo" [(ngModel)]="citaMedicoTmp.tipo"> 
+                <option>AGENDADA</option>
+                <option>VIRTUAL</option>
+            </select>
+            <p style="color:Red;" *ngIf="citaCrearFormulario.controls['tipo'].touched && citaCrearFormulario.controls['tipo'].errors?.required">No válido</p>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['titulo'].errors?.pattern">No válido</span>
+            <br>
+            <label>Costo</label> 
+            <input class="form-control" placeholder="Costo" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" formControlName="costo" [(ngModel)]="citaMedicoTmp.costo" >
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['costo'].errors?.min">Valor mínimo superado</span>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['costo'].errors?.max">Valor máximo superado</span>
+            <br>
+            <label>Fecha (Requerida)</label>
+            <input class="form-control" id="date" type="date" formControlName="fecha_cita" [(ngModel)]="citaMedicoTmp.fecha_cita" >
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['fecha_cita'].errors?.minDate">Esta fecha no es válida</span>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['fecha_cita'].errors?.maxDate">Esta fecha no puede superar 6 meses a partir del día de hoy</span>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['fecha_cita'].touched && citaCrearFormulario.controls['fecha_cita'].errors?.required">Campo Requerido.</span>
+            <br>
+            <label>Hora Inicio (Requerida)</label>
+            <br>
+            <input type="time" name="hora_inicio"  formControlName="hora_inicio"  [(ngModel)]="citaMedicoTmp.hora_inicio">
+            <br>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['hora_inicio'].touched && citaCrearFormulario.controls['hora_inicio'].errors?.required">Campo Requerido.</span>
+            <br>
+            <label>Hora Final (Requerida)</label>
+            <br>
+            <input type="time" name="hora_final"  formControlName="hora_final"  [(ngModel)]="citaMedicoTmp.hora_final">
+            <br>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['hora_final'].touched && citaCrearFormulario.controls['hora_final'].errors?.required">Campo Requerido.</span>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.errors" > Por favor revise el horario ingresado</span>
+            <br>
+            <label>Notas</label>
+            <input class="form-control" type="text" placeholder="Notas" formControlName="notas"  [(ngModel)]="citaMedicoTmp.notas">
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['notas'].errors?.minlength">Las notas no deben ser menores a 5 caracteres</span>
+            <span style="color:Red;" *ngIf="citaCrearFormulario.controls['notas'].errors?.maxlength">Las notas no deben ser mayores a 500 caracteres</span>
+            <hr>
+            <div *ngIf="medico.medicoSemin">
+              <label>Telefono</label>
+              <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="telefono" [(ngModel)]="citaMedicoTmp.telefono">
+              <span style="color:Red;" *ngIf="citaCrearFormulario.controls['telefono'].errors?.min">Número no válido</span>
+              <br *ngIf="citaCrearFormulario.controls['telefono'].errors?.min">
+              <span style="color:Red;" *ngIf="citaCrearFormulario.controls['telefono'].errors?.max">Número no válido</span>
+              <br *ngIf="citaCrearFormulario.controls['telefono'].errors?.max">
+              <br>                
+              <label>Unidad que Envia</label>
+              <input class="form-control" type="text" placeholder="Notas" formControlName="unidadEnvio"  [(ngModel)]="citaMedicoTmp.unidadEnvio">
+              <span style="color:Red;" *ngIf="citaCrearFormulario.controls['unidadEnvio'].errors?.minlength">No debe ser menor a 5 caracteres</span>
+              <span style="color:Red;" *ngIf="citaCrearFormulario.controls['unidadEnvio'].errors?.maxlength">No debe ser mayor a 200 caracteres</span>
+              <hr>
+          </div>
+        </form>
+        <div *ngIf="citaEstatus==1" class="alert alert-primary" role="alert">Espere...</div>
+        <div *ngIf="citaEstatus==2" class="alert alert-success" role="alert">Cita Agendada Exitosamente</div>
+        <div  *ngIf="citaEstatus==3" class="alert alert-danger" role="alert">Error: {{msgError}}</div>
+        <div>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>  
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button *ngIf="citaEstatus == 0" type="button" class="btn boton" (click)="agendarCita()" [disabled]="citaCrearFormulario.invalid" >Agendar</button> 
+            <button *ngIf="citaEstatus > 0" type="button" class="btn boton" disabled >Agendar</button> 
+        </div>
+    </div>
+  </ng-template>
+
+  <ng-template #editarModal let-c="close" led-d="dismiss">
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Editar Cita</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <form [formGroup]="citaEditarForm" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+          <label>Notas</label>
+          <input class="form-control" type="text" placeholder="Notas" formControlName="notas" [(ngModel)]="notasTmp">
+          <span style="color:Red;" *ngIf="citaEditarForm.controls['notas'].errors?.minlength">Debe ser mayor a 5 caracteres</span>
+          <span style="color:Red;" *ngIf="citaEditarForm.controls['notas'].errors?.maxlength">No debe ser mayor a 500 caracteres</span>
+          <span style="color:Red;" *ngIf="citaEditarForm.controls['notas'].touched && citaEditarForm.controls['notas'].errors?.required">Nombre Requerido.</span>
+          <br>
+          <span style="color:Red;" *ngIf="citaEditarForm.controls['notas'].errors?.pattern">No válido</span>
+          <br>
+      </form>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button"  class="btn boton" data-dismiss="modal"  (click)="c('')" (click)="editarCita()" [disabled]="citaEditarForm.invalid">Modificar</button>
+    </div>
+  </ng-template>
+
+  <ng-template #estatusModal let-c="close" led-d="dismiss">
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Modificar Estatus</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->  
+    <div class="modal-body">
+        <select  [(ngModel)]="estatusSeleccionado" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off">
+          <option [ngValue]=0 selected>Seleccionar Estatus...</option>
+          <option [ngValue]=1 >CERRADA</option>
+          <option [ngValue]=2 >CANCELADA</option>
+      </select>  
+      <br *ngIf="estatusSeleccionado == 0">
+      <div *ngIf="estatusSeleccionado == 1">
+        <br>
+        <h6 class="titulo" style="font-size: 20px; text-align: center;"> Al cerrarse una cita no podrá ser editada. ¿Desea Proceder?</h6>
+      </div>
+      <div *ngIf="estatusSeleccionado == 2">
+        <br>
+        <h6 class="titulo" style="font-size: 20px; text-align: center;"> Al cancelarse una cita no podrá ser editada. ¿Desea Proceder?</h6>
+      </div> 
+      <br>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button *ngIf="estatusSeleccionado==0" type="button"  class="btn boton" data-dismiss="modal" disabled>Modificar</button>
+        <button *ngIf="estatusSeleccionado > 0" type="button"  (click)="c('')" (click)="actualizarCitaEstatus()" class="btn boton" data-dismiss="modal">Modificar</button>
+    </div>
+  </ng-template>
+  
+

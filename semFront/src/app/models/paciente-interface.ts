@@ -1,0 +1,38 @@
+export interface PacienteInterface{
+    id?: string;
+    nombre?: string;
+    apellido_paterno?: string;
+    apellido_materno?: string;
+    sexo?: string;
+    fecha_nacimiento?: string;
+    tipo_sangre?: string;
+    curp?: string;
+    imagen?: string;
+    entidad_nacimiento?: string;
+    entidad?: string;
+    nivel_socioeconomico?: string;
+    tipo_vivienda?: string;
+    discapacidad?: string;
+    grupoEtnico?: string;
+    religion?: string;
+    ocupacion?: string;
+    tipoDomicilio?: string;
+    calle?: string;
+    colonia?: string;
+    num_interior?: string;
+    num_exterior?: string;
+    cp?: string;
+    municipio?: string;
+    localidad?: string;
+    estado?: string;
+    telefonoCasa?: string;
+    telefonoOficina?: string;
+    telefonoCelular?: string;
+    email?: string;
+    monedero?: any;
+    fecha_registro?: string;
+    results ?: any;
+    numExpediente ?: any;	
+    count ?: any;
+    password ?: any;
+}

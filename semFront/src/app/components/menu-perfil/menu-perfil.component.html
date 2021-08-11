@@ -1,0 +1,435 @@
+<html>
+    <body>
+        <div id="mcuerpo">
+            <div id="footer">
+
+<app-navbar></app-navbar>
+<div class="base">
+<lib-ngx-notification></lib-ngx-notification>
+<ngx-spinner></ngx-spinner>
+    <div *ngIf="paciente.nombre">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 titulo text-center"> 
+                <h2><strong>Paciente: </strong>{{paciente.nombre}} {{paciente.apellido_paterno}} {{paciente.apellido_materno}}</h2>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                <br><br>
+                <div *ngIf="paciente.imagen">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2" style="text-align: center;">
+                        <img class="imagen" src="https://semindigital.com:8090{{paciente.imagen}}" /> 
+                    </div>
+                </div>
+                <div *ngIf="!paciente.imagen">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2" style="text-align: center;">
+                        <span><a id="imagen"><img class="imagen" src="../../../../assets/img/user.png"></a></span>
+                    </div>
+                </div>
+                <!-- 
+                <div style="text-align: center;" (click)="verPaciente(puntosModal)">
+                    <h2><strong class="titulo" style="font-size: 30px;">Tienes {{paciente.monedero}} puntos Semín.</strong></h2>
+                    <br> 
+                    <button type="button" class="btn boton" >¿Qué son los puntos?</button> 
+                </div>
+                <br> 
+                 -->
+                <strong class="titulo" >Datos Personales:</strong>
+                <br><br>
+                <p *ngIf="paciente.fecha_nacimiento">Fecha de Nacimiento: <strong>{{paciente.fecha_nacimiento}}</strong></p>
+                <p *ngIf="!paciente.fecha_nacimiento">Fecha de Nacimiento: <strong>No definido</strong></p>
+                <p *ngIf="paciente.fecha_nacimiento && edadMeses >= 11">Edad: <strong>{{edad}}</strong></p> 
+                <p *ngIf="paciente.fecha_nacimiento && edadMeses < 11">Meses de Edad: <strong>{{edadMeses}}</strong></p>
+                <p *ngIf="paciente.fecha_registro">Fecha de Registro: <strong>{{paciente.fecha_registro}}</strong></p>
+                <p *ngIf="!paciente.fecha_registro">Fecha de Registro: <strong>No definido</strong></p>
+                <p *ngIf="paciente.sexo">Sexo: <strong>{{paciente.sexo}}</strong></p>
+                <p *ngIf="!paciente.sexo">Sexo: <strong>No definido</strong></p>
+                <p *ngIf="paciente.tipo_sangre">Tipo de Sangre: <strong>{{paciente.tipo_sangre}}</strong></p>
+                <p *ngIf="!paciente.tipo_sangre">Tipo de Sangre: <strong>No definido</strong></p>
+                <p *ngIf="paciente.curp">CURP: <strong>{{paciente.curp}}</strong></p>
+                <p *ngIf="!paciente.curp" >CURP: <strong>No definido</strong></p>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                <br>
+                <br>
+                <br>
+                <p *ngIf="paciente.entidad_nacimiento">Entidad de Nacimiento: <strong>{{paciente.entidad_nacimiento}}</strong></p>
+                <p *ngIf="!paciente.entidad_nacimiento">Entidad de Nacimiento: <strong>No definido</strong></p>
+                <p *ngIf="paciente.entidad">Entidad Actual: <strong>{{paciente.entidad}}</strong></p>
+                <p *ngIf="!paciente.entidad">Entidad Actual: <strong>No definido</strong></p>
+                <p *ngIf="paciente.tipo_vivienda">Tipo de Vivienda: <strong>{{paciente.tipo_vivienda}}</strong></p>
+                <p *ngIf="!paciente.tipo_vivienda">Tipo de Vivienda: <strong>No definido</strong></p>
+                <p *ngIf="paciente.discapacidad">Discapacidad: <strong>{{paciente.discapacidad}}</strong></p>
+                <p *ngIf="!paciente.discapacidad">Discapacidad: <strong>No definido</strong></p>
+                <p *ngIf="paciente.grupoEtnico">Grupo Étnico: <strong>{{paciente.grupoEtnico}}</strong></p>
+                <p *ngIf="!paciente.grupoEtnico">grupo Étnico: <strong>No definido</strong></p>
+                <p *ngIf="paciente.religion">Religión: <strong>{{paciente.religion}}</strong></p>
+                <p *ngIf="!paciente.religion">Religión: <strong>No definido</strong></p>
+                <p *ngIf="paciente.ocupacion">Ocupación: <strong>{{paciente.ocupacion}}</strong></p>
+                <p *ngIf="!paciente.ocupacion">Ocupación: <strong>No definido</strong></p>
+                <p *ngIf="paciente.tipoDomicilio">Tipo Domicilio: <strong>{{paciente.tipoDomicilio}}</strong></p>
+                <p *ngIf="!paciente.tipoDomicilio">Tipo Domicilio: <strong>No definido</strong></p>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                <br>
+                <br>   
+                <strong class="titulo" >Dirección:</strong>
+                <br>   
+                <p *ngIf="paciente.calle">Calle: <strong>{{paciente.calle}}</strong></p>
+                <p *ngIf="!paciente.calle">Calle: <strong>No definido</strong></p>
+                <p *ngIf="paciente.num_interior">Número interior: <strong>{{paciente.num_interior}}</strong></p>
+                <p *ngIf="!paciente.num_interior">Número interior: <strong>No definido</strong></p>
+                <p *ngIf="paciente.num_exterior">Número exterior <strong>{{paciente.num_exterior}}</strong></p>
+                <p *ngIf="!paciente.num_exterior">Número exterior: <strong>No definido</strong></p>
+                <p *ngIf="paciente.colonia">Colonia: <strong>{{paciente.colonia}}</strong></p>
+                <p *ngIf="!paciente.colonia" >Colonia: <strong>No definido</strong></p>
+                <p *ngIf="paciente.cp">CP: <strong>{{paciente.cp}}</strong></p>
+                <p *ngIf="!paciente.cp" >CP: <strong>No definido</strong></p>
+                <p *ngIf="paciente.estado">Estado: <strong>{{paciente.estado}}</strong></p>
+                <p *ngIf="!paciente.estado" >Estado: <strong>No definido</strong></p>
+                <p *ngIf="paciente.localidad">Localidad: <strong>{{paciente.localidad}}</strong></p>
+                <p *ngIf="!paciente.localidad" >Ciudad: <strong>No definido</strong></p>
+                <p *ngIf="paciente.municipio">Municipio: <strong>{{paciente.municipio}}</strong></p>
+                <p *ngIf="!paciente.municipio" >Municipio: <strong>No definido</strong></p>
+                <br>   
+                <strong class="titulo" >Contacto:</strong>
+                <br>  
+                <p *ngIf="paciente.telefonoCasa">Telefono Casa: <strong>{{paciente.telefonoCasa}}</strong></p>
+                <p *ngIf="!paciente.telefonoCasa">Telefono Casa: <strong>No definido</strong></p>
+                <p *ngIf="paciente.telefonoOficina">Telefono Oficina: <strong>{{paciente.telefonoOficina}}</strong></p>
+                <p *ngIf="!paciente.telefonoOficina">Telefono Oficina: <strong>No definido</strong></p>
+                <p *ngIf="paciente.telefonoCelular">Telefono Celular: <strong>{{paciente.telefonoCelular}}</strong></p>
+                <p *ngIf="!paciente.telefonoCelular">Telefono Celular: <strong>No definido</strong></p>
+                <p *ngIf="paciente.email">Correo: <strong>{{paciente.email}}</strong></p>
+                <p *ngIf="!paciente.email">Correo: <strong>No definido</strong></p>
+            </div>
+        </div>
+        <br>
+        <button type="button" class="btn boton" (click)="rellenarPacienteCampos()" (click)="verPaciente(pacienteActualizarModal)">Actualizar Datos</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn boton" style=" color: white;" (click)="reiniciarValoresImagen()" (click)="verPaciente(subirModal)">Subir Foto</button> 
+    </div>
+
+    <ng-template #puntosModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">¿Qué son los puntos Semín?</h4>  
+            <button type="button" class="close" style="color:white;"  (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12" style="text-align: center;">
+                    <p style="font-size: 20px;">Los puntos Semín pueden ser canjeados por estudios de manera gratuita, cada punto Semín es equivalente a un peso.  Una vez agregado los estudios que requieres en el carrito de compra se activará el botón de "Puntos Semín" si cuentas con suficientes puntos para cubrir el total de costo.</p>
+                    <br>
+                    <p style="font-size: 20px;">Al agendar estudios dentro de nuestra plataforma virtual te devolveremos un porcentaje de ellos en puntos Semín que no tendrán caducidad para su canjeo en el futuro.</p>
+                    <br> 
+                    <p id="center" style="font-size: 20px;">De ante mano agradecemos con mucho cariño su confianza.</p>
+                    <br>
+                    <strong><p style="font-size: 20px;">Laboratorios Médicos SEMIN XXI 2020.<br> Todos los derechos reservados</p></strong>
+                    <br>
+                </div>
+            </div> 
+            <div style="text-align: center;">
+                <button style="margin-bottom: 10px;" type="button" class="btn boton" (click)="c('')">Regresar</button>
+                &nbsp;&nbsp;&nbsp;&nbsp; 
+                <!-- Front -->
+                <button type="button" class="btn boton" (click)="c('')" (click)="buscador()">Ir a buscador de estudios</button>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #pacienteActualizarModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+              <h4><strong>Paciente: {{pacienteActualizar.nombre}} {{pacienteActualizar.apellido_paterno}} {{pacienteActualizar.apellido_materno}}</strong></h4>
+            <button type="button" style="color:white;" class="close" (click)="c('')">x</button>
+        </div>
+    <!-- Modal Body -->
+        <div class="modal-body">
+            <ul class="nav nav-tabs">
+                <li><a class="active" data-toggle="tab" href="#t-pac-gral">General</a></li>
+                <li><a data-toggle="tab" href="#t-pac-dir" >Dirección</a></li>
+                <li><a data-toggle="tab" href="#t-pac-con" >Contacto</a></li>
+                <li><a data-toggle="tab" href="#t-pac-otro" >Otros</a></li>
+            </ul>
+            <div class="tab-content" [formGroup]="pacienteForm">
+                <div id="t-pac-gral" class="tab-pane fade  show active">
+                    <br>
+                    <label for="sexo" class="editar">Sexo</label>
+                    <select class="form-control" id="sexo" formControlName="sexo" [(ngModel)]="pacienteActualizar.sexo">
+                    <option>femenino</option>
+                    <option>masculino</option>
+                    </select>
+                    <br>     
+                    <label class="editar">Fecha de Nacimiento</label>
+                    <br>
+                    <input class="form-control" id="date" type="date" formControlName="fecha_nacimiento" [(ngModel)]="pacienteActualizar.fecha_nacimiento">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['fecha_nacimiento'].errors?.minDate">Esta fecha se debe encontrar entre los últimos 120 años</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['fecha_nacimiento'].errors?.maxDate">Esta fecha no puede superar el dia de hoy</span>
+                    <br>
+                    <label for="sangrePaciente" class="editar">Tipo de Sangre</label>
+                    <br>
+                    <select class="form-control" id="sangrePaciente" formControlName="tipo_sangre" [(ngModel)]="pacienteActualizar.tipo_sangre">
+                    <option>N/A</option>
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                    </select>
+                    <br>
+                    <label class="editar">CURP</label>
+                    <input class="form-control" type="text" placeholder="CURP" formControlName="curp" [(ngModel)]="pacienteActualizar.curp">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['curp'].errors?.minlength">CURP debe tener 18 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['curp'].errors?.maxlength">CURP debe tener 18 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['curp'].errors?.pattern">No parece ser un CURP válido</span>
+                </div>
+                <div id="t-pac-dir" class="tab-pane fade">
+                    <br>
+                    <label>Calle</label>
+                    <input class="form-control" type="text" placeholder="Calle" formControlName="calle" [(ngModel)]="pacienteActualizar.calle">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['calle'].errors?.minlength">Calle debe tener mas de 8 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['calle'].errors?.maxlength">Calle debe tener menos de 90 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['calle'].errors?.pattern">No válido</span>
+                    <label>Colonia</label>
+                    <br>
+                    <input class="form-control" type="text" placeholder="Colonia" formControlName="colonia" [(ngModel)]="pacienteActualizar.colonia">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['colonia'].errors?.minlength">Colonia debe tener mas de 5 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['colonia'].errors?.maxlength">Colonia debe tener menos de 45 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['colonia'].errors?.pattern">No válido</span>		
+                    <label>Número interior</label>
+                    <br>
+                    <input class="form-control" type="text" placeholder="Num Interior" formControlName="num_interior" [(ngModel)]="pacienteActualizar.num_interior">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['num_interior'].errors?.maxlength">Número debe tener menos de 10 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['num_interior'].errors?.pattern">No válido</span>
+                    <br>
+                    <label>Número exterior</label>
+                    <br>
+                    <input class="form-control" type="text" placeholder="Num. Exterior" formControlName="num_exterior" [(ngModel)]="pacienteActualizar.num_exterior">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['num_exterior'].errors?.maxlength">Número debe tener menos de 10 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['num_exterior'].errors?.pattern">No válido</span>
+                    <label>Cp</label>
+                    <input class="form-control" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="Cp" formControlName="cp" [(ngModel)]="pacienteActualizar.cp">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['cp'].errors?.min">Cp no válido</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['cp'].errors?.max">Cp no válido</span>
+                    <br>
+                    <label>Municipio</label>
+                    <input class="form-control" type="text" placeholder="Municipio" formControlName="municipio" [(ngModel)]="pacienteActualizar.municipio">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['municipio'].errors?.minlength">Municipio debe tener mas de 2 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['municipio'].errors?.maxlength">municipio debe tener menos de 45 caracteres</span>
+                    <br>
+                    <label>Localidad</label>
+                    <input class="form-control" type="text" placeholder="Localidad" formControlName="localidad" [(ngModel)]="pacienteActualizar.localidad">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['localidad'].errors?.minlength">Localidad debe tener mas de 2 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['localidad'].errors?.maxlength">Localidad debe tener menos de 200 caracteres</span>
+                    <br>
+                    <label>Estado</label>
+                    <select class="form-control" formControlName="estado"  [(ngModel)]="pacienteActualizar.estado">
+                        <option>Aguascalientes</option>
+                        <option>Baja California</option>
+                        <option>Baja California Sur</option>
+                        <option>Campeche</option>
+                        <option>CDMX</option>
+                        <option>Chihuahua</option>
+                        <option>Chiapas</option>
+                        <option>Coahuila</option>
+                        <option>Colima</option>
+                        <option>Durango</option>
+                        <option>Guanajuato</option>
+                        <option>Guerrero</option>
+                        <option>Hidalgo</option>
+                        <option>Jalisco</option>
+                        <option>México</option>
+                        <option>Michoacán</option>
+                        <option>Morelos</option>
+                        <option>Nayarit</option>
+                        <option>Nuevo León</option>
+                        <option>Oaxaca</option>
+                        <option>Puebla</option>
+                        <option>Querétaro</option>
+                        <option>Quintana Ro</option>
+                        <option>San Luis Potosí</option>
+                        <option>Sinaloa</option>
+                        <option>Sonora</option>
+                        <option>Tabasco</option>
+                        <option>Tamaulipas</option>
+                        <option>Tlaxcala</option>
+                        <option>Veracruz</option>
+                        <option>Yucatán</option>
+                        <option>Zacatecas</option>
+                    </select>
+                    <br>
+                </div>
+                <div id="t-pac-con" class="tab-pane fade">
+                    <br>
+                    <label>Telefono Casa</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="telefonoCasa" [(ngModel)]="pacienteActualizar.telefonoCasa">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoCasa'].errors?.min">Número no válido</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoCasa'].errors?.max">Número no válido</span>
+                    <br>
+                    <label>Telefono Oficina</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="telefonoOficina" [(ngModel)]="pacienteActualizar.telefonoOficina">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoOficina'].errors?.min">Número no válido</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoOficina'].errors?.max">Número no válido</span>
+                    <br>
+                    <label>Telefono Celular</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="telefonoCelular" [(ngModel)]="pacienteActualizar.telefonoCelular">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoCelular'].errors?.min">Número no válido</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoCelular'].errors?.max">Número no válido</span>
+                    <br>
+                </div>
+                <div id="t-pac-otro" class="tab-pane fade">
+                   <br>
+                    <label>Entidad de Nacimiento</label>
+                    <select class="form-control" formControlName="entidad_nacimiento"  [(ngModel)]="pacienteActualizar.entidad_nacimiento">
+                        <option>Aguascalientes</option>
+                        <option>Baja California</option>
+                        <option>Baja California Sur</option>
+                        <option>Campeche</option>
+                        <option>CDMX</option>
+                        <option>Chihuahua</option>
+                        <option>Chiapas</option>
+                        <option>Coahuila</option>
+                        <option>Colima</option>
+                        <option>Durango</option>
+                        <option>Guanajuato</option>
+                        <option>Guerrero</option>
+                        <option>Hidalgo</option>
+                        <option>Jalisco</option>
+                        <option>México</option>
+                        <option>Michoacán</option>
+                        <option>Morelos</option>
+                        <option>Nayarit</option>
+                        <option>Nuevo León</option>
+                        <option>Oaxaca</option>
+                        <option>Puebla</option>
+                        <option>Querétaro</option>
+                        <option>Quintana Ro</option>
+                        <option>San Luis Potosí</option>
+                        <option>Sinaloa</option>
+                        <option>Sonora</option>
+                        <option>Tabasco</option>
+                        <option>Tamaulipas</option>
+                        <option>Tlaxcala</option>
+                        <option>Veracruz</option>
+                        <option>Yucatán</option>
+                        <option>Zacatecas</option>
+                    </select>
+                    <br>
+                    <label>Entidad Actual</label>
+                    <select class="form-control" formControlName="entidad"  [(ngModel)]="pacienteActualizar.entidad">
+                        <option>Aguascalientes</option>
+                        <option>Baja California</option>
+                        <option>Baja California Sur</option>
+                        <option>Campeche</option>
+                        <option>CDMX</option>
+                        <option>Chihuahua</option>
+                        <option>Chiapas</option>
+                        <option>Coahuila</option>
+                        <option>Colima</option>
+                        <option>Durango</option>
+                        <option>Guanajuato</option>
+                        <option>Guerrero</option>
+                        <option>Hidalgo</option>
+                        <option>Jalisco</option>
+                        <option>México</option>
+                        <option>Michoacán</option>
+                        <option>Morelos</option>
+                        <option>Nayarit</option>
+                        <option>Nuevo León</option>
+                        <option>Oaxaca</option>
+                        <option>Puebla</option>
+                        <option>Querétaro</option>
+                        <option>Quintana Ro</option>
+                        <option>San Luis Potosí</option>
+                        <option>Sinaloa</option>
+                        <option>Sonora</option>
+                        <option>Tabasco</option>
+                        <option>Tamaulipas</option>
+                        <option>Tlaxcala</option>
+                        <option>Veracruz</option>
+                        <option>Yucatán</option>
+                        <option>Zacatecas</option>
+                    </select>
+                    <br> 
+                    <label>Nivel Socioecónomico</label>
+                    <input class="form-control" type="text" placeholder="Nivel Socioecónomico" formControlName="nivel_socioeconomico" [(ngModel)]="pacienteActualizar.nivel_socioeconomico">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['nivel_socioeconomico'].errors?.minlength">Nivel Socioecónomico debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['nivel_socioeconomico'].errors?.maxlength">Nivel Socioecónomico debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Tipo de Vivienda</label>
+                    <input class="form-control" type="text" placeholder="Tipo de Vivienda" formControlName="tipo_vivienda" [(ngModel)]="pacienteActualizar.tipo_vivienda">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['tipo_vivienda'].errors?.minlength">Tipo de Vivienda debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['tipo_vivienda'].errors?.maxlength">Tipo de Vivienda debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Discapacidad</label>
+                    <input class="form-control" type="text" placeholder="Discapacidad" formControlName="discapacidad" [(ngModel)]="pacienteActualizar.discapacidad">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['discapacidad'].errors?.minlength">Discapacidad debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['discapacidad'].errors?.maxlength">Discapacidad debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Grupo Étnico</label>
+                    <input class="form-control" type="text" placeholder="Grupo Étnico" formControlName="grupoEtnico" [(ngModel)]="pacienteActualizar.grupoEtnico">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['grupoEtnico'].errors?.minlength">Grupo Étnico debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['grupoEtnico'].errors?.maxlength">Grupo Étnico debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Religión</label>
+                    <input class="form-control" type="text" placeholder="Religión" formControlName="religion" [(ngModel)]="pacienteActualizar.religion">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['religion'].errors?.minlength">Religión debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['religion'].errors?.maxlength">Religión debe tener menos de 45 caracteres</span>
+                    <br>
+                    <label>Ocupación</label>
+                    <input class="form-control" type="text" placeholder="Ocupación" formControlName="ocupacion" [(ngModel)]="pacienteActualizar.ocupacion">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['ocupacion'].errors?.minlength">Ocupación debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['ocupacion'].errors?.maxlength">Ocupación debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Tipo de Domicilio</label>
+                    <input class="form-control" type="text" placeholder="Tipo de Domicilio" formControlName="tipoDomicilio" [(ngModel)]="pacienteActualizar.tipoDomicilio">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['tipoDomicilio'].errors?.minlength">Tipo de Domicilio debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['tipoDomicilio'].errors?.maxlength">Tipo de Domicilio debe tener menos de 90 caracteres</span>
+                    <br>
+                </div>
+                <button type="button" class="btnboton" [disabled]="pacienteForm.invalid" (click)="actualizarPaciente()" (click)="c('')">Actualizar</button>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #subirModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Subir Foto</h4>  
+            <button type="button" class="close" style="color:white;"  (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12">
+                    <h6 class="titulo" style="font-size: 20px; text-align: center;"> Por favor seleccione una imagen.</h6>
+                    <br>
+                    <input type="file" accept="image/jpeg" max-size="13000"  (change)="onFileSelect($event)" />
+                    <br><br>
+                    <div *ngIf="imagenEstatus==1" class="alert alert-primary" role="alert">Espere...</div>
+                <div *ngIf="imagenEstatus==2" class="alert alert-success" role="alert">Imagen Guardada Exitosamente</div>
+                <div  *ngIf="imagenEstatus==3" class="alert alert-danger" role="alert">Error: {{msgError}}</div>
+                </div>
+            </div>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button *ngIf="imagenEstatus==0" type="button" [disabled]="imagenSubirForm.invalid" (click)="reiniciarValoresImagen()" (click)="subirImagen()" class="btn boton">Subir</button>
+        </div>
+    </ng-template>
+    
+</div>  
+</div>
+        </div>
+</body>
+</html>
+
+
+

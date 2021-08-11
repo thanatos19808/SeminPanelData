@@ -1,0 +1,87 @@
+<app-nav-radiologo></app-nav-radiologo>
+<ngx-spinner></ngx-spinner>
+<div class="base">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <h1>Perfil</h1>
+        <hr>
+        <div class="container">
+            <div class="row">
+              <div class="col">
+                <label class="editar">Nombre</label>
+                <input
+                    disabled 
+                    class="form-control" 
+                    type="text"
+                    [(ngModel)]="imagenologo.nombre"
+                >
+              </div>
+              <div class="col">
+                <label class="editar">Apellido Paterno</label>
+                <input
+                    disabled 
+                    class="form-control" 
+                    type="text" 
+                    [(ngModel)]="imagenologo.apellido_paterno" 
+                >
+              </div>
+              <div class="col">
+                <label class="editar">Apellido Materno</label>
+                <input
+                    disabled 
+                    class="form-control" 
+                    type="text" 
+                    [(ngModel)]="imagenologo.apellido_materno" 
+                >
+              </div>
+            </div>
+        </div>
+        <br>
+        <div class="container">
+            <div class="row">
+              <div class="col">
+                <label class="editar">Marca de Agua</label>
+                <br>
+                <input 
+                    type="file" 
+                    accept=".png," 
+                    (change)="onFileSelected($event)"
+                />
+                <br>
+                <label class="editar">{{imagenologo.water_mark.split('/').pop() || ""}}</label>
+              </div>
+            </div>
+        </div>
+        <div class="container text-right">
+            <div class="row">
+              <div class="col align-self-end">
+                <button 
+                    type="button" 
+                    class="btn boton" 
+                    (click)="cargarMarca()"
+                >
+                    Actualizar
+                </button>
+              </div>
+            </div>
+          </div>
+     </div>
+</div>
+
+<ng-template #modalExito let-c="close" led-d="dismiss"> 
+  <!-- Modal Header -->
+  <div class="modal-header" style="color:white; background-color:#9AB638;">  
+      <h4 style="text-align: center;">Operación realizada de manera exitosa</h4>  
+  </div>
+  <!-- Modal Body -->
+  <div class="modal-body">
+      <div class="col-12 text-center">
+          <button 
+              type="button" 
+              class="btn boton" 
+              (click)="closeModals()"
+          >
+              Aceptar
+          </button>
+      </div>
+  </div>
+</ng-template>

@@ -1,0 +1,280 @@
+<html>
+    <body>
+        <div id="mcuerpo">
+            <div id="footer">
+<app-navbar></app-navbar>
+<div class="base">
+    <lib-ngx-notification></lib-ngx-notification>
+    <ngx-spinner></ngx-spinner>
+    <div>
+        <div>
+            <p  style="text-align: left;" class="titulo">Historial de Citas</p> 
+        </div>
+        <div *ngIf="citas">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="listaCitas" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Prueba</th>
+                        <th>Fecha</th>
+                        <th>Estatus</th>
+                        <th>Rembolso</th>
+                    </tr>
+                    </thead>
+                    <tbody> 
+                    <tr *ngFor="let results of citas.results; index as i" (click)="verCita(results, citaModal)"> 
+                        <td><span >{{results.prueba.substr(0,40)}}</span></td>
+                        <td><span >{{results.fecha_cita}}</span></td>
+                        <td *ngIf="results.estatus=='ACTIVA'"><span style="color: green"><b>LISTA PARA REALIZAR</b></span></td>
+                        <td *ngIf="results.estatus=='CERRADA'"><span style="color: blue"><b>COMPLETADA</b></span></td>
+                        <td *ngIf="results.estatus=='CANCELADA'"><span style="color: blue"><b>CANCELADA</b></span></td>
+                        <td *ngIf="results.estatus=='CARRITO'"><span style="color: orange"><b>ESPERANDO PAGO</b></span></td>     
+                        <td *ngIf="!results.estatus_rembolso"><span style="color: green"><b></b></span></td>
+                        <td *ngIf="results.estatus_rembolso=='SOLICITADO'"><span style="color: green"><b>{{results.estatus_rembolso}}</b></span></td>
+                        <td *ngIf="results.estatus_rembolso=='APROBADO'"><span style="color: blue"><b>{{results.estatus_rembolso}}</b></span></td>
+                        <td *ngIf="results.estatus_rembolso=='RECHAZADO'"><span style="color: red"><b>{{results.estatus_rembolso}}</b></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div> 
+        <div style="text-align: center;" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <br><br>
+            <button style="background-color: #394793;" type="button" class="btn boton" (click)="verModalg(descargaModal)" >¿CÓMO DESCARGAR<br> RESULTADOS?</button> 
+        </div>    
+    </div>
+    <div>
+        <br><br>
+        <!-- 
+        <div>
+            <p  style="text-align: left;" class="titulo">Estudios Realizados</p> 
+        </div>
+        <div *ngIf="resultados">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="lista" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Estudio</th>
+                        <th>Fecha</th>
+                    </tr>
+                    </thead>
+                    <tbody> 
+                    <tr *ngFor="let results of resultados.results; index as i" (click)="verEstudio(results, estudioModal)"> 
+                        <td><span >{{results.tipoEstudio.substr(0,60)}}</span></td>
+                        <td><span >{{results.creacion.split('T')[0]}} {{results.creacion.substring(11,19)}}</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+         -->
+    </div>
+</div> 
+</div>
+
+    <ng-template #descargaModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">¿DUDAS AL DESCARGAR TUS RESULTADOS?</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row"> 
+                <div style="text-align: center;" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <video width="320" autoplay>
+                        <source src="https://semindigital.com/tutoriales/video_resultados.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+            <br>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #estudioModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Estudio</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <p style="color:#9AB638; font-size: 20px;"><strong>Descripción: </strong></p>
+                    <p ><strong>Número de estudio: </strong>{{resultado.id}}</p>
+                    <p><strong>Tipo de estudio: </strong>{{resultado.tipoEstudio}}</p>
+                    <br>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <p style="color:#9AB638; font-size: 20px;"><strong>Registro: </strong></p>
+                    <p><strong>Creacion: </strong>{{resultado.creacion.split('T')[0]}} {{resultado.creacion.substring(11,19)}}</p>
+                    <p><strong>Última Edición: </strong>{{resultado.ultimaActualizacion.split('T')[0]}} {{resultado.ultimaActualizacion.substring(11,19)}}</p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <br>
+                    <div >
+                        <button *ngIf="!resultado.file" style="background-color: #394793;" type="button" class="btn boton" disabled>Descargar</button>
+                        <button *ngIf="resultado.file" style="background-color: #394793;" type="button" class="btn boton" (click)="download()">Descargar</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button *ngIf="resultado.fileDicom" style="background-color: #394793;" type="button" class="btn boton" (click)="verModal(dicomModal)">Descargar DICOM</button>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #dicomModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">DICOM</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <br>
+                    <div>
+                        <h6  class="titulo" style="text-align: justify;">El formato DICOM es el estándar utilizado es dispositivos médicos, es necesario equipo especial para poder visualizar estos documentos.</h6>
+                        <br>
+                        <h6  class="titulo" style="text-align: center;">Al ofrecerle la oportunidad de descargar estos archivos le damos la capacidad de poder guardar sus estudios en el formato requerido para lectura e interpretación medica en el futuro. </h6>
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+            <hr>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button *ngIf="resultado.fileDicom" style="background-color: #394793;" type="button" class="btn boton" (click)="downloadDicom()">Descargar DICOM</button>
+        </div>
+    </ng-template>
+
+    <ng-template #citaModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header --> 
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">{{cita.prueba}}</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body" id="pdfTable">
+                <div  *ngIf="cita" >
+                    <div class="row" id="recibo" >
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <span><a id="logo"><img class="logo" src="../../../../assets/img/logoBicolor.png"></a></span>
+                            <br><br><br>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <p><strong>Nombre del estudio: </strong>{{cita.prueba}}</p>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <p><strong>Número de cita: </strong>{{cita.id}}</p>
+                            <p><strong>Costo: </strong>{{cita.precioVenta}} MXN</p>
+                            <p><strong>Sucursal: </strong>{{cita.Sucursal.nombreSucursal}}</p> 
+                            <p *ngIf="cita.nombre_promocion"><strong>Estudio de la promoción: </strong>{{cita.nombre_promocion}}</p> 
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <p *ngIf="cita.fecha_cita"><strong>Fecha: </strong>{{cita.fecha_cita}}</p>
+                            <p *ngIf="!cita.fecha_cita"><strong>Fecha: </strong>No definido</p>
+                            <p *ngIf="cita.hora_inicio"><strong>Hora Inicio: </strong>{{cita.hora_inicio}}</p>
+                            <p *ngIf="!cita.hora_inicio"><strong>Hora Inicio: </strong>No definido</p>
+                            <p *ngIf="cita.hora_final"><strong>Hora Final: </strong>{{cita.hora_final}}</p>
+                            <p *ngIf="!cita.hora_final"><strong>Hora Final: </strong>No definido</p>
+                            <p *ngIf="cita.estatus=='ACTIVA'"><strong>Estatus: </strong><strong style="color:#9AB638;">{{cita.estatus}}</strong></p>
+                            <p *ngIf="cita.estatus=='CERRADA'"><strong>Estatus: </strong><strong style="color:#B2EBFE;">{{cita.estatus}}</strong></p>
+                            <p *ngIf="cita.estatus=='CARRITO'"><strong>Estatus: </strong><strong style="color:#E5BE01;">{{cita.estatus}}</strong></p>
+                            <p *ngIf="cita.estatus=='CANCELADA'"><strong>Estatus: </strong><strong style="color:#FF0000;">{{cita.estatus}}</strong></p>
+                            <p *ngIf="cita.estatus_rembolso=='SOLICITADO'"><strong>Estatus de Rembolso: </strong><strong style="color:#9AB638;">Rembolso en proceso de aprovación</strong></p>
+                            <p *ngIf="cita.estatus_rembolso=='APROVADO'"><strong>Estatus de Rembolso: </strong><strong style="color:#B2EBFE;">Rembolso Aprovado</strong></p>
+                            <p *ngIf="cita.estatus_rembolso=='RECHAZADO'"><strong>Estatus de Rembolso: </strong><strong style="color:#FF0000;">Rembolso Rechazado</strong></p>
+                        </div>
+                        <div *ngIf="cita.nombre_promocion" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="alert alert-primary" role="alert">Las citas que son parte de una promoción requieren de un representante Semín para ser canceladas. Por favor comuniquese a su sucursal mas cercana para mas informes.</div>
+                        </div>
+                        <div *ngIf="cita.estatus_rembolso" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <hr>
+                            <p style="color:#9AB638; font-size: 20px;"><strong>Detalles: </strong></p>
+                            <p *ngIf="cita.razon_rembolso"><strong>Razón de la cancelación: </strong>{{cita.razon_rembolso}}</p>
+                            <p *ngIf="cita.notas"><strong>Respuesta: </strong>{{cita.notas}}</p>
+                            <div *ngIf="cita.estatus_rembolso=='SOLICITADO'" class="alert alert-primary" role="alert">La solicitud de rembolso se encuentra en revisión, nos comunicaremos en la menor brevedad posible.</div>
+                            <div *ngIf="cita.estatus_rembolso=='APROVADO'" class="alert alert-success" role="alert">La solicitud de rembolso fue aprobada, el monto le será devuelto en la menor brevedad posible.</div>
+                            <div *ngIf="cita.estatus_rembolso=='RECHAZADO'" class="alert alert-danger" role="alert">La solicitud de rembolso fue rechazada, nos comunicaremos con usted en la menor brevedad posible.</div>
+                        </div>
+                    </div>
+                </div>     
+                <br>           
+                <div class="alert alert-success" style="text-align:center; margin-right: 30px; margin-left: 30px; " role="alert">
+                    Una vez agendado su estudio puede presentarse a su realización presentando una identificación oficial con nombre o en su defecto presentando este comprobante en formato digital o impreso.
+                </div>
+            <hr>
+        </div>
+        <div style="text-align: center;">
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            <a>&nbsp;&nbsp;&nbsp;&nbsp;</a> 
+            <button *ngIf="!cita.estatus_rembolso && cita.estatus=='ACTIVA' && !cita.promocion" type="button" class="btn boton" style="background-color: red;" (click)="c('')" (click)="verModal(confirmacionModal)">Cancelar cita</button>
+            <a>&nbsp;&nbsp;&nbsp;&nbsp;</a> 
+            <button  *ngIf="descargarPDF" type="button" class="btn boton btn-info" (click)="downloadPDF()">Descargar comprobante</button>
+            <button *ngIf="!descargarPDF" type="button" class="btn boton btn-info" disabled>Descargar comprobante</button>
+        </div>
+    </ng-template>
+
+
+    <ng-template #confirmacionModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Solicitud de cancelación</h4>  
+            <button style="color:white;" type="button" class="close" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <h4>¿Está seguro que sea cancelar la cita?</h4>
+            &nbsp;
+            <p style="font-size: 20px; text-align: justify;">Una vez hecha la solicitud de cancelación, se comunicará con usted uno de nuestros ejectivos en la menor brevedad posible para continuar con el proceso de cancelación.</p>
+            <p class="text-danger" style="font-size: 24px; text-align: center;">Esta operación no se puede deshacer.</p>
+            <br>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button style="background-color:red;" type="button" class="btn boton" (click)="verModal(razonModal)" (click)="c('')">Cancelar Cita</button>
+        </div>
+    </ng-template>
+
+    <ng-template #razonModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Solicitud de cancelación</h4>  
+            <button style="color:white;" type="button" class="close" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <label style="font-size: 20px; text-align: justify;">Por favor explique la razón de su cancelación.</label>
+            <select  [(ngModel)]="razonCancelacion" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off">
+                <option [ngValue]=0 selected>Seleccionar...</option>
+                <option [ngValue]=1 >No pude hacer el estudio por no cumplir las condiciones requeridas</option>
+                <option [ngValue]=2 >Ya no requiero el estudio</option>
+                <option [ngValue]=3 >Requiero un cambio de estudio</option>
+                <option [ngValue]=4 >No me gusto el servicio</option>
+                <option [ngValue]=5 >El personal no tiene buena actitud</option>
+                <option [ngValue]=6 >Requiero un descuento adicional</option>
+            </select> 
+            <br>
+            <br>
+            <div *ngIf="flagRembolso == 1" class="alert alert-primary" role="alert">Espere...</div>
+            <div *ngIf="flagRembolso == 2 && !cita.id_pago" class="alert alert-success" role="alert">La cita ha sido cancelada.</div>
+            <div *ngIf="flagRembolso == 2 && cita.id_pago" class="alert alert-success" role="alert">La solicitud de rembolso fue enviada, se comunicará un representante Semín en la menor brevedad posible.</div>
+            <div *ngIf="flagRembolso == 3" class="alert alert-danger" role="alert">Ha ocurrido un error, intente mas tarde.</div>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button *ngIf="!razonCancelacion  || flagRembolso!=0" style="background-color:red;" type="button" class="btn boton" disabled>Cancelar Cita</button>
+            <button *ngIf="razonCancelacion && flagRembolso ==0 " style="background-color:red;" type="button" class="btn boton" (click)="editarCita()">Cancelar Cita</button>
+        </div>
+    </ng-template>
+
+</div>
+</body>
+</html>
+

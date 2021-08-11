@@ -1,0 +1,202 @@
+<app-nav-panel-corporativo></app-nav-panel-corporativo>
+
+<div class="container mt-4">
+
+    <form action="" method="POST" [formGroup]="formGroupData" (ngSubmit)="consultData()">
+
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="empresa">Seleccione la empresa : </label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_empresa" name="empresa" formControlName="empresa">
+                    <option value="semin">Semin</option>
+                    <option value="salud">Salud para todos</option>
+                </select>
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.empresa">
+                        <div
+                            *ngIf="formGroupData.get('empresa').hasError(validation.type) && (formGroupData.get('empresa').dirty || formGroupData.get('empresa').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="option">Seleccione una opcion :</label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_option_finanzas" name="select_option_finanzas"
+                    formControlName="option_finanzas" (change)="showOptions()">
+                    <option value="box_cut" *ngIf="corte_caja">Corte de caja</option>
+                    <option value="type_pay" *ngIf="tipos_pagos">Tipo de Pagos</option>
+                    <option value="devoluciones" *ngIf="devoluciones_permisos">Devoluciones</option>
+                    <option value="change_estudie">Cambio de estudio</option>
+                </select>
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.option_finanzas">
+                        <div
+                            *ngIf="formGroupData.get('option_finanzas').hasError(validation.type) && (formGroupData.get('option_finanzas').dirty || formGroupData.get('option_finanzas').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- desabilitar este campo si no se selecciona una aperacion -->
+        <div class="row mt-2">
+            <div class="col-12 col-md-3">
+                <label class="form-label" for="sucursal">Seleccione la sucursal : </label>
+            </div>
+            <div class="col-12 col-md-9">
+                <select class="custom-select" id="id_sucursal" name="sucursal" formControlName="sucursal">
+                    <option *ngFor="let sucursal of sucursales" value="{{ sucursal.nombreSucursal }}">
+                        {{ sucursal.nombreSucursal }}
+                    </option>
+                </select>
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.sucursal">
+                        <div
+                            *ngIf="formGroupData.get('sucursal').hasError(validation.type) && (formGroupData.get('sucursal').dirty || formGroupData.get('sucursal').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- date -->
+        <div class="row mt-2">
+
+            <div class="col-2 col-md-2">Fecha</div>
+
+            <div class="col-1 col-md-1">
+                <label class="form-label" for="estudio">De: </label>
+            </div>
+            <div class="col-4 col-md-4">
+                <input type="date" class="form-control" id="id_first_date" name="first_date"
+                    formControlName="first_date" />
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.first_date">
+                        <div
+                            *ngIf="formGroupData.get('first_date').hasError(validation.type) && (formGroupData.get('first_date').dirty || formGroupData.get('first_date').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+
+            <div class="col-1 col-md-1 text-center">
+                <label class="form-label" for="estudio"> Al: </label>
+            </div>
+            <div class="col-4 col-md-4">
+                <input type="date" class="form-control" id="id_second_date" name="second_date"
+                    formControlName="second_date" />
+
+                <div class="validation-error">
+                    <ng-container *ngFor="let validation of VALIDATE_ITEMS.second_date">
+                        <div
+                            *ngIf="formGroupData.get('second_date').hasError(validation.type) && (formGroupData.get('second_date').dirty || formGroupData.get('second_date').touched) ">
+                            {{validation.message}}
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+
+        </div>
+
+        <input type="submit" class="btn btn-block btn-primary mt-3" value="Consultar"
+            [disabled]="formGroupData.invalid">
+        <!-- [disabled]="formGroupData.invalid" -->
+        <hr class="border" />
+    </form>
+
+</div>
+
+
+<!-- mensajes de error -->
+<div class="container mt-5">
+    <app-loading *ngIf="loading"></app-loading>
+
+    <div *ngIf="message" class="alert alert-danger mt-3">
+        <p> No hay registros </p>
+    </div>
+    <div *ngIf="error" class="alert alert-danger mt-3">
+        <p> {{ errors }} </p>
+    </div>
+
+</div>
+
+
+<!-- reporte en grafica de corte de cajas *ngIf="!doughnutChartData.length == 0"-->
+<div class="container mt-5 text-center" *ngIf="!doughnutChartData.length == 0">
+
+    <div class="row" id="htmlData">
+        <div class="col">
+            <div style="display: block">
+                <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels"
+                    [chartType]="doughnutChartType">
+                </canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- reporte en grafica de tipos de pagos *ngIf="!doughnutChartData.length == 0"-->
+<div class="container mt-5 text-center" *ngIf="!barChartData.length == 0">
+
+    <div class="row" id="htmlData">
+        <div class="col col-md-4" *ngIf="devoluciones">
+            <table class="table color-text">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Devolución en:</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let monto of montoDevolucion">
+                        <td>{{monto.name | titlecase}}</td>
+                        <td>$ {{ monto.total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col col-md">
+            <div style="display: block">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                    [legend]="barChartLegend" [chartType]="barChartType">
+                </canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="container" *ngIf="!barChartData.length == 0 || !doughnutChartData.length == 0">
+    <div class="row mt-4">
+        <div class="col col-md-6">
+            <button class="btn btn-danger btn-block" (click)="generatePDF()">General PDF</button>
+        </div>
+        <!-- <div class="col col-md-6">
+            <button class="btn btn-success btn-block">General Exel</button>
+        </div> -->
+    </div>
+</div>

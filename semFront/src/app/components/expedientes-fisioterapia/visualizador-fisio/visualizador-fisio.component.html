@@ -1,0 +1,207 @@
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-8 col-md-8 col-lg-8">
+      <h3 class="tittle"> 
+        {{ expediente.nombre | uppercase }} 
+        {{ expediente.apellido_paterno | uppercase }} 
+        {{ expediente.apellido_materno | uppercase }}
+      </h3>
+    </div>
+    <div class="col-3 col-md-3 col-lg-3 text-right tittle">
+      <button routerLink="/fisio/studios" class="btn btn-info" *ngIf="contador < 6">
+        Regresar...
+      </button>
+    </div>
+  </div>
+
+  <app-loading *ngIf="loading"></app-loading>
+
+  <div class="row cards" *ngIf="contador === 1" >
+    <div class="col-6">
+      <lib-ngx-image-zoom
+        [thumbImage]= hoja4_30
+        [enableLens]= enableLens
+        [magnification]= magnification
+        [enableScrollZoom]=enableScrollZoom
+        [lensWidth]=lensWidth
+      ></lib-ngx-image-zoom>
+    </div>
+    <div class="col-6">
+      <lib-ngx-image-zoom
+        [thumbImage]= identificacion
+        [enableLens]= enableLens
+        [magnification]= magnification
+        [enableScrollZoom]=enableScrollZoom
+        [lensWidth]=lensWidth
+      ></lib-ngx-image-zoom>
+    </div>
+  </div>
+
+  <div class="row cards" *ngIf="contador === 2" >
+    <div class="col-6">
+      <lib-ngx-image-zoom
+        [thumbImage]= constancia_vigencia
+        [enableLens]= enableLens
+        [magnification]= magnification
+        [enableScrollZoom]=enableScrollZoom
+        [lensWidth]=lensWidth
+      ></lib-ngx-image-zoom>
+    </div>
+    <div class="col-6">
+      <lib-ngx-image-zoom
+        [thumbImage]= identificacion
+        [enableLens]= enableLens
+        [magnification]= magnification
+        [enableScrollZoom]=enableScrollZoom
+        [lensWidth]=lensWidth
+      ></lib-ngx-image-zoom>
+    </div>
+  </div>
+
+  <div class="row cards" *ngIf="contador === 3" >
+    <div class="col-6">
+      <lib-ngx-image-zoom
+        [thumbImage]= orden_trabajo
+        [enableLens]= enableLens
+        [magnification]= magnification
+        [enableScrollZoom]=enableScrollZoom
+        [lensWidth]=lensWidth
+      ></lib-ngx-image-zoom>
+    </div>
+    <div class="col-6">
+      <lib-ngx-image-zoom
+        [thumbImage]= constancia_vigencia
+        [enableLens]= enableLens
+        [magnification]= magnification
+        [enableScrollZoom]=enableScrollZoom
+        [lensWidth]=lensWidth
+      ></lib-ngx-image-zoom>
+    </div>
+  </div>
+
+  <div class="row cards" *ngIf="contador === 4" >
+    <div class="col-6">
+      <lib-ngx-image-zoom
+        [thumbImage]= carnet
+        [enableLens]= enableLens
+        [magnification]= magnification
+        [enableScrollZoom]=enableScrollZoom
+        [lensWidth]=lensWidth
+      ></lib-ngx-image-zoom>
+    </div>
+    <div class="col-6">
+      <lib-ngx-image-zoom
+        [thumbImage]= identificacion
+        [enableLens]= enableLens
+        [magnification]= magnification
+        [enableScrollZoom]=enableScrollZoom
+        [lensWidth]=lensWidth
+      ></lib-ngx-image-zoom>
+    </div>
+  </div>
+
+  <div class="row cards" *ngIf="contador === 5">
+    <div class="col-8">
+      <lib-ngx-image-zoom
+        [thumbImage]= bitacora
+        [enableLens]= enableLens
+        [magnification]= magnification
+        [enableScrollZoom]=enableScrollZoom
+        [lensWidth]=lensWidth
+      ></lib-ngx-image-zoom>
+    </div>
+    
+    <div class="col-3 firmas">
+      <label>Numero de firmas:</label>
+      <input
+			  type="text"
+			  id="id_firmas"
+        class="form-control"
+			  [(ngModel)] = "firmas"
+			  name="nm_firmas"
+        placeholder="numero de firmas"
+		  />
+    </div>
+  </div>
+
+  
+  <div class="buttons2 text-center" *ngIf="contador < 6" >
+
+    <div class="row">
+      <div class="col incorrecto" (click)="isInvalid()" >
+        <button class="btn btn-danger btn-lg">
+          Incorrecto
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn btn-warning btn-lg" (click)="isPendiente()" >
+          Pendiente
+        </button>
+      </div>
+      <div class="col correcto">
+        <button class="btn btn-success btn-lg" (click)="isValid()" >
+          Correcto
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="contador == 6" >
+    <div class="row">
+      <h3 class="backgraundTittle">Observaciones sobre expediente</h3>
+    </div>
+    
+    <div class="row">
+      <textarea 
+        class="form-control observaciones" 
+        [(ngModel)] = "observaciones"
+        name="observaciones" 
+        id="id_observaciones" 
+        cols="30" 
+        rows="10">
+      </textarea>
+    </div>
+
+    <div class="row" (click)="masContador()">
+      <button class="btn btn-primary btn-block">
+        Continuar...
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- alerta cuando finaliza el registro -->
+  <div class="row" *ngIf="contador == 7">
+    <div class="col target">
+      <h2 class="backgraundTittle">Evaluación de Documentos</h2>
+      <hr />
+      <span>precione "OK" para terminar el proceso</span>
+      <br />
+      <img class="ico" src="./assets/img/checked.png" alt="success" />
+    </div>
+  </div>
+
+  <div class="row button" *ngIf="contador === 7" >
+    <div class="col" (click)="addEditsExpediente()" >
+      <button class="btn btn-primary btn-block" *ngIf="!enviando">
+        OK...
+      </button>
+      <button class="btn btn-primary btn-block" *ngIf="enviando" [disabled]="enviando == true">
+        <i 
+          [ngClass]=
+            "{
+              'fa-refresh fa-spin': enviando == true
+            }" 
+          class="fa">
+        </i>
+        <span> espere...</span>
+      </button>
+    </div>
+  </div>
+  <!-- fin de la alerta -->
+
+</div>

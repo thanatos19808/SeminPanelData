@@ -1,0 +1,91 @@
+<html>
+    <body>
+        <div id="mcuerpo">
+            <div id="footer">
+                <app-navbus></app-navbus>
+                <div class="base">
+                <lib-ngx-notification></lib-ngx-notification>
+                <ngx-spinner></ngx-spinner>
+                    <div class="container page-top">
+                        <div *ngIf="promociones" class="row">
+                            <div *ngFor="let results of promociones.results; index as i" class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4 thumb promociones" (click)="verEstudiosId(results ,promocionModal)" >
+                                    <img  src="https://semindigital.com:8090{{results.imagen}}" class="zoom img-fluid "  alt="">
+                            </div>
+                        </div>
+                        <div *ngIf="!promociones">
+                            <br>
+                            <br>
+                            <h6  class="titulo" style="text-align: center;">Por el momento no hay promociones disponibles.</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <ng-template #promocionModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">{{promocion.titulo}}</h4>  
+            <button type="button" class="close" style="color: white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div *ngIf="promocion" >
+                <div class="col-12" style="text-align: center;">
+                    <img style="width: 100%;" src="https://semindigital.com:8090{{promocion.imagen}}" class="zoom img-fluid" style="padding-bottom: 15px;">
+                    <hr>
+                </div>
+                <div class="row"> 
+                    <div class="col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2" style="text-align: center;">
+                        <a class="icono" style="color:#394793;" *ngIf="promocion.sexo == 'M'"><i class="fas fa fa-male"></i> </a>
+                        <a class="icono" style="color:#E4007C;" *ngIf="promocion.sexo == 'F'"><i class="fas fa fa-female"></i> </a>
+                        <a class="icono" style="color:#7C4E26;" *ngIf="promocion.sexo == 'I'"><i class="fas fa fa-group"></i> </a>
+                    </div>
+                    <div class="col-9 col-sm-9 col-md-10 col-lg-10 col-xl-10" style="text-align: left;">
+                        <h6 *ngIf="promocion.sexo == 'F'" class="titulo" style="font-size: 20px; text-align: left;">Sexo: Femenino</h6>
+                        <h6 *ngIf="promocion.sexo == 'M'" class="titulo" style="font-size: 20px; text-align: left;">Sexo: Masculino</h6>
+                        <h6 *ngIf="promocion.sexo == 'I'" class="titulo" style="font-size: 20px; text-align: left;">Sexo: Indistinto</h6>
+                        <h6 class="titulo" style="font-size: 20px; text-align: left;">Precio: {{promocion.precioVenta}} MXN</h6>
+                    </div>
+                </div>
+                <hr>
+                <div class="col-12" style="text-align: justify;">
+                    {{promocion.descripcion}}
+                </div>
+                <div class="col-12" style="text-align: justify;">
+                    <hr>
+                    <h6 class="titulo" style="font-size: 20px; text-align: left;">Indicaciónes:</h6>
+                    {{promocion.indicaciones}}
+                </div>
+            </div>
+            <hr>
+            <br>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp; 
+            <button  type="button" data-toggle="collapse" href="#collapseOne" class="btn boton" style="background-color: #394793;"   (click)="c('')"  (click)="verEstudios(compraModal)"  > Agendar </button>
+        </div>
+    </ng-template>
+
+    <ng-template #compraModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Necesita Identificarse</h4>  
+            <button type="button" class="close" style="color: white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <p class="parrafosJustify" >Para agendar una cita es necesario identificarse como un usuario Semin Digital.</p>
+            <br>
+            <br> 
+            <p class="parrafosCenter"><strong>Si no tiene una cuenta puede registrare se manera gratuita.</strong></p>
+            <br> 
+            <button id="btnboton" type="button" style="margin-bottom: 10px; background-color: #394793;" (click)="c('')" (click)="onLogin()"> Login </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="btnboton" type="button" style="background-color: #7C4E26;" (click)="c('')" (click)="onRegistro()"> Registro</button>
+        </div>
+    </ng-template>
+
+</body>
+</html> 
+
+
+

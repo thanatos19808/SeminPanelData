@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
+
+
+<div id="body" class="sidebar-is-reduced">
+
+  <header class="l-header b-c2">
+    <div class="l-header__inner clearfix">
+      <div class="c-header-icon js-hamburger b-c2 bh-c5" (click)="myFunction()">
+        <a id="hamburger" class="hamburger-toggle"  ><span class="bar-top"></span><span class="bar-mid"></span><span class="bar-bot"></span></a>
+      </div>      
+        
+      <div class="header-icons-group">
+      <a  (click)="onLogout()">
+        <div class="c-header-icon logout b-c3"><span style="color:#9AB638;" class="fas fa fa-power-off fa-2x b-c1 bh-c4"></span></div>       
+      </a>
+      </div>
+    </div>
+  </header>
+  <div class="l-sidebar b-c2" style="position: fixed;">
+    <div class="logo b-c3">
+      <span><a id="logo"><img class="img-fluid" src="../../../../assets/img/logoNormalBlanco.png"></a></span>
+    </div>
+    <div class="l-sidebar__content" (click)="myFunction()">
+      <nav class="c-menu js-menu">
+        <ul class="u-list" >
+          <li class="c-menu__item has-submenu" routerLink="/panel/citas" routerLinkActive="is-active">
+            <div class="c-menu__item__inner b-c2"><a  style="color:white;" class="fas fa fa-2x fa-calendar c-c3"  [routerLink]="['/panel/citas']" [routerLinkActive]="['active']"></a>
+              <a  class="c-menu-item__title" style="color:white;" [routerLink]="['/panel/citas']" [routerLinkActive]="['active']"><span class="c-c3">&nbsp;&nbsp;&nbsp;&nbsp;Lista de Servicios</span></a>
+            </div>
+          </li>
+          <li class="c-menu__item has-submenu" routerLink="/panel/pacientes" routerLinkActive="is-active">
+            <div class="c-menu__item__inner b-c2"><a  style="color:white;" class="fas fa fa-2x fa-user c-c3"  [routerLink]="['/panel/pacientes']" [routerLinkActive]="['active']"></a>
+              <a  class="c-menu-item__title" style="color:white;" [routerLink]="['/panel/pacientes']" [routerLinkActive]="['active']"><span class="c-c3">&nbsp;&nbsp;&nbsp;&nbsp;Pacientes</span></a>
+            </div>
+          </li>
+          <li class="c-menu__item has-submenu" routerLink="/panel/imagenologia" routerLinkActive="is-active">
+            <div class="c-menu__item__inner b-c2"><a  style="color:white;" class="fas fa fa-2x fa-table c-c3"  [routerLink]="['/panel/imagenologia']" [routerLinkActive]="['active']"></a>
+              <a  class="c-menu-item__title" style="color:white;" [routerLink]="['/panel/imagenologia']" [routerLinkActive]="['active']"><span class="c-c3">&nbsp;&nbsp;&nbsp;&nbsp;Pacientes Imagenologia</span></a>
+            </div>
+          </li>
+          <li class="c-menu__item has-submenu" routerLink="/panel/catalogo" routerLinkActive="is-active">
+            <div class="c-menu__item__inner b-c2"><a style="color:white;" class="fas fa fa-2x fa-search c-c3"  [routerLink]="['/panel/catalogo']" [routerLinkActive]="['active']"></a>
+              <a class="c-menu-item__title" style="color:white;" [routerLink]="['/panel/catalogo']" [routerLinkActive]="['active']"><span class="c-c3">&nbsp;&nbsp;&nbsp;&nbsp;Ver Estudios</span></a>
+            </div>
+          </li>
+          <li class="c-menu__item has-submenu" (click)="myFunction()">
+            <div class="c-menu__item__inner b-c2"><a style="color:white;" class="fas fa fa-2x fa-plus c-c3"  [routerLink]="['/registro']" target="_blank"></a>
+              <a class="c-menu-item__title" style="color:white;" [routerLink]="['/registro']" target="_blank"><span class="c-c3">&nbsp;&nbsp;&nbsp;&nbsp;Registro</span></a>
+            </div>
+          </li>
+
+          <!-- Nuevo boton de navegacion -->
+          <li class="c-menu__item has-submenu" routerLink="/rehabilitacion" routerLinkActive="is-active">
+            <div class="c-menu__item__inner b-c2"><a  style="color:white;" class="fas fa fa-2x fa-wheelchair c-c3"  [routerLink]="['/rehabilitacion']" [routerLinkActive]="['active']"></a>
+              <a  class="c-menu-item__title" style="color:white;" [routerLink]="['/rehabilitacion']" [routerLinkActive]="['active']"><span class="c-c3">&nbsp;&nbsp;&nbsp;&nbsp;Rehabilitacion</span></a>
+            </div>
+          </li>
+
+          <li class="c-menu__item has-submenu">
+            <div  (click)="onLogout()" class="c-menu__item__inner b-c2"><a style="color:white;" class="fas fa fa-2x fa-power-off c-c3" ></a>
+              <a  class="c-menu-item__title" style="color:white;" ><span class="c-c3" >&nbsp;&nbsp;&nbsp;&nbsp;Desconectar</span></a>
+            </div> 
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+<div class="l-main">
+  <div class="content-wrapper content-wrapper--with-bg">    
+  </div>
+</div>
+</div>

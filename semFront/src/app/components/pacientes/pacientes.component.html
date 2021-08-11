@@ -1,0 +1,693 @@
+<app-navop></app-navop>
+<div class="base">
+<lib-ngx-notification></lib-ngx-notification>
+<ngx-spinner></ngx-spinner>
+    <div *ngIf="pacientes">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <table id="lista" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Expediente</th>
+                    <th>Paciente</th>
+                    <th>sexo</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Email</th>
+                    <th>Celular</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let results of pacientes.results; index as i" (click)="verPaciente(results.id, pacienteModal)"> 
+                    <td *ngIf="!results.numExpediente"><span >{{results.numExpediente}}</span></td>
+                    <td *ngIf="results.numExpediente"><span ></span></td>
+                    <td ><span >{{results.nombre}} {{results.apellido_paterno}} {{results.apellido_materno}}</span></td>
+                    <td *ngIf="results.sexo"><span >{{results.sexo}}</span></td>
+                    <td *ngIf="!results.sexo"><span ></span></td>
+                    <td *ngIf="results.fecha_nacimiento"><span >{{results.fecha_nacimiento}}</span></td>
+                    <td *ngIf="!results.fecha_nacimiento"><span ></span></td>
+                    <td *ngIf="results.email"><span ></span>{{results.email}}</td>
+                    <td *ngIf="!results.email"><span ></span></td>
+                    <td *ngIf="results.telefonoCelular"><span >{{results.telefonoCelular}}</span></td>
+                    <td *ngIf="!results.telefonoCelular"><span ></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <ng-template #pacienteModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4  *ngIf="paciente" style="text-align: center;">Perfil de paciente</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div *ngIf="paciente">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 titulo text-center"> 
+                        <h2><strong>Paciente: </strong>{{paciente.nombre}} {{paciente.apellido_paterno}} {{paciente.apellido_materno}}</h2>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                        <br>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                        <strong class="titulo" >Datos Personales:</strong>
+                        <br>
+                        <p *ngIf="paciente.numExpediente">Núm. de Expediente: <strong>{{paciente.numExpediente}}</strong></p>
+                        <p *ngIf="!paciente.numExpediente">Núm. de Expediente: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.fecha_nacimiento">Fecha de Nacimiento: <strong>{{paciente.fecha_nacimiento}}</strong></p>
+                        <p *ngIf="!paciente.fecha_nacimiento">Fecha de Nacimiento: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.fecha_nacimiento && edadMeses >= 11">Edad: <strong>{{edad}}</strong></p>
+                        <p *ngIf="paciente.fecha_nacimiento && edadMeses < 11">Meses de Edad: <strong>{{edadMeses}}</strong></p>
+                        <p *ngIf="paciente.fecha_registro">Fecha de Registro: <strong>{{paciente.fecha_registro}}</strong></p>
+                        <p *ngIf="!paciente.fecha_registro">Fecha de Registro: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.sexo">Sexo: <strong>{{paciente.sexo}}</strong></p>
+                        <p *ngIf="!paciente.sexo">Sexo: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.tipo_sangre">Tipo de Sangre: <strong>{{paciente.tipo_sangre}}</strong></p>
+                        <p *ngIf="!paciente.tipo_sangre">Tipo de Sangre: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.curp">CURP: <strong>{{paciente.curp}}</strong></p>
+                        <p *ngIf="!paciente.curp" >CURP: <strong>No definido</strong></p>
+                        <br>   
+                        <strong class="titulo" >Contacto:</strong>
+                        <br>   
+                        <p *ngIf="paciente.telefonoCasa">Teléfono Casa: <strong>{{paciente.telefonoCasa}}</strong></p>
+                        <p *ngIf="!paciente.telefonoCasa">Teléfono Casa: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.telefonoOficina">Teléfono Oficina: <strong>{{paciente.telefonoOficina}}</strong></p>
+                        <p *ngIf="!paciente.telefonoOficina">Teléfono Oficina: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.telefonoCelular">Teléfono Celular: <strong>{{paciente.telefonoCelular}}</strong></p>
+                        <p *ngIf="!paciente.telefonoCelular">Teléfono Celular: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.email">Correo: <strong>{{paciente.email}}</strong></p>
+                        <p *ngIf="!paciente.email">Correo: <strong>No definido</strong></p>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                        <br><br><br>
+                        <p *ngIf="paciente.entidad_nacimiento">Entidad de Nacimiento: <strong>{{paciente.entidad_nacimiento}}</strong></p>
+                        <p *ngIf="!paciente.entidad_nacimiento">Entidad de Nacimiento: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.entidad">Entidad Actual: <strong>{{paciente.entidad}}</strong></p>
+                        <p *ngIf="!paciente.entidad">Entidad Actual: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.tipo_vivienda">Tipo de Vivienda: <strong>{{paciente.tipo_vivienda}}</strong></p>
+                        <p *ngIf="!paciente.tipo_vivienda">Tipo de Vivienda: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.discapacidad">Discapacidad: <strong>{{paciente.discapacidad}}</strong></p>
+                        <p *ngIf="!paciente.discapacidad">Discapacidad: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.grupoEtnico">Grupo Étnico: <strong>{{paciente.grupoEtnico}}</strong></p>
+                        <p *ngIf="!paciente.grupoEtnico">grupo Étnico: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.religion">Religión: <strong>{{paciente.religion}}</strong></p>
+                        <p *ngIf="!paciente.religion">Religión: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.ocupacion">Ocupación: <strong>{{paciente.ocupacion}}</strong></p>
+                        <p *ngIf="!paciente.ocupacion">Ocupación: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.tipoDomicilio">Tipo Domicilio: <strong>{{paciente.tipoDomicilio}}</strong></p>
+                        <p *ngIf="!paciente.tipoDomicilio">Tipo Domicilio: <strong>No definido</strong></p>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                        <strong class="titulo" >Dirección:</strong>
+                        <br>   
+                        <p *ngIf="paciente.calle">Calle: <strong>{{paciente.calle}}</strong></p>
+                        <p *ngIf="!paciente.calle">Calle: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.num_interior">Número interior: <strong>{{paciente.num_interior}}</strong></p>
+                        <p *ngIf="!paciente.num_interior">Número interior: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.num_exterior">Número exterior <strong>{{paciente.num_exterior}}</strong></p>
+                        <p *ngIf="!paciente.num_exterior">Número exterior: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.colonia">Colonia: <strong>{{paciente.colonia}}</strong></p>
+                        <p *ngIf="!paciente.colonia" >Colonia: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.cp">CP: <strong>{{paciente.cp}}</strong></p>
+                        <p *ngIf="!paciente.cp" >CP: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.estado">Estado: <strong>{{paciente.estado}}</strong></p>
+                        <p *ngIf="!paciente.estado" >Estado: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.localidad">Localidad: <strong>{{paciente.localidad}}</strong></p>
+                        <p *ngIf="!paciente.localidad" >Ciudad: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.municipio">Municipio: <strong>{{paciente.municipio}}</strong></p>
+                        <p *ngIf="!paciente.municipio" >Municipio: <strong>No definido</strong></p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div style="text-align: center;">
+                <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+                &nbsp;&nbsp;&nbsp;&nbsp; 
+                <button  *ngIf="!empleado.auditor" type="button" class="btn boton" (click)="rellenarPacienteCampos()" (click)="checarPaciente(pacienteActualizarModal)">Actualizar Datos</button>
+                <button  *ngIf="empleado.auditor" type="button" class="btn boton" disabled>Actualizar Datos</button>
+                &nbsp;&nbsp;&nbsp;&nbsp; 
+                <button type="button" class="btn boton" (click)="consultarResultadosOp()" (click)="checarPaciente(consultarEstudioModal)">Consultar Estudios</button>
+                &nbsp;&nbsp;&nbsp;&nbsp; 
+                <button *ngIf="!empleado.auditor" type="button" class="btn boton" (click)="purgarEstudio()" (click)="checarPaciente(subirEstudioModal)">Subir Estudio</button>
+                <button *ngIf="empleado.auditor" type="button" class="btn boton" disabled>Subir Estudio</button>
+                &nbsp;&nbsp;&nbsp;&nbsp; 
+                <button *ngIf="!empleado.auditor" type="button" class="btn boton" (click)="reiniciarTablaPer()" (click)="consularTablaPermisos()" (click)="verModalMd(GestionarModal)">Gestionar Expediente</button> 
+                <button *ngIf="empleado.auditor" type="button" class="btn boton" disabled>Gestionar Expediente</button> 
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #pacienteActualizarModal let-c="close" led-d="dismiss">
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+              <h4><strong>Paciente: {{pacienteActualizar.nombre}} {{pacienteActualizar.apellido_paterno}} {{pacienteActualizar.apellido_materno}}</strong></h4>
+            <button type="button" style="color:white;" class="close" (click)="c('')">x</button>
+        </div>
+    <!-- Modal Body -->
+        <div class="modal-body">
+            <ul class="nav nav-tabs">
+                <li><a class="active" data-toggle="tab" href="#t-pac-gral">General</a></li>
+                <li><a data-toggle="tab" href="#t-pac-dir" >Dirección</a></li>
+                <li><a data-toggle="tab" href="#t-pac-con" >Contacto</a></li>
+                <li><a data-toggle="tab" href="#t-pac-otro" >Otros</a></li>
+            </ul>
+            <div class="tab-content" [formGroup]="pacienteForm">
+                <div id="t-pac-gral" class="tab-pane fade  show active">
+                    <br>
+                    <label>Número de Expediente</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="numExpediente" [(ngModel)]="pacienteActualizar.numExpediente">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['numExpediente'].errors?.min">No válido. </span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['numExpediente'].errors?.max">No válido. </span>
+                    <br>
+                    <label class="editar" >Nombre (Requerido)</label>
+                    <input class="form-control" type="text" placeholder="Nombre" formControlName="nombre" [(ngModel)]="pacienteActualizar.nombre">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['nombre'].errors?.minlength">Debe ser de mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['nombre'].errors?.maxlength">No debe ser de mas de 45 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['nombre'].touched && pacienteForm.controls['nombre'].errors?.required">Nombre Requerido.</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['nombre'].errors?.pattern">No parece ser un nombre válido</span>
+                    <br>
+                    <label class="editar">Primer Apellido (Requerido)</label>
+                    <input class="form-control" type="text" placeholder="Primer Apellido" formControlName="apellido_paterno" [(ngModel)]="pacienteActualizar.apellido_paterno">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['apellido_paterno'].errors?.minlength">Debe ser de mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['apellido_paterno'].errors?.maxlength">No debe ser de mas de 45 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['apellido_paterno'].touched && pacienteForm.controls['apellido_paterno'].errors?.required">Apellido Requerido.</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['apellido_paterno'].errors?.pattern">No parece ser un apellido válido</span>
+                    <br>
+                    <label class="editar">Segundo Apellido</label>
+                    <input class="form-control" type="text" placeholder="Segundo Apellido" formControlName="apellido_materno" [(ngModel)]="pacienteActualizar.apellido_materno">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['apellido_materno'].errors?.minlength">Debe ser de mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['apellido_materno'].errors?.maxlength">No debe ser de mas de 45 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['apellido_materno'].touched && pacienteForm.controls['apellido_materno'].errors?.required">Apellido Requerido.</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['apellido_materno'].errors?.pattern">No parece ser un apellido válido</span>
+                    <br>
+                    <label for="sexo" class="editar">Sexo</label>
+                    <select class="form-control" id="sexo" formControlName="sexo" [(ngModel)]="pacienteActualizar.sexo">
+                    <option>femenino</option>
+                    <option>masculino</option>
+                    </select>
+                    <br>     
+                    <label class="editar">Fecha de Nacimiento</label>
+                    <br>
+                    <input class="form-control" id="date" type="date" formControlName="fecha_nacimiento" [(ngModel)]="pacienteActualizar.fecha_nacimiento">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['fecha_nacimiento'].errors?.minDate">Esta fecha se debe encontrar entre los últimos 120 años</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['fecha_nacimiento'].errors?.maxDate">Esta fecha no puede superar el dia de hoy</span>
+                    <br>
+                    <label for="sangrePaciente" class="editar">Tipo de Sangre</label>
+                    <br>
+                    <select class="form-control" id="sangrePaciente" formControlName="tipo_sangre" [(ngModel)]="pacienteActualizar.tipo_sangre">
+                    <option>N/A</option>
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                    </select>
+                    <br>
+                    <label class="editar">CURP</label>
+                    <input class="form-control" type="text" placeholder="CURP" formControlName="curp" [(ngModel)]="pacienteActualizar.curp">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['curp'].errors?.minlength">CURP debe tener 18 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['curp'].errors?.maxlength">CURP debe tener 18 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['curp'].errors?.pattern">No parece ser un CURP válido</span>
+                </div>
+                <div id="t-pac-dir" class="tab-pane fade">
+                    <br>
+                    <label>Calle</label>
+                    <input class="form-control" type="text" placeholder="Calle" formControlName="calle" [(ngModel)]="pacienteActualizar.calle">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['calle'].errors?.minlength">Calle debe tener mas de 8 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['calle'].errors?.maxlength">Calle debe tener menos de 90 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['calle'].errors?.pattern">No válido</span>
+                    <label>Colonia</label>
+                    <br>
+                    <input class="form-control" type="text" placeholder="Colonia" formControlName="colonia" [(ngModel)]="pacienteActualizar.colonia">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['colonia'].errors?.minlength">Colonia debe tener mas de 5 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['colonia'].errors?.maxlength">Colonia debe tener menos de 45 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['colonia'].errors?.pattern">No válido</span>		
+                    <label>Número interior</label>
+                    <br>
+                    <input class="form-control" type="text" placeholder="Num Interior" formControlName="num_interior" [(ngModel)]="pacienteActualizar.num_interior">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['num_interior'].errors?.maxlength">Número debe tener menos de 10 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['num_interior'].errors?.pattern">No válido</span>
+                    <br>
+                    <label>Número exterior</label>
+                    <br>
+                    <input class="form-control" type="text" placeholder="Num. Exterior" formControlName="num_exterior" [(ngModel)]="pacienteActualizar.num_exterior">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['num_exterior'].errors?.maxlength">Número debe tener menos de 10 caracteres</span>
+                    <br>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['num_exterior'].errors?.pattern">No válido</span>
+                    <label>Cp</label>
+                    <input class="form-control" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="Cp" formControlName="cp" [(ngModel)]="pacienteActualizar.cp">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['cp'].errors?.min">Cp no válido</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['cp'].errors?.max">Cp no válido</span>
+                    <br>
+                    <label>Municipio</label>
+                    <input class="form-control" type="text" placeholder="Municipio" formControlName="municipio" [(ngModel)]="pacienteActualizar.municipio">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['municipio'].errors?.minlength">Municipio debe tener mas de 2 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['municipio'].errors?.maxlength">municipio debe tener menos de 45 caracteres</span>
+                    <br>
+                    <label>Localidad</label>
+                    <input class="form-control" type="text" placeholder="Localidad" formControlName="localidad" [(ngModel)]="pacienteActualizar.localidad">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['localidad'].errors?.minlength">Localidad debe tener mas de 2 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['localidad'].errors?.maxlength">Localidad debe tener menos de 200 caracteres</span>
+                    <br>
+                    <label>Estado</label>
+                    <select class="form-control" formControlName="estado"  [(ngModel)]="pacienteActualizar.estado">
+                        <option>Aguascalientes</option>
+                        <option>Baja California</option>
+                        <option>Baja California Sur</option>
+                        <option>Campeche</option>
+                        <option>CDMX</option>
+                        <option>Chihuahua</option>
+                        <option>Chiapas</option>
+                        <option>Coahuila</option>
+                        <option>Colima</option>
+                        <option>Durango</option>
+                        <option>Guanajuato</option>
+                        <option>Guerrero</option>
+                        <option>Hidalgo</option>
+                        <option>Jalisco</option>
+                        <option>México</option>
+                        <option>Michoacán</option>
+                        <option>Morelos</option>
+                        <option>Nayarit</option>
+                        <option>Nuevo León</option>
+                        <option>Oaxaca</option>
+                        <option>Puebla</option>
+                        <option>Querétaro</option>
+                        <option>Quintana Ro</option>
+                        <option>San Luis Potosí</option>
+                        <option>Sinaloa</option>
+                        <option>Sonora</option>
+                        <option>Tabasco</option>
+                        <option>Tamaulipas</option>
+                        <option>Tlaxcala</option>
+                        <option>Veracruz</option>
+                        <option>Yucatán</option>
+                        <option>Zacatecas</option>
+                    </select>
+                    <br>
+                </div>
+                <div id="t-pac-con" class="tab-pane fade">
+                    <br>
+                    <label>Teléfono Casa</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="telefonoCasa" [(ngModel)]="pacienteActualizar.telefonoCasa">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoCasa'].errors?.min">Número no válido</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoCasa'].errors?.max">Número no válido</span>
+                    <br>
+                    <label>Teléfono Oficina</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="telefonoOficina" [(ngModel)]="pacienteActualizar.telefonoOficina">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoOficina'].errors?.min">Número no válido</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoOficina'].errors?.max">Número no válido</span>
+                    <br>
+                    <label>Teléfono Celular</label>
+                    <input class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true" type="number" placeholder="" formControlName="telefonoCelular" [(ngModel)]="pacienteActualizar.telefonoCelular">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoCelular'].errors?.min">Número no válido</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['telefonoCelular'].errors?.max">Número no válido</span>
+                    <br>
+                </div>
+                <div id="t-pac-otro" class="tab-pane fade">
+                   <br>
+                    <label>Entidad de Nacimiento</label>
+                    <select class="form-control" formControlName="entidad_nacimiento"  [(ngModel)]="pacienteActualizar.entidad_nacimiento">
+                        <option>Aguascalientes</option>
+                        <option>Baja California</option>
+                        <option>Baja California Sur</option>
+                        <option>Campeche</option>
+                        <option>CDMX</option>
+                        <option>Chihuahua</option>
+                        <option>Chiapas</option>
+                        <option>Coahuila</option>
+                        <option>Colima</option>
+                        <option>Durango</option>
+                        <option>Guanajuato</option>
+                        <option>Guerrero</option>
+                        <option>Hidalgo</option>
+                        <option>Jalisco</option>
+                        <option>México</option>
+                        <option>Michoacán</option>
+                        <option>Morelos</option>
+                        <option>Nayarit</option>
+                        <option>Nuevo León</option>
+                        <option>Oaxaca</option>
+                        <option>Puebla</option>
+                        <option>Querétaro</option>
+                        <option>Quintana Ro</option>
+                        <option>San Luis Potosí</option>
+                        <option>Sinaloa</option>
+                        <option>Sonora</option>
+                        <option>Tabasco</option>
+                        <option>Tamaulipas</option>
+                        <option>Tlaxcala</option>
+                        <option>Veracruz</option>
+                        <option>Yucatán</option>
+                        <option>Zacatecas</option>
+                    </select>
+                    <br>
+                    <label>Entidad Actual</label>
+                    <select class="form-control" formControlName="entidad"  [(ngModel)]="pacienteActualizar.entidad">
+                        <option>Aguascalientes</option>
+                        <option>Baja California</option>
+                        <option>Baja California Sur</option>
+                        <option>Campeche</option>
+                        <option>CDMX</option>
+                        <option>Chihuahua</option>
+                        <option>Chiapas</option>
+                        <option>Coahuila</option>
+                        <option>Colima</option>
+                        <option>Durango</option>
+                        <option>Guanajuato</option>
+                        <option>Guerrero</option>
+                        <option>Hidalgo</option>
+                        <option>Jalisco</option>
+                        <option>México</option>
+                        <option>Michoacán</option>
+                        <option>Morelos</option>
+                        <option>Nayarit</option>
+                        <option>Nuevo León</option>
+                        <option>Oaxaca</option>
+                        <option>Puebla</option>
+                        <option>Querétaro</option>
+                        <option>Quintana Ro</option>
+                        <option>San Luis Potosí</option>
+                        <option>Sinaloa</option>
+                        <option>Sonora</option>
+                        <option>Tabasco</option>
+                        <option>Tamaulipas</option>
+                        <option>Tlaxcala</option>
+                        <option>Veracruz</option>
+                        <option>Yucatán</option>
+                        <option>Zacatecas</option>
+                    </select>
+                    <br> 
+                    <label>Nivel Socioecónomico</label>
+                    <input class="form-control" type="text" placeholder="Nivel Socioecónomico" formControlName="nivel_socioeconomico" [(ngModel)]="pacienteActualizar.nivel_socioeconomico">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['nivel_socioeconomico'].errors?.minlength">Nivel Socioecónomico debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['nivel_socioeconomico'].errors?.maxlength">Nivel Socioecónomico debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Tipo de Vivienda</label>
+                    <input class="form-control" type="text" placeholder="Tipo de Vivienda" formControlName="tipo_vivienda" [(ngModel)]="pacienteActualizar.tipo_vivienda">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['tipo_vivienda'].errors?.minlength">Tipo de Vivienda debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['tipo_vivienda'].errors?.maxlength">Tipo de Vivienda debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Discapacidad</label>
+                    <input class="form-control" type="text" placeholder="Discapacidad" formControlName="discapacidad" [(ngModel)]="pacienteActualizar.discapacidad">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['discapacidad'].errors?.minlength">Discapacidad debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['discapacidad'].errors?.maxlength">Discapacidad debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Grupo Étnico</label>
+                    <input class="form-control" type="text" placeholder="Grupo Étnico" formControlName="grupoEtnico" [(ngModel)]="pacienteActualizar.grupoEtnico">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['grupoEtnico'].errors?.minlength">Grupo Étnico debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['grupoEtnico'].errors?.maxlength">Grupo Étnico debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Religión</label>
+                    <input class="form-control" type="text" placeholder="Religión" formControlName="religion" [(ngModel)]="pacienteActualizar.religion">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['religion'].errors?.minlength">Religión debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['religion'].errors?.maxlength">Religión debe tener menos de 45 caracteres</span>
+                    <br>
+                    <label>Ocupación</label>
+                    <input class="form-control" type="text" placeholder="Ocupación" formControlName="ocupacion" [(ngModel)]="pacienteActualizar.ocupacion">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['ocupacion'].errors?.minlength">Ocupación debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['ocupacion'].errors?.maxlength">Ocupación debe tener menos de 90 caracteres</span>
+                    <br>
+                    <label>Tipo de Domicilio</label>
+                    <input class="form-control" type="text" placeholder="Tipo de Domicilio" formControlName="tipoDomicilio" [(ngModel)]="pacienteActualizar.tipoDomicilio">
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['tipoDomicilio'].errors?.minlength">Tipo de Domicilio debe tener mas de 3 caracteres</span>
+                    <span style="color:Red;" *ngIf="pacienteForm.controls['tipoDomicilio'].errors?.maxlength">Tipo de Domicilio debe tener menos de 90 caracteres</span>
+                    <br>
+                </div>
+                <button type="button" class="btn boton" [disabled]="pacienteForm.invalid" (click)="actualizarPacienteOp()" (click)="c('')">Actualizar</button>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #GestionarModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Acceso a Expediente</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div *ngIf="tablasPermisos">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <table id="listaTablas" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Caducidad</th> 
+                                    <th>Médico</th> 
+                                    <th>Email</th> 
+                                    <th>Borrar</th> 
+                                </tr>
+                            </thead>  
+                            <tbody>
+                                <tr *ngFor="let results of tablasPermisos.results; index as i"> 
+                                    <td><span >{{results.caducidad}}</span></td>
+                                    <td *ngIf="results.Medico"><span >{{results.Medico.nombre}} {{results.Medico.apellido_paterno}}  {{results.Medico.apellido_materno}}</span></td>
+                                    <td *ngIf="!results.Medico"><span >No Especificado</span></td>
+                                    <td *ngIf="results.email"><span >{{results.email}}</span></td>
+                                    <td *ngIf="!results.email"><span >{{results.Medico.email}}</span></td>
+                                    <td style="text-align: center;" (click)="editarEstatusTablaPermisos(results)"><span ><a  style="color:red;" class="fas fa  fa-trash c-c3"></a> </span></td>
+                                </tr>
+                                </tbody>
+                        </table>
+                    </div>                    
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div *ngIf="historiaVacia == 1" class="alert alert-warning" role="alert" style="text-align: center;">Este paciente no cuenta con Historias Clínicas que Compartir.</div>
+                </div>
+            </div>
+            <br><br>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn boton" style="color: white;" (click)="reiniciarCompartir()" (click)="verModalSmall(CompartirModal)">Compartir Expediente</button>             
+        </div>
+    </ng-template>
+
+    <ng-template #CompartirModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Compartir Expediente</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <div class="modal-body">
+            <div class="row" [formGroup]="emailForm">
+                <div *ngIf="medicoFlag==0" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <div class="alert alert-success" role="alert" style="text-align: center; ">Por favor escriba el correo electrónico del Médico al que desea compartir su Expediente. </div>
+                </div> 
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" > 
+                    <label>Correo (Requerido)</label>
+                    <input autocomplete="off" type="email" id="email" name="email" class="form-control" placeholder="Correo" [(ngModel)]="email" formControlName="email" (change)="reiniciarFlagCompartir()">
+                    <span style="color:Red;" *ngIf="emailForm.controls['email'].errors?.minlength">El correo debe tener por lo menos 5 caracteres. </span>
+                    <br *ngIf="emailForm.controls['email'].errors?.minlength">
+                    <span style="color:Red;" *ngIf="emailForm.controls['email'].errors?.maxlength">El correo debe tener  menos de 40 caracteres. </span>
+                    <br *ngIf="emailForm.controls['email'].errors?.maxlength">
+                    <span style="color:Red;" *ngIf="emailForm.controls['email'].errors?.pattern"> No parece ser un correo electrónico. </span>
+                    <br *ngIf="emailForm.controls['email'].errors?.pattern">
+                    <span style="color:Red;" *ngIf="emailForm.controls['email'].touched && emailForm.controls['email'].errors?.required">Requerido. </span>
+                    <br>
+                </div>
+                <div *ngIf="medicoFlag==1" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: -webkit-center;">
+                    <div  >
+                        <p style="font-size: 30px;">{{this.medico[0].nombre}} {{this.medico[0].apellido_paterno}} {{this.medico[0].apellido_materno}}</p> 
+                        <p *ngIf="this.medico[0].estado">Estado: <strong>{{this.medico[0].estado}}.</strong></p>
+                    </div>
+                    <div *ngIf="this.medico[0].imagen" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: center;">
+                        <img class="imagen" src="https://semindigital.com:8090/media/images/doctores/demo_DeTJXpM.jpg" />
+                    </div>
+                    <div *ngIf="!this.medico[0].imagen" class="col-12 col-sm- col-md-6 col-lg-6 col-xl-6" style="text-align: center;">
+                        <span><a id="imagen"><img class="imagen" src="../../../../assets/img/user.png"></a></span>
+                    </div>
+                    <br><br>
+                </div>
+                <div *ngIf="medicoFlag==2" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: center;">
+                    <div class="alert alert-success" role="alert" style="text-align: center; ">Este Médico no se encuentra registrado dentro de nuestro Expediente Online. Le enviaremos a su Médico una liga via correo para visualizar su expediente.</div>
+                    <br>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" > 
+                    <button  *ngIf="medicoEnviarStatus==0" type="button" class="btn boton" [disabled]="emailForm.invalid" (click)="consultarMedico()">Buscar Médico</button>
+                    <button  *ngIf="!(medicoEnviarStatus==0)" type="button" class="btn boton" disabled>Buscar Médico</button>                    
+                    &nbsp;&nbsp;&nbsp;&nbsp; 
+                    <button *ngIf="(medicoFlag==2 || medicoFlag==1) && medicoEnviarStatus==0" type="button" class="btn boton" [disabled]="emailForm.invalid" (click)="enviarInvitacion()">Enviar Expediente</button>
+                    <button *ngIf="!(medicoEnviarStatus==0)" type="button" class="btn boton" disabled>Enviar Expediente</button>
+                </div> 
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" > 
+                    <br>
+                    <div *ngIf="medicoEnviarStatus==1" class="alert alert-primary" role="alert">Espere...</div>
+                    <div *ngIf="medicoEnviarStatus==2" class="alert alert-success" role="alert">Se ha enviado la invitación exitosamente.</div>
+                    <div  *ngIf="medicoEnviarStatus==3" class="alert alert-danger" role="alert">Error: {{msgError}}</div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #consultarEstudioModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Consultar Estudios</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <div *ngIf="resultados">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="listaRes" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre del estudio</th>
+                        <th>Fecha de realización</th>
+                    </tr>
+                    </thead>
+                    <tbody> 
+                    <tr *ngFor="let results of resultados.results; index as i" (click)="verEstudio(results, estudioModal)"> 
+                        <td><span >{{results.id}}</span></td>
+                        <td><span >{{results.tipoEstudio.substr(0,60)}}</span></td>
+                        <td><span >{{results.fecha_realizacion}}</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+    </div>
+    </ng-template>
+
+
+    <ng-template #subirEstudioModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Subir Estudio</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <form [formGroup]="estudioSubirForm"> 
+            <label>Nombre del estudio (Requerido)</label>
+            <input class="form-control" type="text" placeholder="Tipo de estudio" formControlName="tipoEstudio"  [(ngModel)]="resultadoTmp.tipoEstudio">
+            <span style="color:Red;" *ngIf="estudioSubirForm.controls['tipoEstudio'].errors?.minlength">Debe ser de mas de 5 caracteres</span>
+            <span style="color:Red;" *ngIf="estudioSubirForm.controls['tipoEstudio'].errors?.maxlength">No debe ser de mas de 90 caracteres</span>
+            <span style="color:Red;" *ngIf="estudioSubirForm.controls['tipoEstudio'].touched && estudioSubirForm.controls['tipoEstudio'].errors?.required">Campo Requerido.</span>
+            <br *ngIf="estudioSubirForm.controls['tipoEstudio'].errors?.pattern">
+            <span style="color:Red;" *ngIf="estudioSubirForm.controls['tipoEstudio'].errors?.pattern">No válido</span>
+            <br>
+            <label>Fecha de realización (Requerido)</label>
+            <input class="form-control" id="date" type="date" formControlName="fecha_realizacion" [(ngModel)]="resultadoTmp.fecha_realizacion" >
+            <span style="color:Red;" *ngIf="estudioSubirForm.controls['fecha_realizacion'].touched && estudioSubirForm.controls['fecha_realizacion'].errors?.required">Campo Requerido.</span>
+            <br>
+            <label>Notas</label>
+            <input class="form-control" type="text" placeholder="Notas" formControlName="notasEstudio"  [(ngModel)]="resultadoTmp.notasEstudio">
+            <span style="color:Red;" *ngIf="estudioSubirForm.controls['notasEstudio'].errors?.minlength">Debe ser de mas de 5 caracteres</span>
+            <span style="color:Red;" *ngIf="estudioSubirForm.controls['notasEstudio'].errors?.maxlength">No debe ser de mas de 500 caracteres</span>
+            <br *ngIf="estudioSubirForm.controls['notasEstudio'].errors?.pattern">
+            <span style="color:Red;" *ngIf="estudioSubirForm.controls['notasEstudio'].errors?.pattern">No válido</span>
+            <br>
+            <label>Selecciona el archivo (Requerido)</label>
+            <br>
+            <input type="file"(change)="onFileSelect($event)" />
+            <br><br>
+            <label>Selecciona el archivo DICOM</label>
+            <br>
+            <input type="file" (change)="onFileSelectDicom($event)" />
+            <br>
+            <br>
+            <div *ngIf="estudioEstatus==1" class="alert alert-primary" role="alert">Espere...</div>
+            <div *ngIf="estudioEstatus==2" class="alert alert-success" role="alert">Estudio Guardado Exitosamente</div>
+            <div  *ngIf="estudioEstatus==3" class="alert alert-danger" role="alert">Error: {{msgError}}</div>
+        </form>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button *ngIf="estudioEstatus==0" style="font-size: 20px;" type="button"  (click)="crearResultadoOp()" [disabled]="estudioSubirForm.invalid" class="btn boton">Subir</button>
+    </div>
+    </ng-template>
+
+    <ng-template #estudioModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Estudio</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <p style="color:#9AB638; font-size: 20px;"><strong>Descripción: </strong></p>
+                    <p ><strong>Id Estudio: </strong>{{resultado.id}}</p>
+                    <p><strong>Nombre del estudio: </strong>{{resultado.tipoEstudio}}</p>
+                    <p><strong>Fecha de realización: </strong>{{resultado.fecha_realizacion}}</p>
+                    <br>
+                    <div >
+                        <button *ngIf="!resultado.file" style="background-color: #394793;" type="button" class="btn boton" disabled>Descargar</button>
+                        <button *ngIf="resultado.file" style="background-color: #394793;" type="button" class="btn boton" (click)="download()">Descargar</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button *ngIf="resultado.fileDicom" style="background-color: #394793;" type="button" class="btn boton" (click)="downloadDicom()">Descargar DICOM</button>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <p style="color:#9AB638; font-size: 20px;"><strong>Registro: </strong></p>
+                    <p *ngIf="resultado.creador"><strong>Creador: </strong>{{resultado.creador}}</p>
+                    <p *ngIf="!resultado.creador"><strong>Creador: </strong>No definido</p>
+                    <p *ngIf="resultado.editor"><strong>Último Editor: </strong>{{resultado.editor}}</p>
+                    <p *ngIf="!resultado.editor"><strong>Último Editor: </strong>No definido</p>
+                    <p><strong>Creacion: </strong>{{resultado.creacion.split('T')[0]}} {{resultado.creacion.substring(11,19)}}</p>
+                    <p><strong>Última Edición: </strong>{{resultado.ultimaActualizacion.split('T')[0]}} {{resultado.ultimaActualizacion.substring(11,19)}}</p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <hr>
+                </div>
+                <div *ngIf="resultado.notasEstudio" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <p style="color:#9AB638; font-size: 20px;"><strong>Notas: </strong></p>
+                    <p *ngIf="resultado.notasEstudio">{{resultado.notasEstudio}}</p>
+                    <hr>
+                </div>
+            </div>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button *ngIf="!empleado.auditor" type="button" class="btn boton" (click)="rellenarCamposEditar()" (click)="checarPaciente(editarEstudioModal)">Editar</button> 
+            <button *ngIf="empleado.auditor" type="button" class="btn boton" disabled>Editar</button>  
+        </div>
+    </ng-template>
+
+    <ng-template #editarEstudioModal let-c="close" led-d="dismiss"> 
+        <!-- Modal Header -->
+        <div class="modal-header" style="color:white; background-color:#9AB638;">  
+            <h4 style="text-align: center;">Editar estudio</h4>  
+            <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <form [formGroup]="estudioEditarForm"> 
+                <label>Tipo de estudio (Requerido)</label>
+                <input class="form-control" type="text" placeholder="Tipo de estudio" formControlName="tipoEstudio"  [(ngModel)]="resultadoTmp.tipoEstudio">
+                <span style="color:Red;" *ngIf="estudioEditarForm.controls['tipoEstudio'].errors?.minlength">Debe ser de mas de 5 caracteres</span>
+                <span style="color:Red;" *ngIf="estudioEditarForm.controls['tipoEstudio'].errors?.maxlength">No debe ser de mas de 90 caracteres</span>
+                <span style="color:Red;" *ngIf="estudioEditarForm.controls['tipoEstudio'].touched && estudioEditarForm.controls['tipoEstudio'].errors?.required">Campo Requerido.</span>
+                <br>
+                <label>Fecha de realización (Requerido)</label>
+                <input class="form-control" id="date" type="date" formControlName="fecha_realizacion" [(ngModel)]="resultadoTmp.fecha_realizacion" >
+                <span style="color:Red;" *ngIf="estudioEditarForm.controls['fecha_realizacion'].touched && estudioEditarForm.controls['fecha_realizacion'].errors?.required">Campo Requerido.</span>
+                <br>
+                <label>Notas</label>
+                <input class="form-control" type="text" placeholder="Notas" formControlName="notasEstudio"  [(ngModel)]="resultadoTmp.notasEstudio">
+                <span style="color:Red;" *ngIf="estudioEditarForm.controls['notasEstudio'].errors?.minlength">Debe ser de mas de 5 caracteres</span>
+                <span style="color:Red;" *ngIf="estudioEditarForm.controls['notasEstudio'].errors?.maxlength">No debe ser de mas de 500 caracteres</span>
+                <br>
+                <br>
+            </form>
+            <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp; 
+            <button type="button" class="btn boton" [disabled]="estudioEditarForm.invalid" (click)="actualizarResultadoOp()" (click)="c('')">Actualizar</button>
+            
+        </div>
+    </ng-template>
+</div>
+<script type="text/javascript" src="scripts/zip.js"></script>

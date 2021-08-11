@@ -1,0 +1,911 @@
+<app-nav-ext></app-nav-ext>
+<div class="base" style="overflow: hidden;">
+    <lib-ngx-notification></lib-ngx-notification> 
+    <ngx-spinner></ngx-spinner>
+    <div class="row" *ngIf="flagToken == true">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-right: 30px;">
+            <br>
+            <div class="alert alert-danger" role="alert" style="text-align: center;">{{msgError}}</div>
+        </div>
+    </div>
+    <div *ngIf="flagToken == false" style="width: 1200px;">
+        <div class="row" >
+            <div *ngIf="paciente.imagen">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2" style="text-align: center;">
+                    <img class="imagen" src="https://semindigital.com:8090{{paciente.imagen}}" /> 
+                </div>
+            </div>
+            <div *ngIf="!paciente.imagen">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2" style="text-align: center;">
+                    <span><a id="imagen"><img class="imagen" src="../../../../assets/img/user.png"></a></span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-8" style="text-align: center;">
+                <p style="font-size: 30px;">{{paciente.nombre}} {{paciente.apellido_paterno}} {{paciente.apellido_materno}}</p> 
+                <p *ngIf="edadMeses >= 11 && edad > 1" style="font-size: 27px;">{{paciente.fecha_nacimiento}} / {{edad}} Años</p>
+                <p *ngIf="edadMeses >= 11 && edad == 1" style="font-size: 27px;">{{paciente.fecha_nacimiento}} / {{edad}} Año</p>
+                <p *ngIf="edadMeses < 11" style="font-size: 27px;">{{paciente.fecha_nacimiento}} / {{edadMeses}} meses</p>  
+            </div> 
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-2" style="text-align: center;">  
+                <button  type="button" class="btn boton"  (click)="verModal(avisoModal)">Nueva consulta</button> 
+                <br><br>
+                <p *ngIf="ultimaConsulta" style="font-size: 16px;"><strong>Última consulta: </strong><strong>Fecha: </strong>{{ultimaConsulta.split('T')[0]}} <strong>Hora: </strong>{{ultimaConsulta.substring(11,19)}}</p>
+                <p *ngIf="!ultimaConsulta" style="font-size: 16px;"><strong>Última consulta: <br> Sin consultas</strong></p>
+            </div>
+        </div>
+        <ul class="nav nav-tabs"> 
+            <li><a class="active" data-toggle="tab" href="#t-exp-per"> Perfil</a></li>
+            <li><a data-toggle="tab" href="#t-exp-hist"  (click)="consultarHistoriasClinicasExterno()">Historia clínica</a></li>
+            <li><a data-toggle="tab" href="#t-ext-not" (click)="consultarNotasPacienteExterno()">Consultas</a></li>
+            <li><a data-toggle="tab" href="#t-ext-est" (click)="consultarResultadosExterno()">Estudios</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="t-exp-per" class="tab-pane fade show active">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: end; padding-right: 30px;">
+                    <button *ngIf="descargarPDF" type="button" class="btn boton" style="margin-right: 15px;" (click)="downloadPerfilPDF()" >Descargar página</button>
+                    <button *ngIf="!descargarPDF" type="button" class="btn boton" style="margin-right: 15px;" disabled >Generando...</button>
+                    <button *ngIf="paciente" type="button" class="btn boton"  (click)="consultarPacienteExterno()">Actualizar</button>
+                    <button *ngIf="!paciente" type="button" class="btn boton"  disabled>Actualizar</button>
+                </div>
+                <div class="row" *ngIf="paciente" id="perfilClinico">
+                    <br><br>
+                    <div style="margin-left: -5%;" class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4" >
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <span><a id="logo"><img class="logo" src="../../../../assets/img/logoBicolor.png"></a></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"></div>
+                    <br><br>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                        <strong class="titulo" >Datos personales:</strong>
+                        <br>
+                        <br>
+                        <p *ngIf="paciente.fecha_nacimiento">Fecha de nacimiento: <strong>{{paciente.fecha_nacimiento}}</strong></p>
+                        <p *ngIf="!paciente.fecha_nacimiento">Fecha de nacimiento: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.fecha_nacimiento && edadMeses >= 11">Edad: <strong>{{edad}}</strong></p> 
+                        <p *ngIf="paciente.fecha_nacimiento && edadMeses < 11">Meses de edad: <strong>{{edadMeses}}</strong></p>
+                        <p *ngIf="paciente.fecha_registro">Fecha de registro: <strong>{{paciente.fecha_registro}}</strong></p>
+                        <p *ngIf="!paciente.fecha_registro">Fecha de registro: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.sexo == 'femenino'">"Sexo: <strong>Femenino</strong></p>
+                        <p *ngIf="paciente.sexo == 'masculino'">"Sexo: <strong>Maculino</strong></p>
+                        <p *ngIf="!paciente.sexo">Sexo: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.tipo_sangre">Tipo de Sangre: <strong>{{paciente.tipo_sangre}}</strong></p>
+                        <p *ngIf="!paciente.tipo_sangre">Tipo de Sangre: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.curp">CURP: <strong>{{paciente.curp}}</strong></p>
+                        <p *ngIf="!paciente.curp" >CURP: <strong>No definido</strong></p>
+                        <br>   
+                        <strong class="titulo" >Contacto:</strong>
+                        <br>   
+                        <br>  
+                        <p *ngIf="paciente.telefonoCasa">Telefono casa: <strong>{{paciente.telefonoCasa}}</strong></p>
+                        <p *ngIf="!paciente.telefonoCasa">Telefono casa: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.telefonoOficina">Telefono oficina: <strong>{{paciente.telefonoOficina}}</strong></p>
+                        <p *ngIf="!paciente.telefonoOficina">Telefono oficina: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.telefonoCelular">Telefono celular: <strong>{{paciente.telefonoCelular}}</strong></p>
+                        <p *ngIf="!paciente.telefonoCelular">Telefono celular: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.email">Correo: <strong>{{paciente.email}}</strong></p>
+                        <p *ngIf="!paciente.email">Correo: <strong>No definido</strong></p>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                        <br>
+                        <br>
+                        <p *ngIf="paciente.entidad_nacimiento">Entidad de nacimiento: <strong>{{paciente.entidad_nacimiento}}</strong></p>
+                        <p *ngIf="!paciente.entidad_nacimiento">Entidad de nacimiento: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.entidad">Entidad actual: <strong>{{paciente.entidad}}</strong></p>
+                        <p *ngIf="!paciente.entidad">Entidad actual: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.tipo_vivienda">Tipo de vivienda: <strong>{{paciente.tipo_vivienda}}</strong></p>
+                        <p *ngIf="!paciente.tipo_vivienda">Tipo de vivienda: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.discapacidad">Discapacidad: <strong>{{paciente.discapacidad}}</strong></p>
+                        <p *ngIf="!paciente.discapacidad">Discapacidad: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.grupoEtnico">Grupo étnico: <strong>{{paciente.grupoEtnico}}</strong></p>
+                        <p *ngIf="!paciente.grupoEtnico">grupo étnico: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.religion">Religión: <strong>{{paciente.religion}}</strong></p>
+                        <p *ngIf="!paciente.religion">Religión: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.ocupacion">Ocupación: <strong>{{paciente.ocupacion}}</strong></p>
+                        <p *ngIf="!paciente.ocupacion">Ocupación: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.tipoDomicilio">Tipo domicilio: <strong>{{paciente.tipoDomicilio}}</strong></p>
+                        <p *ngIf="!paciente.tipoDomicilio">Tipo domicilio: <strong>No definido</strong></p>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" >
+                        <strong class="titulo" >Dirección:</strong>
+                        <br>
+                        <br>   
+                        <p *ngIf="paciente.calle">Calle: <strong>{{paciente.calle}}</strong></p>
+                        <p *ngIf="!paciente.calle">Calle: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.num_interior">Número interior: <strong>{{paciente.num_interior}}</strong></p>
+                        <p *ngIf="!paciente.num_interior">Número interior: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.num_exterior">Número exterior <strong>{{paciente.num_exterior}}</strong></p>
+                        <p *ngIf="!paciente.num_exterior">Número exterior: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.colonia">Colonia: <strong>{{paciente.colonia}}</strong></p>
+                        <p *ngIf="!paciente.colonia" >Colonia: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.cp">CP: <strong>{{paciente.cp}}</strong></p>
+                        <p *ngIf="!paciente.cp" >CP: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.estado">Estado: <strong>{{paciente.estado}}</strong></p>
+                        <p *ngIf="!paciente.estado" >Estado: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.localidad">Localidad: <strong>{{paciente.localidad}}</strong></p>
+                        <p *ngIf="!paciente.localidad" >Ciudad: <strong>No definido</strong></p>
+                        <p *ngIf="paciente.municipio">Municipio: <strong>{{paciente.municipio}}</strong></p>
+                        <p *ngIf="!paciente.municipio" >Municipio: <strong>No definido</strong></p>
+                    </div>
+                </div> 
+            </div>
+            <div id="t-exp-hist" class="tab-pane"> 
+                <div *ngIf="historiaVacia == 1" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: right;">
+                    <button *ngIf="(edadMeses > 11)" type="button" class="btn boton" (click)="verModal(imcModal)">Tabla I.M.C.</button> 
+                    <button *ngIf="(edadMeses <= 11)" type="button" class="btn boton" (click)="verModal(imcModalMenor)">Tablas Relacionadas</button> 
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn boton" style="margin-right: 15px;"  disabled>Ver historial</button>
+                    <br><br>
+                    <div class="alert alert-warning" role="alert" style="text-align: center;">Este paciente no cuenta con Historias Clínicas que mostrar.</div>
+                </div>
+                <div *ngIf="historiaClinica" class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: right;">
+                        <button *ngIf="descargarPDF" type="button" class="btn boton" style="margin-right: 15px;" (click)="downloadHistPDF()" >Descargar página</button>
+                        <button *ngIf="!descargarPDF" type="button" class="btn boton" style="margin-right: 15px;" disabled >Generando...</button>
+                        <button type="button" class="btn boton" style="margin-right: 15px;" (click)="reiniciarTablaHist()" (click)="verModalSmall(historialModal)" >Ver Historial</button>
+                        <button type="button" class="btn boton" style="margin-right: 15px;" (click)="consultarHistoriasClinicasExterno()" >Actualizar</button>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                        <br>
+                        <div class="alert alert-success" role="alert" style="text-align: center;">Por medio del presente el que suscribe al calce, legalmente habilitado para la practica médica, hace constar que realizo valoración médica al arriba identificado.</div>
+                    </div> 
+                    <br><br><br><br>
+                    <div id="historiaPrincipalPag1">
+                        <div style="margin-left: -5%;" class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4" >
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <span><a id="logo"><img class="logo" src="../../../../assets/img/logoBicolor.png"></a></span>
+                                <br><br>
+                            </div>
+                        </div>
+                        <div *ngIf="historiaClinica.creacion" style="padding-left:30px;" class="row">
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                                <p><strong>Historia clínica </strong></p> 
+                                <p>{{paciente.nombre}} {{paciente.apellido_paterno}} {{paciente.apellido_materno}}</p> 
+                                <p *ngIf="edadMeses >= 11 && edad > 1" >{{paciente.fecha_nacimiento}} / {{edad}} Años</p>
+                                <p *ngIf="edadMeses >= 11 && edad == 1" >{{paciente.fecha_nacimiento}} / {{edad}} Año</p>
+                                <p *ngIf="edadMeses < 11" >{{paciente.fecha_nacimiento}} / {{edadMeses}} meses</p>                         
+                            </div> 
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                                <p><strong>Última actualización: </strong></p> 
+                                <p><strong>Fecha: </strong>{{historiaClinica.creacion.split('T')[0]}} <strong>Hora: </strong>{{historiaClinica.creacion.substring(11,19)}}</p> 
+                            </div>
+                        </div> 
+                        <div style="margin-left: 30px" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <br>
+                            <p><strong>Datos generales: </strong></p> 
+                        </div> 
+                        <div class="row" style="margin-left: 30px">
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                                <p *ngIf="historiaClinica.tipoInterrogatorio">Tipo de interrogatorio: <strong>{{historiaClinica.tipoInterrogatorio}}</strong></p>
+                                <p *ngIf="!historiaClinica.tipoInterrogatorio" >Tipo de interrogatorio: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.informador">Informador: <strong>{{historiaClinica.informador}}</strong></p>
+                                <p *ngIf="!historiaClinica.informador" >Informador: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.estadoSalud">Estado de salud: <strong>{{historiaClinica.estadoSalud}}</strong></p>
+                                <p *ngIf="!historiaClinica.estadoSalud" >Estado de salud: <strong>No definido</strong></p>
+                                <br>
+                                <p *ngIf="historiaClinica.telefonoCasa">Teléfono de casa: <strong>{{historiaClinica.telefonoCasa}}</strong></p>
+                                <p *ngIf="!historiaClinica.telefonoCasa" >Teléfono de casa: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.telefonoOficina">Teléfono de oficina: <strong>{{historiaClinica.telefonoOficina}}</strong></p>
+                                <p *ngIf="!historiaClinica.telefonoOficina" >Teléfono de oficina: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.telefonoCelular">Celular: <strong>{{historiaClinica.telefonoCelular}}</strong></p>
+                                <p *ngIf="!historiaClinica.telefonoCelular" >Celular: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.email">Email: <strong>{{historiaClinica.email}}</strong></p>
+                                <p *ngIf="!historiaClinica.email" >Email: <strong>No definido</strong></p>
+                            </div>
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                                <p *ngIf="historiaClinica.religion">Religión: <strong>{{historiaClinica.religion}}</strong></p>
+                                <p *ngIf="!historiaClinica.religion" >Religión: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.ocupacion">Ocupación: <strong>{{historiaClinica.ocupacion}}</strong></p>
+                                <p *ngIf="!historiaClinica.ocupacion" >Ocupación: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.numHijos">Número de hijos: <strong>{{historiaClinica.numHijos}}</strong></p>
+                                <p *ngIf="!historiaClinica.numHijos" >Número de hijos: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.estadoCivil">Estado civil: <strong>{{historiaClinica.estadoCivil}}</strong></p>
+                                <p *ngIf="!historiaClinica.estadoCivil" >Estado civil: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.maxGradoEstudios">Máximo grado de estudios: <strong>{{historiaClinica.maxGradoEstudios}}</strong></p>
+                                <p *ngIf="!historiaClinica.maxGradoEstudios" >Máximo grado de estudios: <strong>No definido</strong></p>
+                            </div>
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                                <p *ngIf="historiaClinica.entidad_nacimiento">Entidad de nacimiento: <strong>{{historiaClinica.entidad_nacimiento}}</strong></p>
+                                <p *ngIf="!historiaClinica.entidad_nacimiento" >Entidad de nacimiento: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.estado">Estado actual: <strong>{{historiaClinica.estado}}</strong></p>
+                                <p *ngIf="!historiaClinica.estado" >Estado actual: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.municipio">Calle: <strong>{{historiaClinica.municipio}}</strong></p>
+                                <p *ngIf="!historiaClinica.municipio" >Calle: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.colonia">Colonia: <strong>{{historiaClinica.colonia}}</strong></p>
+                                <p *ngIf="!historiaClinica.colonia" >Colonia: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.num_interior">Num. interior: <strong>{{historiaClinica.num_interior}}</strong></p>
+                                <p *ngIf="!historiaClinica.num_interior" >Num. interior: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.num_exterior">Num. exterior: <strong>{{historiaClinica.num_exterior}}</strong></p>
+                                <p *ngIf="!historiaClinica.num_exterior" >Num. exterior: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.cp">Cp: <strong>{{historiaClinica.cp}}</strong></p>
+                                <p *ngIf="!historiaClinica.cp" >Cp: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.municipio">Municipio: <strong>{{historiaClinica.municipio}}</strong></p>
+                                <p *ngIf="!historiaClinica.municipio" >Municipio: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.localidad">Localidad: <strong>{{historiaClinica.localidad}}</strong></p>
+                                <p *ngIf="!historiaClinica.localidad" >Localidad: <strong>No definido</strong></p>
+                            </div>
+                        </div>
+                        <div style="margin-left: 30px" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <p><strong>Datos antopométricos: </strong></p> 
+                        </div> 
+                        <div class="row" style="margin-left: 30px">
+                            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" >
+                                <p *ngIf="historiaClinica.sexo == 'femenino'">"Sexo: <strong>Femenino</strong></p>
+                                <p *ngIf="historiaClinica.sexo == 'masculino'">"Sexo: <strong>Maculino</strong></p>
+                                <p *ngIf="!historiaClinica.sexo" >Sexo: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.peso">Peso: <strong>{{historiaClinica.peso}} Kg.</strong></p>
+                                <p *ngIf="!historiaClinica.peso" >Peso: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.talla">Talla: <strong>{{historiaClinica.talla}} cm.</strong></p>
+                                <p *ngIf="!historiaClinica.talla" >Talla: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.temperatura">Temperatura: <strong>{{historiaClinica.temperatura}} °C.</strong></p>
+                                <p *ngIf="!historiaClinica.temperatura" >Temperatura: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.indiceMasaCorporal">Índice de masa corporal: <strong>{{historiaClinica.indiceMasaCorporal}} Kg/m².</strong></p>
+                            </div>
+                            <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5" >
+                                <br>
+                                <p *ngIf="historiaClinica.frecuenciaCardiaca">Frecuencia cardiaca: <strong>{{historiaClinica.frecuenciaCardiaca}} latidos Por minuto.</strong></p>
+                                <p *ngIf="!historiaClinica.frecuenciaCardiaca" >Frecuencia cardiaca: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.frecuenciaRespiratoria">Frecuencia respiratoria: <strong>{{historiaClinica.frecuenciaRespiratoria}} respiraciónes por minuto.</strong></p>
+                                <p *ngIf="!historiaClinica.frecuenciaRespiratoria" >Frecuencia respiratoria: <strong>No definido</strong></p>
+                                <p *ngIf="historiaClinica.tensionArterialSistole && historiaClinica.tensionArterialDiastole">Sistólica y Diastólica: <strong>{{historiaClinica.tensionArterialSistole}} / {{historiaClinica.tensionArterialDiastole}} mm/Hg.</strong></p>
+                                <p *ngIf="!historiaClinica.tensionArterialSistole || !historiaClinica.tensionArterialDiastole" >Sistólica y Diastólica: <strong>No definido</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding-left:30px; padding-right: 15px; text-align:justify"  class="row" id="historiaPrincipalPag2">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Antecedentes familiares: </strong></p> 
+                            <p *ngIf="historiaClinica.antecedentesFamiliares">{{historiaClinica.antecedentesFamiliares}}</p>
+                            <p *ngIf="!historiaClinica.antecedentesFamiliares" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Antecedentes personales no patológicos: </strong></p> 
+                            <p *ngIf="historiaClinica.antecedentesPersonalesNoPatologicos">{{historiaClinica.antecedentesPersonalesNoPatologicos}}</p>
+                            <p *ngIf="!historiaClinica.antecedentesPersonalesNoPatologicos" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Antecedentes personales patológicos: </strong></p> 
+                            <p *ngIf="historiaClinica.antecedentesPersonalesPatologicos">{{historiaClinica.antecedentesPersonalesPatologicos}}</p>
+                            <p *ngIf="!historiaClinica.antecedentesPersonalesPatologicos" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Procedimiento actual: </strong></p> 
+                            <p *ngIf="historiaClinica.procedimientoActual">{{historiaClinica.procedimientoActual}}</p>
+                            <p *ngIf="!historiaClinica.procedimientoActual" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" > 
+                            <br>
+                            <p><strong>Auxiliares diagnostico: </strong></p> 
+                            <p *ngIf="historiaClinica.auxiliaresDiagnostico">{{historiaClinica.auxiliaresDiagnostico}}</p>
+                            <p *ngIf="!historiaClinica.auxiliaresDiagnostico" ><strong>No definido</strong></p>
+                        </div>
+                    </div>
+                    <div style="padding-left:30px; padding-right: 15px; text-align:justify" class="row" id="historiaPrincipalPag3">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Sistema neurológico: </strong></p> 
+                            <p *ngIf="historiaClinica.sistemaNeurologico">{{historiaClinica.sistemaNeurologico}}</p>
+                            <p *ngIf="!historiaClinica.sistemaNeurologico" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" > 
+                            <br>
+                            <p><strong>Sistema tegumentario: </strong></p> 
+                            <p *ngIf="historiaClinica.sistemaTegumentario">{{historiaClinica.sistemaTegumentario}}</p>
+                            <p *ngIf="!historiaClinica.sistemaTegumentario" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Sistema músculo esquelético: </strong></p> 
+                            <p *ngIf="historiaClinica.sistemaMusculoEsqueletico">{{historiaClinica.sistemaMusculoEsqueletico}}</p>
+                            <p *ngIf="!historiaClinica.sistemaMusculoEsqueletico" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Sistema respiratorio: </strong></p> 
+                            <p *ngIf="historiaClinica.sistemaRespiratorio">{{historiaClinica.sistemaRespiratorio}}</p>
+                            <p *ngIf="!historiaClinica.sistemaRespiratorio" ><strong>No definido</strong></p>
+                        </div>
+                    </div>
+                    <div style="padding-left:30px; padding-right: 15px; text-align:justify" class="row" id="historiaPrincipalPag4">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Sistema digestivo: </strong></p> 
+                            <p *ngIf="historiaClinica.sistemaDigestivo">{{historiaClinica.sistemaDigestivo}}</p>
+                            <p *ngIf="!historiaClinica.sistemaDigestivo" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Sistema urinario: </strong></p> 
+                            <p *ngIf="historiaClinica.sistemaUrinario">{{historiaClinica.sistemaUrinario}}</p>
+                            <p *ngIf="!historiaClinica.sistemaUrinario" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Sistema reproductor: </strong></p> 
+                            <p *ngIf="historiaClinica.sistemaReproductor">{{historiaClinica.sistemaReproductor}}</p>
+                            <p *ngIf="!historiaClinica.sistemaReproductor" ><strong>No definido</strong></p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <br>
+                            <p><strong>Sistemas sentidos: </strong></p> 
+                            <p *ngIf="historiaClinica.sistemasSentidos">{{historiaClinica.sistemasSentidos}}</p>
+                            <p *ngIf="!historiaClinica.sistemasSentidos" ><strong>No definido</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <div id="t-ext-not" class="tab-pane fade">
+                <div *ngIf="notas"> 
+                    <div class="row">
+                        <div *ngIf="historiaVacia == 0" class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" style="padding-bottom: 15px;">
+                            <select  [(ngModel)]="categoriaSeleccionada" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off" (change)="consultarNotasPacienteExterno()">
+                                <option [ngValue]="0"selected>Seleccionar Categoria...</option>
+                                <option [ngValue]="1">Medicina General</option>
+                                <option [ngValue]="2">Medicina Interna</option>
+                                <option [ngValue]="3">Cirugía</option>
+                                <option [ngValue]="4">Endocrinología</option>
+                                <option [ngValue]="5">Ginecología</option>
+                                <option [ngValue]="6">Nefrología</option> 
+                                <option [ngValue]="7">Neurocirugía</option>
+                                <option [ngValue]="8">Neurología</option>
+                                <option [ngValue]="9">Pediatría</option> 
+                                <option [ngValue]="10">Traumatología y Ortopedia</option>
+                                <option [ngValue]="11">Urología</option>
+                            </select> 
+                        </div>
+                        <div *ngIf="historiaVacia == 0" class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" style="padding-bottom: 15px;">
+                            <select  [(ngModel)]="fechaSeleccionada" class="custom-select mr-sm-2" id="inlineFormCustomSelect" autocomplete="off" (change)="consultarNotasPacienteExterno()">
+                                <option [ngValue]="0" selected>Seleccionar Fecha...</option>
+                                <option [ngValue]="1">Último Año</option>
+                                <option [ngValue]="2">Último Mes</option>
+                            </select> 
+                        </div>
+                        <div *ngIf="historiaVacia == 0" class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" style="text-align: right;"> 
+                            <button *ngIf="(edadMeses > 11)" type="button" class="btn boton" (click)="verModal(imcModal)">Tabla I.M.C.</button> 
+                            <button *ngIf="(edadMeses <= 11)" type="button" class="btn boton" (click)="verModal(imcModalMenor)">Tablas Relacionadas</button> 
+                            &nbsp;&nbsp;
+                            <button  type="button" class="btn boton"  (click)="verModal(avisoModal)">Nueva Consulta</button> 
+                            &nbsp;&nbsp;
+                            <button type="button" class="btn boton" style="color: white; margin-right: 15px;" (click)="consultarNotasPacienteExterno()">Actualizar</button> 
+                        </div>
+                        <div *ngIf="historiaVacia == 1" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: end;"> 
+                            <button *ngIf="(edadMeses > 11)" type="button" class="btn boton" (click)="verModal(imcModal)">Tabla I.M.C.</button> 
+                            <button *ngIf="(edadMeses <= 11)" type="button" class="btn boton" (click)="verModal(imcModalMenor)">Tablas Relacionadas</button> 
+                            &nbsp;&nbsp;
+                            <button  type="button" class="btn boton"  (click)="verModal(avisoModal)">Nueva Consulta</button> 
+                            &nbsp;&nbsp;
+                            <button type="button" class="btn boton" style="color: white; margin-right: 15px;" (click)="consultarNotasPacienteExterno()">Actualizar</button> 
+                            <br><br>
+                        </div>
+                        <div *ngIf="notaVacia == 1" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                            <div class="alert alert-warning" role="alert" style="text-align: center;">Este paciente no tiene consultas previas que mostrar.</div>
+                        </div>
+                        <div *ngIf="notaVacia == 0" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> 
+                            <div *ngIf="notas">
+                                <br><br>
+                                <table id="listaNotas" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th> 
+                                            <th>Especialidad</th> 
+                                            <th>Médico</th> 
+                                        </tr>
+                                        </thead>  
+                                        <tbody>
+                                        <tr *ngFor="let results of notas.results; index as i" (click)="verModalNotas(results, notasModal)"> 
+                                            <td><span >{{results.creacion.split('T')[0]}} {{results.creacion.substring(11,19)}}</span></td>
+                                            <td *ngIf="results.especialidad"><span >{{results.especialidad}}</span></td>
+                                            <td *ngIf="!results.especialidad"><span >No Especificado</span></td>
+                                            <td *ngIf="results.Medico"><span >{{results.Medico.nombre}} {{results.Medico.apellido_paterno}} {{results.Medico.apellido_materno}}</span></td>
+                                            <td *ngIf="!results.Medico"><span >No Especificado</span></td>
+                                        </tr>
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="t-ext-est" class="tab-pane fade">
+                <div *ngIf="resultados">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: right;"> 
+                            <button type="button" class="btn boton" style="color: white; margin-right: 15px;" (click)="consultarResultadosExterno()">Actualizar</button> 
+                    </div>
+                    <br>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <table id="listaEstudios" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>Nombre del estudio</th>
+                                <th>Fecha de realización</th>
+                            </tr> 
+                            </thead>
+                            <tbody> 
+                            <tr *ngFor="let results of resultados.results; index as i" (click)="verModalEstudio(results, estudioModal)"> 
+                                <td><span >{{results.tipoEstudio.substr(0,60)}}</span></td>
+                                <td><span >{{results.fecha_realizacion}}</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #estudioModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Estudio</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                <p style="color:#9AB638; font-size: 20px;"><strong>Descripción: </strong></p>
+                <p><strong>Nombre del estudio: </strong>{{resultado.tipoEstudio}}</p>
+                <br>
+            </div>
+            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                <br>
+                <br>
+                <p><strong>Fecha de realización: </strong>{{resultado.fecha_realizacion}}</p>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <br>
+                <div >
+                    <button *ngIf="!resultado.file" style="background-color: #394793;" type="button" class="btn boton" disabled>Descargar</button>
+                    <button *ngIf="resultado.file" style="background-color: #394793;" type="button" class="btn boton" (click)="download()">Descargar</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button *ngIf="resultado.fileDicom" style="background-color: #394793;" type="button" class="btn boton" (click)="downloadDicom()">Descargar DICOM</button>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+    </div>
+</ng-template>
+
+
+<ng-template #avisoModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Médico no registrado</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <div class="row">
+            <div style="text-align: center;" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="alert alert-success" role="alert">Su cuenta no se encuentra registrada dentro de nuestro expediente Clínico Online Semín Digital. <br> Puede registrarse de manera gratuita desde el siguiente enlace:</div>
+                <a href="https://semindigital.com/registro-medico" target="_blank"><button type="button" style="background-color: darkblue;   font-size: 1.5em;"  class="btn boton" (click)="c('')">Registro</button> </a>
+                <br><br>
+            </div>
+        </div>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+    </div>
+</ng-template>
+
+
+<ng-template #historialModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Historial</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div *ngIf="historiasClinica">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table id="listaHist" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th> 
+                                <th>Estado de Salud</th> 
+                            </tr>
+                        </thead>  
+                        <tbody>
+                            <tr *ngFor="let results of historiasClinica.results; index as i" (click)="verModalHistorial(results, historiaHistorialModal)"> 
+                                <td><span >{{results.creacion.split('T')[0]}} {{results.creacion.substring(11,19)}}</span></td>
+                                <td *ngIf="results.estadoSalud"><span >{{results.estadoSalud.substring(0,60)}}</span></td>
+                                <td *ngIf="!results.estadoSalud"><span >No Especificado</span></td>
+                            </tr>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #historiaHistorialModal  let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header"  style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Historial</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <div class="row" >
+            <div id="historiaTmpPag1">
+                <div style="margin-left: -5%;" class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4" >
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <span><a id="logo"><img class="logo" src="../../../../assets/img/logoBicolor.png"></a></span>
+                        <br><br>
+                    </div>
+                </div>
+                <div *ngIf="historiaClinicaTmp.creacion" style="padding-left:30px;" class="row">
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                        <p><strong>Historia clínica </strong></p> 
+                        <p>{{paciente.nombre}} {{paciente.apellido_paterno}} {{paciente.apellido_materno}}</p> 
+                        <p *ngIf="edadMeses >= 11 && edad > 1" >{{paciente.fecha_nacimiento}} / {{edad}} Años</p>
+                        <p *ngIf="edadMeses >= 11 && edad == 1" >{{paciente.fecha_nacimiento}} / {{edad}} Año</p>
+                        <p *ngIf="edadMeses < 11" >{{paciente.fecha_nacimiento}} / {{edadMeses}} meses</p>                         
+                    </div> 
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                        <p><strong>Última actualización: </strong></p> 
+                        <p><strong>Fecha: </strong>{{historiaClinicaTmp.creacion.split('T')[0]}} <strong>Hora: </strong>{{historiaClinicaTmp.creacion.substring(11,19)}}</p> 
+                    </div>
+                </div> 
+                <div style="margin-left: 30px" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <br>
+                    <p><strong>Datos generales: </strong></p> 
+                </div> 
+                <div class="row" style="margin-left: 30px">
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                        <p *ngIf="historiaClinicaTmp.tipoInterrogatorio">Tipo de interrogatorio: <strong>{{historiaClinicaTmp.tipoInterrogatorio}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.tipoInterrogatorio" >Tipo de interrogatorio: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.informador">Informador: <strong>{{historiaClinicaTmp.informador}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.informador" >Informador: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.estadoSalud">Estado de salud: <strong>{{historiaClinicaTmp.estadoSalud}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.estadoSalud" >Estado de salud: <strong>No definido</strong></p>
+                        <br>
+                        <p *ngIf="historiaClinicaTmp.telefonoCasa">Teléfono de casa: <strong>{{historiaClinicaTmp.telefonoCasa}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.telefonoCasa" >Teléfono de casa: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.telefonoOficina">Teléfono de oficina: <strong>{{historiaClinicaTmp.telefonoOficina}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.telefonoOficina" >Teléfono de oficina: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.telefonoCelular">Celular: <strong>{{historiaClinicaTmp.telefonoCelular}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.telefonoCelular" >Celular: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.email">Email: <strong>{{historiaClinicaTmp.email}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.email" >Email: <strong>No definido</strong></p>
+                    </div>
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                        <p *ngIf="historiaClinicaTmp.religion">Religión: <strong>{{historiaClinicaTmp.religion}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.religion" >Religión: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.ocupacion">Ocupación: <strong>{{historiaClinicaTmp.ocupacion}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.ocupacion" >Ocupación: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.numHijos">Número de hijos: <strong>{{historiaClinicaTmp.numHijos}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.numHijos" >Número de hijos: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.estadoCivil">Estado civil: <strong>{{historiaClinicaTmp.estadoCivil}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.estadoCivil" >Estado civil: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.maxGradoEstudios">Máximo grado de estudios: <strong>{{historiaClinicaTmp.maxGradoEstudios}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.maxGradoEstudios" >Máximo grado de estudios: <strong>No definido</strong></p>
+                    </div>
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" >
+                        <p *ngIf="historiaClinicaTmp.entidad_nacimiento">Entidad de nacimiento: <strong>{{historiaClinicaTmp.entidad_nacimiento}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.entidad_nacimiento" >Entidad de nacimiento: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.estado">Estado actual: <strong>{{historiaClinicaTmp.estado}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.estado" >Estado actual: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.municipio">Calle: <strong>{{historiaClinicaTmp.municipio}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.municipio" >Calle: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.colonia">Colonia: <strong>{{historiaClinicaTmp.colonia}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.colonia" >Colonia: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.num_interior">Num. interior: <strong>{{historiaClinicaTmp.num_interior}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.num_interior" >Num. interior: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.num_exterior">Num. exterior: <strong>{{historiaClinicaTmp.num_exterior}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.num_exterior" >Num. exterior: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.cp">Cp: <strong>{{historiaClinicaTmp.cp}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.cp" >Cp: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.municipio">Municipio: <strong>{{historiaClinicaTmp.municipio}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.municipio" >Municipio: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.localidad">Localidad: <strong>{{historiaClinicaTmp.localidad}}</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.localidad" >Localidad: <strong>No definido</strong></p>
+                    </div>
+                </div>
+                <div style="margin-left: 30px" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <p><strong>Datos antopométricos: </strong></p> 
+                </div> 
+                <div class="row" style="margin-left: 30px">
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" >
+                        <p *ngIf="historiaClinicaTmp.sexo == 'femenino'">"Sexo: <strong>Femenino</strong></p>
+                        <p *ngIf="historiaClinicaTmp.sexo == 'masculino'">"Sexo: <strong>Maculino</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.sexo" >Sexo: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.peso">Peso: <strong>{{historiaClinicaTmp.peso}} Kg.</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.peso" >Peso: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.talla">Talla: <strong>{{historiaClinicaTmp.talla}} cm.</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.talla" >Talla: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.temperatura">Temperatura: <strong>{{historiaClinicaTmp.temperatura}} °C.</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.temperatura" >Temperatura: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.indiceMasaCorporal">Índice de masa corporal: <strong>{{historiaClinicaTmp.indiceMasaCorporal}} Kg/m².</strong></p>
+                    </div>
+                    <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5" >
+                        <br>
+                        <p *ngIf="historiaClinicaTmp.frecuenciaCardiaca">Frecuencia cardiaca: <strong>{{historiaClinicaTmp.frecuenciaCardiaca}} latidos Por minuto.</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.frecuenciaCardiaca" >Frecuencia cardiaca: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.frecuenciaRespiratoria">Frecuencia respiratoria: <strong>{{historiaClinicaTmp.frecuenciaRespiratoria}} respiraciónes por minuto.</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.frecuenciaRespiratoria" >Frecuencia respiratoria: <strong>No definido</strong></p>
+                        <p *ngIf="historiaClinicaTmp.tensionArterialSistole && historiaClinicaTmp.tensionArterialDiastole">Sistólica y Diastólica: <strong>{{historiaClinicaTmp.tensionArterialSistole}} / {{historiaClinicaTmp.tensionArterialDiastole}} mm/Hg.</strong></p>
+                        <p *ngIf="!historiaClinicaTmp.tensionArterialSistole || !historiaClinicaTmp.tensionArterialDiastole" >Sistólica y Diastólica: <strong>No definido</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div style="padding-left:30px; padding-right: 15px; text-align:justify"  class="row" id="historiaTmpPag2">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Antecedentes familiares: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.antecedentesFamiliares">{{historiaClinicaTmp.antecedentesFamiliares}}</p>
+                    <p *ngIf="!historiaClinicaTmp.antecedentesFamiliares" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Antecedentes personales no patológicos: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.antecedentesPersonalesNoPatologicos">{{historiaClinicaTmp.antecedentesPersonalesNoPatologicos}}</p>
+                    <p *ngIf="!historiaClinicaTmp.antecedentesPersonalesNoPatologicos" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Antecedentes personales patológicos: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.antecedentesPersonalesPatologicos">{{historiaClinicaTmp.antecedentesPersonalesPatologicos}}</p>
+                    <p *ngIf="!historiaClinicaTmp.antecedentesPersonalesPatologicos" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Procedimiento actual: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.procedimientoActual">{{historiaClinicaTmp.procedimientoActual}}</p>
+                    <p *ngIf="!historiaClinicaTmp.procedimientoActual" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" > 
+                    <br>
+                    <p><strong>Auxiliares diagnostico: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.auxiliaresDiagnostico">{{historiaClinicaTmp.auxiliaresDiagnostico}}</p>
+                    <p *ngIf="!historiaClinicaTmp.auxiliaresDiagnostico" ><strong>No definido</strong></p>
+                </div>
+            </div>
+            <div style="padding-left:30px; padding-right: 15px; text-align:justify" class="row" id="historiaTmpPag3">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Sistema neurológico: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.sistemaNeurologico">{{historiaClinicaTmp.sistemaNeurologico}}</p>
+                    <p *ngIf="!historiaClinicaTmp.sistemaNeurologico" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" > 
+                    <br>
+                    <p><strong>Sistema tegumentario: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.sistemaTegumentario">{{historiaClinicaTmp.sistemaTegumentario}}</p>
+                    <p *ngIf="!historiaClinicaTmp.sistemaTegumentario" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Sistema músculo esquelético: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.sistemaMusculoEsqueletico">{{historiaClinicaTmp.sistemaMusculoEsqueletico}}</p>
+                    <p *ngIf="!historiaClinicaTmp.sistemaMusculoEsqueletico" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Sistema respiratorio: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.sistemaRespiratorio">{{historiaClinicaTmp.sistemaRespiratorio}}</p>
+                    <p *ngIf="!historiaClinicaTmp.sistemaRespiratorio" ><strong>No definido</strong></p>
+                </div>
+            </div>
+            <div style="padding-left:30px; padding-right: 15px; text-align:justify" class="row" id="historiaTmpPag4">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Sistema digestivo: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.sistemaDigestivo">{{historiaClinicaTmp.sistemaDigestivo}}</p>
+                    <p *ngIf="!historiaClinicaTmp.sistemaDigestivo" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Sistema urinario: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.sistemaUrinario">{{historiaClinicaTmp.sistemaUrinario}}</p>
+                    <p *ngIf="!historiaClinicaTmp.sistemaUrinario" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Sistema reproductor: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.sistemaReproductor">{{historiaClinicaTmp.sistemaReproductor}}</p>
+                    <p *ngIf="!historiaClinicaTmp.sistemaReproductor" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Sistemas sentidos: </strong></p> 
+                    <p *ngIf="historiaClinicaTmp.sistemasSentidos">{{historiaClinicaTmp.sistemasSentidos}}</p>
+                    <p *ngIf="!historiaClinicaTmp.sistemasSentidos" ><strong>No definido</strong></p>
+                </div>
+            </div>
+            <br>                
+        </div> 
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        &nbsp;&nbsp;&nbsp;&nbsp; 
+        <button *ngIf="descargarPDF" type="button" class="btn boton" style="margin-right: 15px;" (click)="downloadHistTmpPDF()" >Descargar página</button>
+        <button *ngIf="!descargarPDF" type="button" class="btn boton" style="margin-right: 15px;" disabled >Generando...</button>
+    </div>
+</ng-template>
+
+<ng-template #notasModal let-c="close" led-d="dismiss">
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Historial</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button> 
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <div *ngIf="nota" class="row">
+            <div id="consultaTmpPag1">
+                <div style="margin-left: -5%;" class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4" >
+                    <span><a id="logo"><img class="logo" src="../../../../assets/img/logoBicolor.png"></a></span>
+                    <br><br>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left:15px;" class="row">
+                    <div *ngIf="nota.creacion" class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        <p><strong>Consulta </strong></p> 
+                        <p>{{paciente.nombre}} {{paciente.apellido_paterno}} {{paciente.apellido_materno}}</p> 
+                        <p *ngIf="edadMeses >= 11 && edad > 1" >{{paciente.fecha_nacimiento}} / {{edad}} Años</p>
+                        <p *ngIf="edadMeses >= 11 && edad == 1" >{{paciente.fecha_nacimiento}} / {{edad}} Año</p>
+                        <p *ngIf="edadMeses < 11" >{{paciente.fecha_nacimiento}} / {{edadMeses}} meses</p>                         
+                    </div> 
+                    <div *ngIf="nota.creacion" class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                        <p><strong>Creación: </strong></p> 
+                        <p><strong>Fecha: </strong>{{nota.creacion.split('T')[0]}} <strong>Hora: </strong>{{nota.creacion.substring(11,19)}}</p> 
+                        <p><strong>Especialidad: </strong>{{nota.especialidad}}</p> 
+                    </div> 
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <hr>
+                    <p><strong>Nota evolución: </strong></p> 
+                    <p *ngIf="nota.notaEvolucion">{{nota.notaEvolucion}}</p>
+                    <p *ngIf="!nota.notaEvolucion" ><strong>No definido</strong></p>
+                </div>
+                <div  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <hr>
+                    <p><strong>Datos antopométricos: </strong></p> 
+                </div> 
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" >
+                    <p *ngIf="nota.sexo == 'femenino'">"Sexo: <strong>Femenino</strong></p>
+                    <p *ngIf="nota.sexo == 'masculino'">"Sexo: <strong>Maculino</strong></p>
+                    <p *ngIf="!nota.sexo" >Sexo: <strong>No definido</strong></p>
+                    <p *ngIf="nota.peso">Peso: <strong>{{nota.peso}} Kg.</strong></p>
+                    <p *ngIf="!nota.peso" >Peso: <strong>No definido</strong></p>
+                    <p *ngIf="nota.talla">Talla: <strong>{{nota.talla}} cm.</strong></p>
+                    <p *ngIf="!nota.talla" >Talla: <strong>No definido</strong></p>
+                    <p *ngIf="nota.temperatura">Temperatura: <strong>{{nota.temperatura}} °C.</strong></p>
+                    <p *ngIf="!nota.temperatura" >Temperatura: <strong>No definido</strong></p>
+                    <p *ngIf="nota.indiceMasaCorporal">Índice de masa corporal: <strong>{{nota.indiceMasaCorporal}} Kg/m².</strong></p>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" >
+                    <p *ngIf="nota.frecuenciaCardiaca">Frecuencia cardiaca: <strong>{{nota.frecuenciaCardiaca}} latidos por minuto.</strong></p>
+                    <p *ngIf="!nota.frecuenciaCardiaca" >Frecuencia cardiaca: <strong>No definido</strong></p>
+                    <p *ngIf="nota.frecuenciaRespiratoria">Frecuencia respiratoria: <strong>{{nota.frecuenciaRespiratoria}} respiraciónes por minuto.</strong></p>
+                    <p *ngIf="!nota.frecuenciaRespiratoria" >Frecuencia respiratoria: <strong>No definido</strong></p> 
+                    <p *ngIf="nota.tensionArterialSistole && nota.tensionArterialDiastole">Sistólica y Diastólica: <strong>{{nota.tensionArterialSistole}} / {{nota.tensionArterialDiastole}} mm/Hg.</strong></p>
+                    <p *ngIf="!nota.tensionArterialSistole || !nota.tensionArterialDiastole" >Sistólica y Diastólica: <strong>No definido</strong></p>
+                </div>
+            </div>
+            <div style="padding-left:30px; padding-right: 15px; text-align:justify"  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="consultaTmpPag2">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <hr>
+                    <p><strong>Clínicos: </strong></p> 
+                    <p *ngIf="nota.clinicos">{{nota.clinicos}}</p>
+                    <p *ngIf="!nota.clinicos" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" > 
+                    <br>
+                    <p><strong>Impresión diagnostica: </strong></p> 
+                    <p *ngIf="nota.impresionDiagnostica">{{nota.impresionDiagnostica}}</p>
+                    <p *ngIf="!nota.impresionDiagnostica" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Manejo recomendaciónes: </strong></p> 
+                    <p *ngIf="nota.manejoRecomendaciones">{{nota.manejoRecomendaciones}}</p>
+                    <p *ngIf="!nota.manejoRecomendaciones" ><strong>No definido</strong></p>
+                </div>
+            </div>
+            <div style="padding-left:30px; padding-right: 15px; text-align:justify"  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="consultaTmpPag3">
+                <div  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <hr>
+                    <p><strong>SOAP: </strong></p> 
+                </div> 
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <p><strong>Subjetivo: </strong></p> 
+                    <p *ngIf="nota.subjetivo">{{nota.subjetivo}}</p>
+                    <p *ngIf="!nota.subjetivo" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Objetivo: </strong></p> 
+                    <p *ngIf="nota.objetivo">{{nota.objetivo}}</p>
+                    <p *ngIf="!nota.objetivo" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Análisis: </strong></p> 
+                    <p *ngIf="nota.analisis">{{nota.analisis}}</p>
+                    <p *ngIf="!nota.analisis" ><strong>No definido</strong></p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <br>
+                    <p><strong>Plan: </strong></p> 
+                    <p *ngIf="nota.plan">{{nota.plan}}</p>
+                    <p *ngIf="!nota.plan" ><strong>No definido</strong></p>
+                    <hr>
+                </div>
+            </div>
+            <div style="padding-left:30px; padding-right: 15px; text-align:justify"  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="consultaTmpPag4">
+                <div *ngIf="nota.tituloUno && nota.notaUno" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <p><strong>{{nota.tituloUno}}: </strong></p> 
+                    <p *ngIf="nota.notaUno">{{nota.notaUno}}</p>
+                    <hr>
+                </div>
+                <div *ngIf="nota.tituloDos && nota.notaDos" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <p><strong>{{nota.tituloDos}}: </strong></p> 
+                    <p *ngIf="nota.notaDos">{{nota.notaDos}}</p>
+                    <hr>
+                </div>
+                <div *ngIf="nota.tituloTres && nota.notaTres" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <p><strong>{{nota.tituloTres}}: </strong></p> 
+                    <p *ngIf="nota.notaTres">{{nota.notaTres}}</p>
+                    <hr>
+                </div>
+                <div *ngIf="nota.tituloCuatro && nota.notaCuatro" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                    <p><strong>{{nota.tituloCuatro}}: </strong></p> 
+                    <p *ngIf="nota.notaCuatro">{{nota.notaCuatro}}</p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn boton" (click)="c('')">Regresar</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button *ngIf="descargarPDF" type="button" class="btn boton" style="margin-right: 15px;" (click)="downloadConsPDF()" >Descargar página</button>
+        <button *ngIf="!descargarPDF" type="button" class="btn boton" style="margin-right: 15px;" disabled >Generando...</button>
+    </div>
+</ng-template>
+
+<ng-template #imcModal let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Tabla I.M.C</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body --> 
+    <div class="modal-body"> 
+        <span><a id="imc"><img class="imc" src="../../../../assets/img/imc.jpg"></a></span>
+    </div>
+</ng-template>
+
+<ng-template #imcModalMenor let-c="close" led-d="dismiss"> 
+    <!-- Modal Header -->
+    <div class="modal-header" style="color:white; background-color:#9AB638;">  
+        <h4 style="text-align: center;">Tablas Relacionadas</h4>  
+        <button type="button" class="close" style="color:white;" (click)="c('')">x</button>
+    </div>
+    <!-- Modal Body --> 
+    <div class="modal-body"> 
+        <select class="form-control"  [(ngModel)]="imcMenor">
+            <option selected>Por favor seleccione una tabla</option>
+            <option [ngValue]="0">Percentiles circunferencia cabeza 0 - 36 meses</option>
+            <option [ngValue]="1">Percentiles estatura y peso 2 - 20 años</option>
+            <option [ngValue]="2">Percentiles I.M.C. 2 - 20 años</option>
+        </select>
+        <br> 
+        <span *ngIf="imcMenor==0"><a id="imc"><img class="imc" src="../../../../assets/img/imcMen1.jpeg"></a></span>
+        <span *ngIf="imcMenor==1"><a id="imc"><img class="imc" src="../../../../assets/img/imcMen2.jpeg"></a></span>
+        <span *ngIf="imcMenor==2"><a id="imc"><img class="imc" src="../../../../assets/img/imcMen3.jpeg"></a></span>
+    </div>
+</ng-template>
+
+
+
+
+
+
+
+
+

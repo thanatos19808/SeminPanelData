@@ -1,0 +1,277 @@
+<div class="container mt-5">
+	<h1 class="mb-4">Expedientes de Convenio</h1>
+	<br />
+
+	<form (ngSubmit)="subirDatos( f )" #f = "ngForm">
+
+		<div class="row mb-3">
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<label class="form-label">Nombre del paciente: <small>*</small></label>
+			</div>
+
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<input
+					type="text"
+					class="form-control"
+					id="id_name"
+					[(ngModel)] = "rehabilitacion.nombre"
+					name="rehabilitacion.nombre"
+					ngModel
+					required
+				/>
+				<!-- <p style="color:Red;" *ngIf="f.controls['nombre'].errors?.minlength">No hay nombres con solo dos letras. </p> -->
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<label class="form-label">Apellido Paterno: <small>*</small></label>
+			</div>
+
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<input
+					type="text"
+					class="form-control"
+					id="id_apellido_paterno"
+					[(ngModel)] = "rehabilitacion.apellido_paterno"
+					name="rehabilitacion.apellido_paterno"
+					ngModel
+					required
+				/>
+				<!-- <p style="color: Red" *ngIf="apellido1NoValido">Dato invalido</p> -->
+				<!-- <p style="color:Red;" *ngIf="usuarioForm.controls['nombre'].errors?.maxlength">No puede superar los 90 caracteres. </p> -->
+			</div>
+		</div>
+		
+		<div class="row mb-3">
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<label class="form-label">Apellido Materno: <small>*</small></label>
+			</div>
+
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<input
+					type="text"
+					class="form-control"
+					id="id_apellido_materno"
+					[(ngModel)] = "rehabilitacion.apellido_materno"
+					name="rehabilitacion.apellido_materno"
+					ngModel
+					required
+				/>
+				<!-- <p style="color: Red" *ngIf="apellido2NoValido">Dato invalido</p> -->
+				<!-- <p style="color:Red;" *ngIf="usuarioForm.controls['nombre'].errors?.maxlength">No puede superar los 90 caracteres. </p> -->
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<label class="form-label">Sexo: <small>*</small></label>
+			</div>
+
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<select class="form-select" [(ngModel)] = "rehabilitacion.sexo" name="rehabilitacion.sexo" ngModel required>
+					<option selected>---------------</option>
+					<option value="femenino">Femenino</option>
+					<option value="masculino">Masculino</option>
+				</select>
+				<!-- <p style="color: Red" *ngIf="apellido2NoValido">Dato invalido</p> -->
+				<!-- <p style="color:Red;" *ngIf="usuarioForm.controls['nombre'].errors?.maxlength">No puede superar los 90 caracteres. </p> -->
+			</div>
+		</div>
+
+		<!-- fecha del paciente -->
+		<div class="row mt-2">
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<label class="form-label">Fecha de nacimiento: <small>*</small></label>
+			</div>
+
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<input
+					type="date"
+					class="form-control"
+					id="date"
+					[(ngModel)] = "fecha_nacimiento"
+					name="fecha_nacimiento"
+					(change)="validarFecha($event)"
+					ngModel
+					required
+				/>
+			</div>
+		</div>
+		<!-- ++++++++++++++++++++++++++++++++++++++++ -->
+
+		<br />
+		<br />
+
+		<!-- Main Documents -->
+		<div class="row">
+			<div class="col">
+				<div class="mb-3">
+					<label class="form-label">Solicitud de subrogación de servicios (4-30-2/03) <small>*</small></label>
+					<input
+						class="form-control"
+						accept="image/*"
+						type="file"
+						id="solicitud"
+						[(ngModel)] = "rehabilitacion.img_subrogacion"
+						name="img_subrogacion"
+						(change)="onFileSelected($event, 'sub')"
+						ngModel
+						required
+					/>
+					<hr />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Constancia de vigencia <small>*</small></label>
+					<input
+						class="form-control"
+						accept="image/*"
+						type="file"
+						id="id_contancia_vigencia"
+						[(ngModel)] = "rehabilitacion.img_vigencia"
+						name="img_vigencia"
+						(change)="onFileSelected($event, 'vig')"
+						ngModel
+						required
+					/>
+					<hr />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Orden de trabajo <small>*</small></label>
+					<input
+						class="form-control"
+						accept="image/*"
+						type="file"
+						id="id_orden_trabajo"
+						[(ngModel)] = "rehabilitacion.img_orden"
+						name="img_orden"
+						(change)="onFileSelected($event, 'orden')"
+					/>
+					<p style="color: Red" *ngIf="orden">Requerida</p>
+					<hr />
+				</div>
+
+				<div class="mb-3" *ngIf="!menor">
+					<label class="form-label">Identificación oficial(INE/IFE) <small>*</small></label>
+					<input
+						class="form-control"
+						accept="image/*"
+						type="file"
+						id="id_identificacion"
+						[(ngModel)] = "rehabilitacion.img_identificacion"
+						name="img_identificacion"
+						(change)="onFileSelected($event, 'ident')"
+						ngModel
+						required
+					/>
+					<hr />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Carnet de citas <small>*</small></label>
+					<input
+						class="form-control"
+						accept="image/*"
+						type="file"
+						id="id_carnet"
+						[(ngModel)] = "rehabilitacion.img_citas"
+						name="img_citas"
+						(change)="onFileSelected($event, 'cita')"
+						ngModel
+						required
+					/>
+					<hr />
+				</div>
+
+
+				<div class="mb-3">
+					<label class="form-label">Bitacora de asistencias <small>*</small></label>
+					<input
+						class="form-control"
+						accept="image/*"
+						type="file"
+						id="id_bitacora"
+						[(ngModel)] = "rehabilitacion.img_bitacora"
+						name="img_bitacora"
+						(change)="onFileSelected($event, 'bitacora')"
+						ngModel
+						required
+					/>
+					<hr />
+				</div>
+
+			</div>
+		</div>
+
+		<!-- documentos extra para menores de edad -->
+		<div class="row" *ngIf="menor">
+
+			<h3 class="text-center">Es menor de edad complete los campos adicionales</h3>
+
+			<div class="col">
+				<div class="mb-3">
+					<label class="form-label">Acta de nacimiento <small>*</small></label>
+					<input
+						class="form-control"
+						accept="image/*"
+						type="file"
+						id="id_acta_nacimiento"
+						[(ngModel)] = "rehabilitacion.img_acta"
+						name="img_acta"
+						(change)="onFileSelected($event, 'acta')"
+						ngModel
+						required
+					/>
+					<hr />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">CURP <small>*</small></label>
+					<input
+						class="form-control"
+						accept="image/*"
+						type="file"
+						id="id_curp"
+						[(ngModel)] = "rehabilitacion.img_curp"
+						name="img_curp"
+						(change)="onFileSelected($event, 'curp')"
+						ngModel
+						required
+					/>
+					<hr />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Identificación oficial del padre o responsable (INE/IFE)<small>*</small></label>
+					<input
+						class="form-control"
+						accept="image/*"
+						type="file"
+						id="id_identificacion_tutor"
+						[(ngModel)] = "rehabilitacion.img_ident_tutor"
+						name="img_ident_tutor"
+						(change)="onFileSelected($event, 'ident_tutor')"
+						ngModel
+						required
+					/>
+					<hr />
+				</div>
+			</div>
+		</div>
+
+		<button class="btn btn-primary btn-block mb-5 mt-3" [disabled]="f.invalid" *ngIf="!enviando">Guardar</button>
+		<button class="btn btn-primary btn-block mb-5 mt-3" *ngIf="enviando" [disabled]="enviando == true">
+			<i 
+				[ngClass]=
+					"{
+						'fa-refresh fa-spin': enviando == true
+					}" 
+				class="fa">
+			</i>
+			<span> espere ...</span>
+		</button>
+		
+	</form>
+</div>

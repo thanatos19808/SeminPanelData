@@ -1,0 +1,66 @@
+.base {padding: 80px;display: block}
+.nav-tabs{border-bottom:solid 1px #9AB638; margin-bottom:10px; padding:5px 0 0 0;}
+.nav-tabs li{margin-bottom: -1px}
+.nav-tabs a{padding:0px 40px; border:solid 1px #9AB638; margin-left:-1px; border-bottom: none; border-radius: 10px 10px 0 0; color: #9AB638; transition: all linear .25s}
+.nav-tabs a:hover{ text-decoration: none; color:#fff; background:#9AB638}
+.nav-tabs a.active{background:#9AB638; color:#fff;}
+
+@media (max-width: 575px) {
+    .base {position:absolute; padding-left: 80px!important; padding-right : 0px; padding-top: 80px; overflow:auto;}
+    .row{margin-right: 0px; margin-left: -20px;}
+}
+@media (min-width: 576px) and (max-width: 767px) {
+    .base {position:absolute; padding-left: 80px!important; padding-right : 0px; padding-top: 80px; overflow:auto;}
+    .row{margin-right: 0px; margin-left: -20px;}
+}
+
+span{
+    font-size: 20px;
+}
+
+p{
+    font-size: 20px;
+}
+
+.boton {
+    color: #fff;
+    background-color: #9AB638;
+    border-color: #9AB638;
+}
+
+.titulo{
+    -webkit-text-fill-color: #9AB638;
+    font-size: 20px;
+}
+
+#mcuerpo{
+    height: 1700px;
+    background-color: #fff;
+  }
+  
+#footer{
+    background-color: #fff;
+  }
+.close{
+    outline: none;
+    border: none;
+  }
+.editar{
+    font-size: 22px;
+}
+.form-control{
+    font-size: 20px;
+}
+.active{
+    font-size: 20px;
+}
+.btnboton{
+    color: #fff;
+    background-color: #9AB638;
+    border-color: #9AB638;
+    outline: none;
+    border-radius: 4px;
+    border: none;
+    font-size: 20px;
+    padding: 8px 18px;
+}

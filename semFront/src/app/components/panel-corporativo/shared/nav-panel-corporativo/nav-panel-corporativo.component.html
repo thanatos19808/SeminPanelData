@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-light nav">
+   <img src="assets/img/logoNormalBlanco.png" width="80" height="40" alt="Semin">
+   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+      aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+   </button>
+
+   <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+         <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/paneldata">Inicio</a>
+         </li>
+         <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/paneldata/ventas">Ventas</a>
+         </li>
+         <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/paneldata/productivity">Productividad</a>
+         </li>
+         <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/paneldata/finance">Finanzas</a>
+         </li>
+         <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/paneldata/gastos">Gastos</a>
+         </li>
+      </ul>
+
+      <div (click)="onLogout()" class="puntero button-nav">
+         <a style="color:white !important;" class="fas fa fa-2x fa-power-off c-c3"></a>
+      </div>
+
+   </div>
+
+</nav>

@@ -1,0 +1,149 @@
+.base {padding: 80px;display: block; }
+@media (max-width: 400px) {
+    .base {width: 100%; position:absolute; top: 80px; left: 0; margin-left: 0 10px; padding: 0!important;}
+    .squareMargin {margin-left: 0px!important;}
+}
+
+@media (max-width: 575px) {
+  .base {width: 70%; position:absolute; top: 80px; left: 80px; margin-left: 0 10px; padding: 0!important;}
+}
+
+.pasos{
+  display: flex;
+}
+
+.numberCircle {
+  font-size: 28px;
+  height: 50px;
+  display: block;
+  color: #9AB638;
+  text-align: center;
+  font: px Arial, sans-serif;
+}
+
+.icono{
+  font-size: 3em;
+  padding: 30%;
+}
+
+.titulo{
+  font-size: 35px;
+  display: block;
+  color: #9AB638;
+  font: px Arial, sans-serif;
+ }
+
+ 
+.boton {
+  color: #fff;
+  background-color: #9AB638;
+  border-color:#9AB638;
+  outline: none;
+  border: none;
+  font-size: 20px; 
+  border-radius: 4px;
+  padding: 8px 18px;
+}
+
+#mcuerpo{
+    height: 100%;
+    background-color: #fff;
+  }
+  
+#footer{
+    background-color: #fff;
+  }
+
+.green{
+  background-color:#6fb936;
+}
+
+.thumb{
+    margin-bottom: 30px;
+}
+
+.page-top{
+    margin-top:20px;
+}
+        
+.modal-header {  
+  border-bottom: none;
+}
+
+.modal-title {
+    color:#000;
+}
+
+.modal-footer{
+  display:none;  
+}
+
+#btnres{
+  background-color: #394793;
+  color: #fff;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  text-align: right;
+  font-size: 20px;
+  padding: 8px 18px;
+  float: right 12px;
+  margin-left: 20px;
+}
+
+h2 {
+  font-family: Poppins;
+  font-weight: 500;
+  margin: 0 0 20px;
+}
+.timer {
+  margin: 0 0 0px;
+  color: #fff;
+  display: inline-block;
+  font-weight: 100;
+  text-align: center;
+  font-size: 30px;
+}
+.timer div {
+  padding: 10px;
+  border-radius: 3px;
+  background: #9AB638;
+  display: inline-block;
+  font-size: 26px;
+  font-weight: 400;
+  width: 80px;
+}
+.timer .smalltext {
+  color: white;
+  font-size: 12px;
+  font-family: Poppins;
+  font-weight: 500;
+  display: block;
+  padding: 0;
+  width: auto;
+}
+.timer #time-up {
+  margin: 8px 0 0;
+  text-align: left;
+  font-size: 14px;
+  font-style: normal;
+  color: red;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.square {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.squareMargin {
+  margin-left: 25px;
+}
+
+.last { 
+  margin-right: 10px;
+  margin-bottom: 10px;
+  margin-left: -90px;
+  height: 75px;
+}

@@ -1,0 +1,12 @@
+  
+  .boton {
+    color: #fff;
+    background-color: #9AB638;
+    border-color:#9AB638;
+    outline: none;
+    border: none;
+    font-size: 20px; 
+    border-radius: 4px;
+    padding: 8px 18px;
+    margin-bottom: 10px;
+  }

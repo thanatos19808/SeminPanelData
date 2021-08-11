@@ -1,0 +1,14 @@
+● semAPI.service
+   Loaded: [0;1;31merror[0m (Reason: Bad message)
+   Active: inactive (dead)
+
+Feb 07 20:10:46 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m
+Feb 07 20:10:54 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m
+Feb 07 20:12:53 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m
+Feb 07 21:18:20 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m
+Feb 07 21:25:28 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m
+Feb 07 21:25:49 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m
+Feb 07 21:26:56 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m
+Feb 07 21:27:22 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m
+Feb 07 21:30:20 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m
+Feb 07 21:38:14 semin-server systemd[1]: [0;1;31m[0;1;39m[0;1;31m/etc/systemd/system/semAPI.service:2: Invalid section header '[Unit] Description=Servicio de api semin'[0m

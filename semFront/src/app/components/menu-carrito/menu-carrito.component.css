@@ -1,0 +1,152 @@
+.base {position:absolute; top: 80px; margin-left: 70px;}
+
+.table>tbody>tr>td, .table>tfoot>tr>td{
+    vertical-align: middle;
+}
+
+.card-expl {
+	color:red
+}
+
+.debit {
+	height: 30px;
+	width: 100%;
+}
+
+.openpay {
+	height: 30px;
+	width: 100%;
+	text-align: center;
+}
+
+.encrypt {
+	height: 30px;
+	width: 100%;
+	text-align: center;
+}
+
+
+.credit {
+	height: 30px;
+	width: 100%;;
+} 
+
+.error{
+	border:1px solid red;
+	color:red;
+}
+
+.visible{
+	display: none;
+}
+
+
+.security {
+	height: 30px;
+	width: 100%;;
+}
+
+.card-expl h4 {
+    font-weight: 400;
+    margin: 0;
+}
+
+@media screen and (max-width: 600px) {
+    table#cart tbody td .form-control{
+		display: inline !important;
+	}
+	.actions .btn{
+		width:36%;
+		margin:1.5em 0;
+	}
+	
+	.actions .btn-info{
+		float:left;
+	}
+	.actions .btn-danger{
+		float:right;
+	}
+	
+	table#cart thead { display: none; }
+	table#cart tbody td { display: block; padding: .6rem; min-width:320px;}
+	table#cart tbody tr td:first-child { background: #333; color: #fff; }
+	table#cart tbody td:before {
+		content: attr(data-th); font-weight: bold;
+		display: inline-block; width: 8rem;
+	}
+	
+	table#cart tfoot td{display:block; }
+	table#cart tfoot td .btn{display:block;}
+	
+}
+#mcuerpo{
+
+    height: 1100px;
+    background-color: #fff;
+  }
+  
+#footer{
+
+    background-color: #fff;
+  }
+
+  .boton {
+    color: #fff;
+    background-color: #9AB638;
+    border-color:#9AB638;
+    outline: none;
+    border: none;
+    font-size: 20px; 
+    border-radius: 4px;
+    padding: 8px 18px;
+}
+
+.switch {
+	display: inline-block;
+	height: 34px;
+	position: relative;
+	width: 60px;
+  }
+  
+  .switch input {
+	display:none;
+  }
+  
+  .slider {
+	background-color: #ccc;
+	bottom: 0;
+	cursor: pointer;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	transition: .4s;
+  }
+  
+  .slider:before {
+	background-color: #fff;
+	bottom: 4px;
+	content: "";
+	height: 26px;
+	left: 4px;
+	position: absolute;
+	transition: .4s;
+	width: 26px;
+  }
+  
+  input:checked + .slider {
+	background-color: #66bb6a;
+  }
+  
+  input:checked + .slider:before {
+	transform: translateX(26px);
+  }
+  
+  .slider.round {
+	border-radius: 34px;
+  }
+  
+  .slider.round:before {
+	border-radius: 50%;
+  }
+  

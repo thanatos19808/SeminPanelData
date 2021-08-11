@@ -1,0 +1,1 @@
+from panel_data.models.ventas_models import VentaEstudios, VentaDespartamentoArea

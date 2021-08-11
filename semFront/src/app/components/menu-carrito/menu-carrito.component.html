@@ -1,0 +1,172 @@
+<html>
+    <body>
+        <div id="mcuerpo">
+            <div id="footer">
+<app-navbar></app-navbar> 
+<div class="base"> 
+<lib-ngx-notification></lib-ngx-notification>
+<ngx-spinner></ngx-spinner>
+    <div *ngIf="totalPagoFinal == 0" style="text-align: center; padding-left: 30px; margin-top: 70px; color: #9AB638;"> 
+    <div></div>        
+        <h6 class="titulo" style="font-size: 30px;">El carrito de compra esta vació. </h6>
+    </div>
+    <div *ngIf="totalPagoFinal > 0"> 
+        <table id="cart" class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th style="width:60%">Producto</th>
+                    <th style="width:10%">Costo</th>
+                    <th style="width:8%">Cantidad</th>
+                    <th style="width:22%" class="text-center">Subtotal</th> 
+                    <th style="width:10%"></th>
+                </tr>
+            </thead>
+            <tbody *ngIf="citas">
+                <tr *ngFor="let results of citas.results; index as i">
+                    <td *ngIf="results.estatus=='CARRITO'" data-th="Producto:">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <h4 style="color:#9AB638">{{results.prueba}}</h4>
+                                <br>
+                                <p *ngIf="results.Sucursal.nombreSucursal && results.fecha_cita"><strong>Sucursal: </strong> {{results.Sucursal.nombreSucursal}}</p>
+                                <p *ngIf="!results.fecha_cita"><strong>Sucursal: </strong> Por definir</p>
+                                <p *ngIf="results.fecha_cita"><strong>Fecha: </strong> {{results.fecha_cita}}</p>
+                                <p *ngIf="!results.fecha_cita"><strong>Fecha: </strong> Por definir</p>
+                                <p *ngIf="results.hora_inicio"><strong>hora: </strong> {{results.hora_inicio.substring(0, 5)}} - {{results.hora_final.substring(0, 5)}}</p>
+                                <p *ngIf="!results.hora_inicio"><strong>hora: </strong> Por definir</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td *ngIf="results.estatus=='CARRITO'" data-th="Costo">{{results.precioVenta}} MXN</td>
+                    <td *ngIf="results.estatus=='CARRITO'" data-th="Cantidad">
+                        <input type="number" readonly='readonly' class="form-control text-center"  value="1">
+                    </td>
+                    <td *ngIf="results.estatus=='CARRITO'" data-th="Subtotal" class="text-center">{{results.precioVenta}} MXN</td>
+                    <td *ngIf="results.estatus=='CARRITO'" class="actions" data-th="">
+                        <button (click)="eliminarCita(results.id, results.promocion, results.nombre_promocion)" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>								
+                    </td>
+                </tr>
+            </tbody>  
+            <tfoot>
+                <tr>
+                  <td  class="hidden-xs"></td>
+                    <td  class="hidden-xs"></td>
+                    <td  class="hidden-xs"></td>
+                    <td *ngIf="totalPagoFinal>0" class="hidden-xs text-center"><strong><h4>Total {{totalPagoFinal}} MXN</h4></strong></td>
+                    <td *ngIf="totalPagoFinal==0" class="hidden-xs text-center"><strong><h4>Total 0 MXN</h4></strong></td>    
+                    <td  class="hidden-xs"></td>
+                </tr>
+            </tfoot>
+        </table>
+        <!--Paypal --> 
+        <hr>
+        <br>
+        <div [ngClass]="{'visible': (flagFactura && !flagFacturaCompleta)}">
+          <div *ngIf="totalPagoFinal < 5999.99 " class="col-12" >
+            <h4 style="color:#9AB638" >Pago en Sucursal</h4>
+            <br>
+            <div *ngIf="totalPagoFinal > 0.1" class="alert alert-success" role="alert" style="text-align: center;">Si elige como forma de pago "Pago en Sucursal" le pedimos que llegue 10 minutos antes de la hora de su cita, para que puedan generar el cobro desde nuestra sucursal. <br> Le recordamos que al elegir "Pago en sucursal" el precio no será considerado la promoción de pago virtual.</div>
+            <div *ngIf="totalPagoFinal < 0.1" class="alert alert-success" role="alert" style="text-align: center;">Nos comunicaremos con usted via watsapp en un lapso de 5 minutos a una hora deprendiendo de la disponibilidad de nuestros médicos. Le recomendamos tener su celular conectado a internet.</div>          
+            <br>
+            <button class="btn boton" (click)="agendarPagoSucursal()"  [disabled]="flagFactura">{{pagoMsg}} - {{totalSucursal}} MXN</button>  
+          </div>
+          <div>
+            <div *ngIf="totalPagoFinal > 5999.99" class="col-12">
+              <h4 style="color:#9AB638" >Pago en Sucursal</h4>
+              <br>
+              <div  class="alert alert-warning " role="alert" style="text-align: center;">No puede ser agendado con pago a sucursal montos mayores a 6,000 MXN.</div>          
+            </div>
+            <div >
+              <hr>
+              <h4 *ngIf="!flagPago && totalPagoFinal > 0.1" style="padding-left: 15px; color:#9AB638" >Pago Con PayPal - {{totalPagoFinal}}</h4>
+              <br *ngIf="!flagPago && totalPagoFinal > 0.1">
+              <div *ngIf="!flagPago && totalPagoFinal > 0.1" class="col" style="text-align: center;">
+                  <div   #paypal ></div>
+              </div>
+            </div>
+          </div>
+          <!-- Stripe -->
+          <hr *ngIf="!flagPago && totalPagoFinal > 0.1">
+          <div *ngIf="!flagPago && totalPagoFinal > 0.1" class="row">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" style="padding-left: 30px;">
+              <h4 style="padding-left: 15px; color:#9AB638">Pago con tarjeta de crédito</h4>
+              <br>
+              <form (submit)="handleForm($event)" width='100%'>
+                <div #cardElement>
+                  <!-- A Stripe Element will be inserted here. -->
+                </div>
+                <!-- Used to display Element errors. -->
+                <p>{{ cardErrors }}</p>
+                <button [disabled]="(FacturacionCrearForm.status=='INVALID') && flagFactura" class="btn boton" style="background-color:#394793">Pagar {{ totalPagoFinal }} MXN</button>  
+              </form>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+          <h4 style="padding-left: 15px; color:#9AB638; text-align: center;">Requiero Factura (Solo disponible en pago Con tarjeta o PayPal)</h4>
+          <br>
+          <div class="row">
+            <label class="switch" for="checkbox" style="margin-left: 45%;">
+              <input type="checkbox" id="checkbox" [(ngModel)]="flagFactura" (click)="verificarSelect()" >  
+              <div class="slider round"></div>
+            </label>
+            <br>
+            <form [ngClass]="{'visible': !flagFactura}" [formGroup]="FacturacionCrearForm" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div [ngClass]="{'visible': (flagFacturaCompleta)}">                
+                <label class="editar" >Nombre (Requerido)</label>
+                <input [readonly]="!flagFactura" [ngClass]="{'error': ((FacturacionCrearForm.controls['nombre'].touched && FacturacionCrearForm.controls['nombre'].errors?.required)||(FacturacionCrearForm.controls['nombre'].errors?.minlength)||(FacturacionCrearForm.controls['nombre'].errors?.maxlength)||(FacturacionCrearForm.controls['nombre'].errors?.pattern))}" class="form-control" type="text" placeholder="Nombre" formControlName="nombre" [(ngModel)]="facturaTmp.nombre">
+                <br>
+                <label class="editar">Apellido Paterno (Requerido)</label>
+                <input [readonly]="!flagFactura" [ngClass]="{'error': ((FacturacionCrearForm.controls['apellido_paterno'].touched && FacturacionCrearForm.controls['apellido_paterno'].errors?.required)||(FacturacionCrearForm.controls['apellido_paterno'].errors?.minlength)||(FacturacionCrearForm.controls['apellido_paterno'].errors?.maxlength)||(FacturacionCrearForm.controls['apellido_paterno'].errors?.pattern))}" class="form-control" type="text" placeholder="Primer Apellido" formControlName="apellido_paterno" [(ngModel)]="facturaTmp.apellido_paterno">
+                <br> 
+                <label class="editar">Apellido Materno (Opcional)</label>
+                <input [readonly]="!flagFactura" [ngClass]="{'error': ((FacturacionCrearForm.controls['apellido_materno'].errors?.minlength)||(FacturacionCrearForm.controls['apellido_materno'].errors?.maxlength)||(FacturacionCrearForm.controls['apellido_materno'].errors?.pattern))}" class="form-control" type="text" placeholder="Segundo Apellido" formControlName="apellido_materno" [(ngModel)]="facturaTmp.apellido_materno">
+                <br>
+                <label  for="tipo_rfc" class="editar">Estatus (Requerido)</label>
+                <select  class="form-control" id="tipo_rfc" formControlName="tipo_rfc" [(ngModel)]="facturaTmp.tipo_rfc" [ngClass]="{'error': (FacturacionCrearForm.controls['tipo_rfc'].touched && FacturacionCrearForm.controls['tipo_rfc'].errors?.required)}">
+                <option>FISICA</option>
+                <option>MORAL</option>
+                </select>
+                <br>
+                <label>RFC (Requerido)</label>
+                <input [readonly]="!flagFactura" [ngClass]="{'error': ((FacturacionCrearForm.controls['rfc'].touched && FacturacionCrearForm.controls['rfc'].errors?.required)||(FacturacionCrearForm.controls['rfc'].errors?.minlength)||(FacturacionCrearForm.controls['rfc'].errors?.maxlength)||(FacturacionCrearForm.controls['rfc'].errors?.pattern))}" class="form-control" type="text" placeholder="RFC" formControlName="rfc" [(ngModel)]="facturaTmp.rfc">
+                <br>
+                <label  for="impresion" class="editar">¿Requiere Impresión de Factura? (Requerido)</label>
+                <select class="form-control" id="impresion" formControlName="impresion" [(ngModel)]="facturaTmp.impresion" [ngClass]="{'error': (FacturacionCrearForm.controls['impresion'].touched && FacturacionCrearForm.controls['impresion'].errors?.required)}">
+                <option value=true>SI</option>
+                <option value=false>NO</option>
+                </select>
+                <br>
+                <label for="cfdi_uso" class="editar">Uso CFDI (Requerido)</label>
+                <select class="form-control" id="cfdi_uso" formControlName="cfdi_uso" [(ngModel)]="facturaTmp.cfdi_uso" [ngClass]="{'error': (FacturacionCrearForm.controls['cfdi_uso'].touched && FacturacionCrearForm.controls['cfdi_uso'].errors?.required)}" [(ngModel)]="facturaTmp.cfdi_uso">
+                  <option>P01-Por definir</option>
+                  <option>G03-Gastos en general</option> 
+                  <option>D01-Honorarios medicos dentales y gastos hospitalarios</option>
+                </select>
+                <br>
+                <label for="forma_pago" class="editar">Forma de Pago (Requerido)</label>
+                <select class="form-control" id="forma_pago" formControlName="forma_pago" [(ngModel)]="facturaTmp.forma_pago" [ngClass]="{'error': (FacturacionCrearForm.controls['forma_pago'].touched && FacturacionCrearForm.controls['forma_pago'].errors?.required)}" [(ngModel)]="facturaTmp.forma_pago" [(ngModel)]="facturaTmp.forma_pago">
+                  <option>04-Tarjeta de crédito</option>
+                  <option>28-Tarjeta de debito</option> 
+                </select>
+                <br>
+                <p class="text-success" style="font-size: 20px; text-align: center;">Si requiere algún detalle especifico en la elaboración de su factura por favor comuníquese directamente al número +52 (222) 237 6664.</p>
+                <br>
+                <div *ngIf="totalPagoFinal > 5999.9" class="alert alert-danger" role="alert" style="font-size: 20px; text-align: center;">No pueden ser agendados estudios mayores a 6,000 MXN.</div>
+                <br>
+                <button  [disabled]="FacturacionCrearForm.invalid" (click)="activar()" class="btn boton" style="background-color:#394793">Guardar Factura</button>  
+              </div>
+            </form>
+          </div> 
+        </div>
+    </div>
+</div> 
+
+
+    
+</div>
+</div>
+ 
+</body>
+</html>
